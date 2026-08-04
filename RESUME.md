@@ -562,9 +562,37 @@ at 25px, no slot overlaps, and all 8 meters render their exact fraction.
    the top of the list. Promote one of the seven audience presets in
    `references/palettes.md` — they are proto-genres already, with reasoning
    written down. Authored, never computed.
-2. `marketing` and `media player` — the last two unbuilt skeletons from the
+2. **Skin three — the soft one.** Gary's, and he is right: "black can be
+   beveled on black, I've done it before with softer shadows and or highlights."
+   The mid face is NOT a property of bevels; it follows from two rules bevel
+   chose for itself — opaque edges mixed FROM the face, and `--ui-shadow:none`.
+   Drop both and the face stays on the theme's own ground. Measured over
+   `--ui-bg` in all twelve combinations at 10% white / 55% black:
+
+       dark modes    highlight 1.28-1.33   shadow 1.05-1.12
+       light modes   highlight 1.00-1.01   shadow 4.60-4.73
+
+   Exactly one edge carries each mode — highlight in dark, shadow in light —
+   and the cast shadow supplies the depth the flat edge cannot. Note the edge
+   bar (1.5) is too crude for a 1px hairline; WCAG sets no floor for one, which
+   is why `EDGE_WANT` is advisory. All of this is written into the head of
+   `skins/bevel.css` so it is not re-derived from scratch.
+
+   This skin is also the answer to bevel's real weakness: with the face on the
+   theme's ground, none of bevel's ink promotions are needed at all.
+3. `marketing` and `media player` — the last two unbuilt skeletons from the
    original monoculture list. Neither is blocked.
-3. The sequential ramp / Radiance question (see NEW DIRECTION below).
+4. The sequential ramp / Radiance question (see NEW DIRECTION below).
+
+**Gary on bevel's grey, 2026-08-04:** "that gray on black or white is fuggly...
+It might be alright in cpanel" — then "I don't mind keeping it." So bevel STAYS
+as the period piece; do not quietly restyle it. Two things fell out of that
+exchange worth keeping. The grey is not the mix desaturating the theme (checked:
+a hue-preserving face is the same colour) — it is that every theme's ground is
+already near-neutral, chroma 0.001-0.032, so pulling one 30% toward the ink
+lands in dead-centre grey. And "alright in cpanel" is the GENRE ring talking:
+bevel + graphite + app-shell is a control-panel genre and a strong candidate for
+genre one.
 
 **One visible change to put in front of Gary:** bevel promotes `--ui-accent` on
 its panel faces, and `--ui-accent` is not only link text — ui.css also fills a

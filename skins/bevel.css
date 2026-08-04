@@ -39,13 +39,19 @@
   /* Square, everywhere. A bevel with rounded corners is neither thing. */
   --ui-radius-sm:0px; --ui-radius:0px; --ui-radius-lg:0px; --ui-radius-pill:0px;
 
-  /* THE FACE MUST BE A MID TONE, and that is not a style choice — it is the
-     only way a bevel works at all. An edge lighter than the face and an edge
-     darker than it both need somewhere to go; a face at #FFFFFF cannot get
-     lighter and one at #12161A cannot get darker, so whichever extreme the
-     theme sits at, that edge silently flattens. Measuring the first attempt
-     showed exactly this: every light mode had an invisible lit edge (1.04) and
-     every dark mode an invisible shade edge (1.08).
+  /* THE FACE IS A MID TONE BECAUSE OF TWO RULES THIS SKIN CHOSE, not because a
+     bevel requires it. An earlier version of this comment claimed the mid face
+     was "the only way a bevel works at all" — that is false, and Gary said so:
+     black bevels on black perfectly well with a soft highlight. It does, and
+     measuring it confirms it (see the note at the end of this block).
+
+     What is true is narrower. Given BOTH of this skin's rules — edges that are
+     opaque and mixed FROM the face, and --ui-shadow:none — an edge lighter than
+     the face and an edge darker than it both need somewhere to go; a face at
+     #FFFFFF cannot get lighter and one at #12161A cannot get darker, so
+     whichever extreme the theme sits at, that edge silently flattens. Measuring
+     the first attempt showed exactly this: every light mode had an invisible lit
+     edge (1.04) and every dark mode an invisible shade edge (1.08).
 
      So the face is pulled 30% toward the theme's own ink first, which gives
      headroom in both directions. Solved numerically across all six themes and
@@ -55,7 +61,23 @@
 
      Derived from --ui-bg rather than --ui-surface because bg is the one token
      opaque in all six themes (trap 11); halo's rgba surfaces would otherwise
-     produce a bevel you can see through. */
+     produce a bevel you can see through.
+
+     THE OTHER WAY, MEASURED, because it is the obvious next skin and someone
+     will otherwise re-derive it from scratch. Drop both rules — translucent
+     edges instead of mixed-from-the-face, and a soft cast shadow instead of
+     none — and the face can stay on the theme's own ground. Composited over
+     --ui-bg across all twelve theme x mode combinations, at 10% white and 55%
+     black:
+
+       dark modes    highlight 1.28-1.33   shadow 1.05-1.12
+       light modes   highlight 1.00-1.01   shadow 4.60-4.73
+
+     Exactly one edge carries each mode: the highlight in dark, the shadow in
+     light, and the cast shadow supplies the depth the flat edge cannot. That is
+     a real grammar and it is how black bevels on black — it is just not THIS
+     grammar, which is hard opaque edges and drawn rather than cast depth. It
+     belongs in a third skin, not in this file. */
   --ui-bevel-face: color-mix(in srgb,var(--ui-bg) 70%,var(--ui-text));
   --ui-bevel-lit:  color-mix(in srgb,var(--ui-bevel-face) 15%,#fff);
   --ui-bevel-shade:color-mix(in srgb,var(--ui-bevel-face) 25%,#000);
