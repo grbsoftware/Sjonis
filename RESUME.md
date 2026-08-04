@@ -2,7 +2,34 @@
 
 Project name: **Sjonis**. Lives at `C:\Users\grben\Design`.
 
-Written 2026-08-03 at context ceiling. Current state, decisions, and dead ends.
+Written 2026-08-04 at context ceiling. Current state, decisions, and dead ends.
+Second half of this file is the newer material — read `## NEXT` first.
+
+## Working loop (how this session actually ran)
+
+Gary ran `/loop` and asked for autonomous work: fix bugs, add missing pieces,
+commit and push each change, wake him only for decisions that are genuinely his.
+That mandate still stands unless he says otherwise. He also said to be creative
+and add features not yet discussed.
+
+**Every change ships.** The cycle that worked, and should be repeated:
+
+```bash
+python tools/build_themes.py verify     # round trip, MUST pass before commit
+python tools/validate_palette.py        # contrast; exit 1 on required failure
+python tools/check_adapters.py          # adapter refs resolve
+git add -A && git commit && git push origin main
+gh api repos/grbsoftware/Sjonis/pages/builds/latest --jq .status   # poll to "built"
+```
+
+Then verify **on the live site**, not locally — the preview pane cannot open
+`file://` here, and `file://` cannot do the cross-frame work anyway. Screenshots
+often fail ("pane not displayed"); `mcp__Claude_Browser__javascript_tool` against
+the served URL works reliably and is the tool of choice for verification.
+
+If a theme colour changes: `python tools/css_to_tokens.py` then
+`python tools/build_themes.py all` to regenerate `tokens/` and `dist/`, or the
+round trip fails.
 
 ## Who / how to work
 
@@ -24,9 +51,20 @@ forced a Claude Desktop reinstall. Use WebSearch/WebFetch.
 core/ui.css          structure + components, zero colours
 core/themes.css      6 themes x light/dark (589 tokens, 18 blocks)
 core/ui.js           LAYER 2 — behaviour. classic script, no deps, no build
+index.html           EXAMPLE BROWSER — the front door. Frames every example,
+                     hash-routed, global dark toggle, live tuner (T)
 demo/behaviour.html  exercises every behaviour, all 6 themes live
 demo/img/*.svg       14 placeholder drawings, transparent grounds
-archetypes/portfolio.html   banded content page — the anti-admin archetype
+archetypes/app-shell.html          rail + main — the admin pattern
+archetypes/portfolio.html          banded content page — the anti-admin
+archetypes/storefront.html         catalogue — site frame + product grid
+archetypes/storefront-product.html page two of the same site
+archetypes/editorial.html          long-form — columns, drop cap, pull quotes
+tools/validate_palette.py   WCAG contrast over every theme x mode
+tools/check_adapters.py     adapter references resolve
+tools/fonts.py              Google Fonts catalogue: fetch / find / show
+tokens/fonts.catalogue.json 1,942 families, generated
+LICENSE.md           PolyForm Noncommercial 1.0.0
 tokens/themes.tokens.json   W3C DTCG, generated from CSS
 tokens/fonts.json    15 OFL fonts, curated shortlist
 tools/css_to_tokens.py, build_themes.py   (Python — NO NODE on this machine)
@@ -299,7 +337,19 @@ and the hue moved to the border and a dot. That alone cleared 142 failures.
 
 ## NEXT
 
-- **The palette decision above** — the only thing genuinely blocked on Gary.
+**Not started, and it was next in line: the GAME / HUD archetype.** The most
+different remaining skeleton — overlaid HUD chrome on hero art, a leaderboard,
+loud display type, no reading measure at all. `marketing` and `media player`
+from the original monoculture list are also unbuilt, but game is the one that
+proves the primitives stretch furthest. Nothing blocks it; it just needs a fresh
+context window, which is why it was deferred rather than half-built.
+
+Likely new primitives it would need, none of which exist yet: an overlay layer
+positioned over a full-bleed image, a stat readout at display size, a ranked
+table with a highlighted "you" row, and a progress/meter element — `ui.css` has
+no meter of any kind, which is a real gap independent of the game page.
+
+- **The palette decision** — the only thing genuinely blocked on Gary.
 - Layer 3 (React) still unstarted and still worth questioning, because it costs
   the no-build-step property that is currently the suite's best feature.
 - **Adapters — DONE this session.** Both now expose `--ui-cat-1..8` (shadcn's
