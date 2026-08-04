@@ -198,6 +198,18 @@ which reached its first stable version in October 2025 — so Style Dictionary,
 Figma, Penpot and friends can read it directly if you'd rather not use the
 Python generators.
 
+## Licence
+
+[PolyForm Noncommercial 1.0.0](LICENSE.md). Free to use, change and redistribute for
+any **noncommercial** purpose — personal projects, study, hobby work, and use by
+charities, schools, public research, and government bodies.
+
+**Commercial use requires a separate licence.** If you want to use Sjonis in or for a
+business — a product you sell, client work, anything with a commercial application —
+open an issue at [grbsoftware/Sjonis](https://github.com/grbsoftware/Sjonis/issues) or
+contact [@grbsoftware](https://github.com/grbsoftware) to arrange one. Terms are
+straightforward and I'd like to hear what you're building.
+
 **Two honest limits.** Composite values (shadows, gradients, blur) are stored as
 raw CSS and only the CSS and GTK targets consume them — depth on Windows is
 Mica/Acrylic and ThemeShadow, which is set on the element, not in a resource
