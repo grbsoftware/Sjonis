@@ -32,6 +32,14 @@
   --ui-accent-soft:#E9F0FC;
   --ui-shadow:0 1px 2px rgba(16,24,40,.06);
   --ui-shadow-lg:0 8px 26px rgba(16,24,40,.10);
+  --ui-cat-1:#2A78D6;
+  --ui-cat-2:#EB6834;
+  --ui-cat-3:#1BAF7A;
+  --ui-cat-4:#EDA100;
+  --ui-cat-5:#E87BA4;
+  --ui-cat-6:#008300;
+  --ui-cat-7:#4A3AA7;
+  --ui-cat-8:#E34948;
 }
 
 [data-theme="vanilla"][data-mode="light"]{
@@ -59,6 +67,14 @@
   --ui-info-soft:#E5F2FA;
   --ui-shadow:0 1px 2px rgba(16,24,40,.06);
   --ui-shadow-lg:0 8px 26px rgba(16,24,40,.10);
+  --ui-cat-1:#2A78D6;
+  --ui-cat-2:#EB6834;
+  --ui-cat-3:#1BAF7A;
+  --ui-cat-4:#EDA100;
+  --ui-cat-5:#E87BA4;
+  --ui-cat-6:#008300;
+  --ui-cat-7:#4A3AA7;
+  --ui-cat-8:#E34948;
 }
 
 [data-theme="vanilla"][data-mode="dark"]{
@@ -86,6 +102,14 @@
   --ui-info-soft:#0F1F2B;
   --ui-shadow:0 1px 2px rgba(0,0,0,.42);
   --ui-shadow-lg:0 8px 26px rgba(0,0,0,.5);
+  --ui-cat-1:#3987E5;
+  --ui-cat-2:#D95926;
+  --ui-cat-3:#199E70;
+  --ui-cat-4:#C98500;
+  --ui-cat-5:#D55181;
+  --ui-cat-6:#008300;
+  --ui-cat-7:#9085E9;
+  --ui-cat-8:#E66767;
 }
 
 /* ==========================================================================
@@ -121,6 +145,14 @@
   --ui-accent-hover:#5BD5F2;
   --ui-accent-ink:#04161E;
   --ui-accent-soft:#0B2E3D;
+  --ui-cat-1:#3987E5;
+  --ui-cat-2:#D95926;
+  --ui-cat-3:#199E70;
+  --ui-cat-4:#C98500;
+  --ui-cat-5:#D55181;
+  --ui-cat-6:#008300;
+  --ui-cat-7:#9085E9;
+  --ui-cat-8:#E66767;
 }
 
 [data-theme="blueprint"][data-mode="light"]{
@@ -147,6 +179,14 @@
   --ui-info:#0B7FA0;
   --ui-info-soft:#DCEEF4;
   --ui-shadow:none;
+  --ui-cat-1:#2A78D6;
+  --ui-cat-2:#EB6834;
+  --ui-cat-3:#1BAF7A;
+  --ui-cat-4:#EDA100;
+  --ui-cat-5:#E87BA4;
+  --ui-cat-6:#008300;
+  --ui-cat-7:#4A3AA7;
+  --ui-cat-8:#E34948;
 }
 
 [data-theme="blueprint"][data-mode="dark"]{
@@ -173,6 +213,14 @@
   --ui-info:#35C6E8;
   --ui-info-soft:#0B2E3D;
   --ui-shadow:none;
+  --ui-cat-1:#3987E5;
+  --ui-cat-2:#D95926;
+  --ui-cat-3:#199E70;
+  --ui-cat-4:#C98500;
+  --ui-cat-5:#D55181;
+  --ui-cat-6:#008300;
+  --ui-cat-7:#9085E9;
+  --ui-cat-8:#E66767;
 }
 
 /* ==========================================================================
@@ -206,6 +254,14 @@
   --ui-accent-soft:rgba(79,214,193,.14);
   --ui-shadow:0 6px 22px rgba(0,0,0,.34);
   --ui-shadow-lg:0 18px 48px rgba(0,0,0,.44);
+  --ui-cat-1:#3987E5;
+  --ui-cat-2:#D95926;
+  --ui-cat-3:#199E70;
+  --ui-cat-4:#C98500;
+  --ui-cat-5:#D55181;
+  --ui-cat-6:#008300;
+  --ui-cat-7:#9085E9;
+  --ui-cat-8:#E66767;
 }
 
 [data-theme="halo"][data-mode="light"]{
@@ -234,6 +290,14 @@
   --ui-info-soft:rgba(58,111,216,.12);
   --ui-shadow:0 6px 22px rgba(30,32,70,.10);
   --ui-shadow-lg:0 18px 48px rgba(30,32,70,.14);
+  --ui-cat-1:#2A78D6;
+  --ui-cat-2:#EB6834;
+  --ui-cat-3:#1BAF7A;
+  --ui-cat-4:#EDA100;
+  --ui-cat-5:#E87BA4;
+  --ui-cat-6:#008300;
+  --ui-cat-7:#4A3AA7;
+  --ui-cat-8:#E34948;
 }
 
 [data-theme="halo"][data-mode="dark"]{
@@ -262,6 +326,14 @@
   --ui-info-soft:rgba(138,180,255,.13);
   --ui-shadow:0 6px 22px rgba(0,0,0,.34);
   --ui-shadow-lg:0 18px 48px rgba(0,0,0,.44);
+  --ui-cat-1:#3987E5;
+  --ui-cat-2:#D95926;
+  --ui-cat-3:#199E70;
+  --ui-cat-4:#C98500;
+  --ui-cat-5:#D55181;
+  --ui-cat-6:#008300;
+  --ui-cat-7:#9085E9;
+  --ui-cat-8:#E66767;
 }
 
 /* ==========================================================================
@@ -294,6 +366,14 @@
   --ui-accent-ink:#0B0E12;
   --ui-accent-soft:#18212D;
   --ui-shadow:0 1px 2px rgba(0,0,0,.4);
+  --ui-cat-1:#3987E5;
+  --ui-cat-2:#D95926;
+  --ui-cat-3:#199E70;
+  --ui-cat-4:#C98500;
+  --ui-cat-5:#D55181;
+  --ui-cat-6:#008300;
+  --ui-cat-7:#9085E9;
+  --ui-cat-8:#E66767;
 }
 
 [data-theme="graphite"][data-mode="light"]{
@@ -320,6 +400,14 @@
   --ui-info:#3C63A8;
   --ui-info-soft:#E7EDF7;
   --ui-shadow:0 1px 2px rgba(16,24,40,.06);
+  --ui-cat-1:#2A78D6;
+  --ui-cat-2:#EB6834;
+  --ui-cat-3:#1BAF7A;
+  --ui-cat-4:#EDA100;
+  --ui-cat-5:#E87BA4;
+  --ui-cat-6:#008300;
+  --ui-cat-7:#4A3AA7;
+  --ui-cat-8:#E34948;
 }
 
 [data-theme="graphite"][data-mode="dark"]{
@@ -346,6 +434,14 @@
   --ui-info:#6D93C4;
   --ui-info-soft:#18212D;
   --ui-shadow:0 1px 2px rgba(0,0,0,.4);
+  --ui-cat-1:#3987E5;
+  --ui-cat-2:#D95926;
+  --ui-cat-3:#199E70;
+  --ui-cat-4:#C98500;
+  --ui-cat-5:#D55181;
+  --ui-cat-6:#008300;
+  --ui-cat-7:#9085E9;
+  --ui-cat-8:#E66767;
 }
 
 /* ==========================================================================
@@ -379,6 +475,14 @@
   --ui-accent-ink:#1A0E07;
   --ui-accent-soft:#2C1A10;
   --ui-shadow:0 2px 0 rgba(0,0,0,.28);
+  --ui-cat-1:#3987E5;
+  --ui-cat-2:#D95926;
+  --ui-cat-3:#199E70;
+  --ui-cat-4:#C98500;
+  --ui-cat-5:#D55181;
+  --ui-cat-6:#008300;
+  --ui-cat-7:#9085E9;
+  --ui-cat-8:#E66767;
 }
 
 [data-theme="oxide"][data-mode="light"]{
@@ -405,6 +509,14 @@
   --ui-info:#3D6E7A;
   --ui-info-soft:#E0ECEF;
   --ui-shadow:0 2px 0 rgba(120,96,64,.13);
+  --ui-cat-1:#2A78D6;
+  --ui-cat-2:#EB6834;
+  --ui-cat-3:#1BAF7A;
+  --ui-cat-4:#EDA100;
+  --ui-cat-5:#E87BA4;
+  --ui-cat-6:#008300;
+  --ui-cat-7:#4A3AA7;
+  --ui-cat-8:#E34948;
 }
 
 [data-theme="oxide"][data-mode="dark"]{
@@ -431,6 +543,14 @@
   --ui-info:#5E9AA8;
   --ui-info-soft:#132123;
   --ui-shadow:0 2px 0 rgba(0,0,0,.28);
+  --ui-cat-1:#3987E5;
+  --ui-cat-2:#D95926;
+  --ui-cat-3:#199E70;
+  --ui-cat-4:#C98500;
+  --ui-cat-5:#D55181;
+  --ui-cat-6:#008300;
+  --ui-cat-7:#9085E9;
+  --ui-cat-8:#E66767;
 }
 
 /* ==========================================================================
@@ -464,6 +584,14 @@
   --ui-accent-hover:#2C4258;
   --ui-accent-ink:#FFFFFF;
   --ui-accent-soft:#E4E9EF;
+  --ui-cat-1:#2A78D6;
+  --ui-cat-2:#EB6834;
+  --ui-cat-3:#1BAF7A;
+  --ui-cat-4:#EDA100;
+  --ui-cat-5:#E87BA4;
+  --ui-cat-6:#008300;
+  --ui-cat-7:#4A3AA7;
+  --ui-cat-8:#E34948;
 }
 
 [data-theme="vellum"][data-mode="light"]{
@@ -490,6 +618,14 @@
   --ui-info:#3A5470;
   --ui-info-soft:#E4E9EF;
   --ui-shadow:none;
+  --ui-cat-1:#2A78D6;
+  --ui-cat-2:#EB6834;
+  --ui-cat-3:#1BAF7A;
+  --ui-cat-4:#EDA100;
+  --ui-cat-5:#E87BA4;
+  --ui-cat-6:#008300;
+  --ui-cat-7:#4A3AA7;
+  --ui-cat-8:#E34948;
 }
 
 [data-theme="vellum"][data-mode="dark"]{
@@ -516,4 +652,12 @@
   --ui-info:#8FB0D0;
   --ui-info-soft:#1E252C;
   --ui-shadow:none;
+  --ui-cat-1:#3987E5;
+  --ui-cat-2:#D95926;
+  --ui-cat-3:#199E70;
+  --ui-cat-4:#C98500;
+  --ui-cat-5:#D55181;
+  --ui-cat-6:#008300;
+  --ui-cat-7:#9085E9;
+  --ui-cat-8:#E66767;
 }

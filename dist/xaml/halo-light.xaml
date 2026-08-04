@@ -18,6 +18,14 @@
     <Color x:Key="UiAccentHoverColor">#FF0B7E6C</Color>
     <Color x:Key="UiAccentInkColor">#FFFFFFFF</Color>
     <Color x:Key="UiAccentSoftColor">#1F0E9C86</Color>
+    <Color x:Key="UiCat1Color">#FF2A78D6</Color>
+    <Color x:Key="UiCat2Color">#FFEB6834</Color>
+    <Color x:Key="UiCat3Color">#FF1BAF7A</Color>
+    <Color x:Key="UiCat4Color">#FFEDA100</Color>
+    <Color x:Key="UiCat5Color">#FFE87BA4</Color>
+    <Color x:Key="UiCat6Color">#FF008300</Color>
+    <Color x:Key="UiCat7Color">#FF4A3AA7</Color>
+    <Color x:Key="UiCat8Color">#FFE34948</Color>
     <Color x:Key="UiGoodColor">#FF0E9C86</Color>
     <Color x:Key="UiGoodSoftColor">#1F0E9C86</Color>
     <Color x:Key="UiWarnColor">#FFB37A15</Color>
@@ -40,6 +48,14 @@
     <SolidColorBrush x:Key="UiAccentHover" Color="{StaticResource UiAccentHoverColor}" />
     <SolidColorBrush x:Key="UiAccentInk" Color="{StaticResource UiAccentInkColor}" />
     <SolidColorBrush x:Key="UiAccentSoft" Color="{StaticResource UiAccentSoftColor}" />
+    <SolidColorBrush x:Key="UiCat1" Color="{StaticResource UiCat1Color}" />
+    <SolidColorBrush x:Key="UiCat2" Color="{StaticResource UiCat2Color}" />
+    <SolidColorBrush x:Key="UiCat3" Color="{StaticResource UiCat3Color}" />
+    <SolidColorBrush x:Key="UiCat4" Color="{StaticResource UiCat4Color}" />
+    <SolidColorBrush x:Key="UiCat5" Color="{StaticResource UiCat5Color}" />
+    <SolidColorBrush x:Key="UiCat6" Color="{StaticResource UiCat6Color}" />
+    <SolidColorBrush x:Key="UiCat7" Color="{StaticResource UiCat7Color}" />
+    <SolidColorBrush x:Key="UiCat8" Color="{StaticResource UiCat8Color}" />
     <SolidColorBrush x:Key="UiGood" Color="{StaticResource UiGoodColor}" />
     <SolidColorBrush x:Key="UiGoodSoft" Color="{StaticResource UiGoodSoftColor}" />
     <SolidColorBrush x:Key="UiWarn" Color="{StaticResource UiWarnColor}" />

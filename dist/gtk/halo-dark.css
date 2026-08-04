@@ -30,6 +30,14 @@
   --ui-accent-soft: rgba(79,214,193,.14);
   --ui-shadow: 0 6px 22px rgba(0,0,0,.34);
   --ui-shadow-lg: 0 18px 48px rgba(0,0,0,.44);
+  --ui-cat-1: #3987E5;
+  --ui-cat-2: #D95926;
+  --ui-cat-3: #199E70;
+  --ui-cat-4: #C98500;
+  --ui-cat-5: #D55181;
+  --ui-cat-6: #008300;
+  --ui-cat-7: #9085E9;
+  --ui-cat-8: #E66767;
   --ui-good: #4FD6C1;
   --ui-good-soft: rgba(79,214,193,.13);
   --ui-warn: #FFC46B;
