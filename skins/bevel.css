@@ -41,10 +41,17 @@
 
   /* The two edges, derived from whatever ground the theme supplies. Declared
      here rather than in ui.css so the default skin carries no bevel vocabulary
-     at all — a skin may ADD tokens, not just override them. */
-  --ui-bevel-lit:  color-mix(in srgb,var(--ui-surface) 62%,#fff);
-  --ui-bevel-shade:color-mix(in srgb,var(--ui-surface) 55%,#000);
+     at all — a skin may ADD tokens, not just override them.
+
+     Mixed from the FACE, not from --ui-surface. Measuring caught this: vanilla's
+     surface is #FFFFFF, so a lit edge mixed from it is pure white with nowhere
+     left to go, sitting on a face that is already near-white. An edge has to be
+     lighter than the thing it edges, which means it must be derived from that
+     thing — otherwise the bevel quietly flattens on exactly the themes whose
+     surfaces are brightest. */
   --ui-bevel-face: var(--ui-surface-2);
+  --ui-bevel-lit:  color-mix(in srgb,var(--ui-bevel-face) 58%,#fff);
+  --ui-bevel-shade:color-mix(in srgb,var(--ui-bevel-face) 52%,#000);
 
   /* Depth was drawn, not cast. No theme's soft shadow survives here. */
   --ui-shadow:none;
@@ -122,8 +129,9 @@
    jobs. Its edges mix from the accent instead of the surface. */
 [data-skin="bevel"] .ui-btn{
   background:var(--ui-accent);
-  --ui-bevel-lit:  color-mix(in srgb,var(--ui-accent) 62%,#fff);
-  --ui-bevel-shade:color-mix(in srgb,var(--ui-accent) 55%,#000);
+  --ui-bevel-face: var(--ui-accent);
+  --ui-bevel-lit:  color-mix(in srgb,var(--ui-accent) 58%,#fff);
+  --ui-bevel-shade:color-mix(in srgb,var(--ui-accent) 52%,#000);
 }
 
 /* Ghost and danger sit on the raised face rather than on nothing — in this
