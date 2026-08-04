@@ -81,7 +81,99 @@ Artifacts: [tuner](https://claude.ai/code/artifact/089593e5-f49b-4b33-ae38-de496
 Always run `python tools/build_themes.py verify` after touching themes
 (427 tokens, 18 blocks, currently lossless).
 
-## Architecture (settled)
+## ARCHITECTURE — FOUR RINGS (settled 2026-08-04, replaces the two-axis model)
+
+Gary pushed hard on this and was right twice. First: three words ("archetype",
+"layout", "template") were in use for ONE thing — that is how a vocabulary rots,
+and it had already cost us a confused exchange about whether a new skeleton needs
+a new theme. Second, and bigger: **a new theme would only ever be this same look
+in new colours.** He was correct, and the reason is mechanical.
+
+A theme can set only nine kinds of value — colour, radius, density, font, weight,
+tracking, blur, shadow, ambient. The *rule* (`.ui-card{background:…;border:…}`)
+lives in ui.css where no theme can reach. So a theme changes the adjectives and
+can never change the grammar. That is why a system with twenty themes ships one
+look, and it is exactly the mode-collapse critique he made about the layouts,
+one layer down.
+
+The system is now an onion. One word per layer, no synonyms:
+
+| ring | owns | chosen by | built |
+|---|---|---|---|
+| **skeleton** | structure | what the thing *is* | 6 |
+| **skin** | how a surface is drawn | which visual grammar | 2 |
+| **theme** | colour, type, radius | who it is *for* | 6 |
+| **genre** | a named complete look | the point of view | 0 |
+
+`archetypes/` is now `skeletons/`. "Archetype" and "layout" are gone everywhere.
+
+**Industry note, since it will come up again:** there is no settled term for any
+of this. Atomic Design stops at "template" (= our skeleton) with nothing above;
+CMSes use theme > template; Winamp/phpBB used "skin" for exactly our meaning.
+Nobody will hand us a vocabulary — these four are ours and they are now written
+into README, SKILL.md and every file.
+
+### skin — the new ring, and how it works
+
+Four ROLES cover every surface. Components name a role, never a treatment, so a
+skin restyles everything by redefining four things:
+
+    raise    on the page       cards, table wrap
+    float    above everything  dialogs, menus, toasts
+    inset    below the page    inputs
+    control  can be pressed    buttons
+
+Each has `-fill`, `-border`, `-radius`, `-shadow`, declared in ui.css's derived
+block (`:root,.ui`) so they resolve wherever a theme lands. The defaults ARE the
+flat skin, so a page with no skin is byte-identical to before.
+
+**`data-skin` must go on the SAME element as `class="ui"` and `data-theme`.** On
+an ancestor, the derived block re-declares the role tokens at the `.ui` level and
+the skin silently does nothing — trap 1 again.
+
+**A skin may add RULES; a theme may not.** That is the line between them, and it
+is load-bearing: `border-color` takes four values and no single token can carry
+that. A bevel's grammar is a shape, not a value.
+
+`skins/bevel.css` is deliberately the furthest thing from flat rather than a
+tasteful variation — square corners, no cast shadow, drawn edges, controls that
+go DOWN when pressed, dotted inset focus. If the architecture expresses that,
+everything between is free. `demo/skins.html` proves it with both panels stamped
+from ONE `<template>`, so the twins cannot drift.
+
+### genre — not started, and the rule that matters
+
+Genre is the composition ring: a named look that picks a skin and theme, adds
+ornament, and says which skeletons it suits. Facets (era / industry / ideology /
+mood) are for FINDING genres, never for generating them.
+
+**Genres are authored, never computed.** The moment a look falls out of a
+parameter combination it stops being a point of view — which is the exact failure
+the skin layer exists to fix. The seven audience presets already in
+`references/palettes.md` are proto-genres stuck in the palette layer; they are
+the natural first set to promote.
+
+Gary also flagged that a genre may need to carry BEHAVIOUR, not just ornament (he
+was recalling Java-applet physics toys — circles, springs, gravity). Agreed and
+worth designing for: a "toy" genre and a "clinical" genre differ in how things
+*move*, not only how they look. Deferred, but do not architect it out.
+
+## OPEN — the gate gap that skins just opened
+
+**`validate_palette.py` cannot see skins.** It models ui.css's pairings against
+theme tokens, so a skin can introduce a contrast failure while every gate reports
+green. This is not hypothetical — building bevel produced exactly that, and it
+was caught only by measuring by hand:
+
+- `--ui-text-dim` on the bevel face failed 4.5:1 in **all twelve** theme x mode
+  combinations (2.7–3.3), and `.ui-table td` uses it.
+- Both bevel edges were invisible on half the palette each, because an edge
+  mixed toward white off a near-white face has nowhere to go.
+
+Close this before a second skin lands. The tool already has the machinery — it
+needs to load a skin file, resolve its role tokens, and re-run the pairings.
+
+## Architecture (superseded — kept for the reasoning)
 
 Two independent axes. **Skeleton** = structure, chosen by what it is.
 **Theme** = appearance, chosen by who it's for. Skeletons contain no colour,
