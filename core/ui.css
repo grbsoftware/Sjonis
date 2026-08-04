@@ -366,6 +366,12 @@
    column look broken, so these are tabular-figure by default — the same reason
    .ui-num exists for tables.
    -------------------------------------------------------------------------- */
+/* A heading that is also a link should read as a heading. Catalogue titles are
+   almost always links, and the default blue-and-underlined turns a tidy grid
+   into a page of hyperlinks. */
+.ui-title a,.ui-list-title a{color:inherit;text-decoration:none}
+.ui-title a:hover,.ui-list-title a:hover{text-decoration:underline;text-underline-offset:3px}
+
 .ui-price{
   font-variant-numeric:tabular-nums;
   font-weight:var(--ui-weight-heading);

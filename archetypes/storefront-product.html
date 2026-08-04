@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lattice — Sjonis Editions</title>
+
+<link rel="stylesheet" href="../core/ui.css">
+<link rel="stylesheet" href="../core/themes.css">
+
+<!--
+  STOREFRONT — PRODUCT PAGE
+
+  The second page of the same site, and the reason it exists: an archetype
+  proves a layout, but only a SECOND page proves a site. Everything between
+  <header> and the first <section>, and everything from <footer> down, is
+  copied from storefront.html without one character changed. That is the test —
+  if the site frame needed editing to survive a different page, it was a header
+  and not a frame.
+
+  What differs is only what should:
+    - the crumb trail gains a level and ends on this product
+    - .ui-sitenav-item keeps aria-current on Prints, because that is still where
+      you are in the site, even though this is not the listing page
+    - the layout drops from a grid to a two-column split: one thing to look at,
+      one column of things to decide
+
+  The thumbnail strip is data-ui-choice — the same single-select group the
+  swatches use. It was written for colour chips and works unchanged for images,
+  which is the only real evidence that a primitive was worth adding.
+-->
+
+<body class="ui" data-theme="graphite" id="top">
+<a class="ui-skip" href="#main">Skip to content</a>
+
+<div class="ui-page">
+
+  <!-- site frame: header — identical to storefront.html --------------------- -->
+  <header class="ui-sitehead ui-sitehead-stick">
+    <div class="ui-sitebar ui-measure ui-measure-wide">
+      <a class="ui-brand" href="storefront.html">
+        <div class="ui-mark">SJ</div>
+        <div class="ui-brand-name">Sjonis Editions</div>
+      </a>
+      <nav class="ui-sitenav" aria-label="Catalogue">
+        <a class="ui-sitenav-item" aria-current="page" href="storefront.html">Prints</a>
+        <a class="ui-sitenav-item" href="storefront.html">Objects</a>
+        <a class="ui-sitenav-item" href="storefront.html">Archive</a>
+      </nav>
+      <div class="ui-sitehead-actions">
+        <button class="ui-btn ui-btn-ghost" data-ui-open="#cart">
+          Bag <span class="ui-nav-count">3</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="ui-band ui-band-tight">
+    <div class="ui-measure ui-measure-wide">
+      <nav aria-label="Breadcrumb">
+        <ol class="ui-crumbs">
+          <li><a href="storefront.html">Home</a></li>
+          <li><a href="storefront.html">Prints</a></li>
+          <li><a href="storefront.html">Screenprints</a></li>
+          <li><span aria-current="page">Lattice</span></li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <!-- the product ------------------------------------------------------------>
+  <section class="ui-band ui-band-tight" id="main" tabindex="-1">
+    <div class="ui-measure ui-measure-wide ui-split" style="gap:var(--ui-s6)">
+
+      <!-- viewing column -->
+      <div>
+        <div class="ui-frame ui-ratio-portrait" id="hero">
+          <img src="../demo/img/lattice.svg" alt="Lattice, a screenprint of a woven grid">
+        </div>
+
+        <!-- Same component as the swatches. A thumbnail strip IS a single-select
+             group; giving it its own bespoke behaviour would be the mistake. -->
+        <div class="ui-row" data-ui-choice role="group" aria-label="Views"
+             style="margin-top:var(--ui-s3);gap:var(--ui-s2)">
+          <button class="ui-frame ui-ratio-square" style="width:72px" aria-pressed="true"
+                  aria-label="Full print" data-view="../demo/img/lattice.svg">
+            <img src="../demo/img/lattice.svg" alt="">
+          </button>
+          <button class="ui-frame ui-ratio-square" style="width:72px" aria-pressed="false"
+                  aria-label="Detail" data-view="../demo/img/weave.svg">
+            <img src="../demo/img/weave.svg" alt="">
+          </button>
+          <button class="ui-frame ui-ratio-square" style="width:72px" aria-pressed="false"
+                  aria-label="Framed" data-view="../demo/img/grid.svg">
+            <img src="../demo/img/grid.svg" alt="">
+          </button>
+        </div>
+      </div>
+
+      <!-- deciding column -->
+      <div>
+        <p class="ui-eyebrow">Screenprint · 2026</p>
+        <h1 class="ui-title ui-title-lg">Lattice</h1>
+        <p class="ui-lead">Four-colour screenprint on 300gsm Somerset. The plate order
+          is part of the rule set, so no two pulls in the edition register identically.</p>
+
+        <p>
+          <span class="ui-price" style="font-size:var(--ui-fs-lg)">£180</span>
+          <span class="ui-dim">Edition of 40 · 50×70cm</span>
+        </p>
+
+        <div class="ui-field">
+          <span class="ui-label" id="ink-label">Ink</span>
+          <div class="ui-swatches" data-ui-choice role="group" aria-labelledby="ink-label">
+            <button class="ui-swatch" style="--ui-swatch:var(--ui-cat-1)" aria-pressed="true"  aria-label="Blue"></button>
+            <button class="ui-swatch" style="--ui-swatch:var(--ui-cat-3)" aria-pressed="false" aria-label="Green"></button>
+            <button class="ui-swatch" style="--ui-swatch:var(--ui-cat-7)" aria-pressed="false" aria-label="Violet"></button>
+          </div>
+        </div>
+
+        <div class="ui-row" style="gap:var(--ui-s3);align-items:flex-end;margin-top:var(--ui-s4)">
+          <div class="ui-field" style="max-width:96px">
+            <label class="ui-label" for="qty">Quantity</label>
+            <input class="ui-input ui-input-mono" id="qty" type="number" value="1" min="1" max="5">
+          </div>
+          <button class="ui-btn" data-ui-open="#cart">Add to bag</button>
+        </div>
+
+        <p class="ui-pill ui-pill-good" style="margin-top:var(--ui-s4)">12 of 40 remaining</p>
+
+        <div class="ui-accordion" data-ui-accordion="single" style="margin-top:var(--ui-s5)">
+          <details open>
+            <summary>Paper and inks</summary>
+            <div class="ui-accordion-body">300gsm Somerset Satin, acid-free and mould-made.
+              Lightfast pigment inks rated 100+ years under glass.</div>
+          </details>
+          <details>
+            <summary>Framing</summary>
+            <div class="ui-accordion-body">Supplied unframed with a 40mm border for hinging.
+              Any 50×70cm frame with a window mount fits without trimming.</div>
+          </details>
+          <details>
+            <summary>Shipping and returns</summary>
+            <div class="ui-accordion-body">Rolled in a board tube, tracked, 3–5 working days.
+              Returns accepted unframed within 30 days.</div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- related. A reel rather than a grid: this is a sideline, and a grid down
+       here would compete with the product above it. ------------------------- -->
+  <section class="ui-band ui-band-sunk ui-band-line">
+    <div class="ui-measure ui-measure-wide">
+      <h2 class="ui-title">From the same series</h2>
+      <div class="ui-reel">
+        <a class="ui-card ui-card-flush" href="storefront.html">
+          <div class="ui-frame ui-ratio-portrait"><img src="../demo/img/orbit.svg" alt="Orbit"></div>
+          <div class="ui-card-body">
+            <span class="ui-list-title">Orbit</span>
+            <span><span class="ui-price">£126</span> <span class="ui-price-was">£180</span></span>
+          </div>
+        </a>
+        <a class="ui-card ui-card-flush" href="storefront.html">
+          <div class="ui-frame ui-ratio-portrait"><img src="../demo/img/signal.svg" alt="Signal"></div>
+          <div class="ui-card-body">
+            <span class="ui-list-title">Signal</span>
+            <span class="ui-price">£165</span>
+          </div>
+        </a>
+        <a class="ui-card ui-card-flush" href="storefront.html">
+          <div class="ui-frame ui-ratio-portrait"><img src="../demo/img/fold.svg" alt="Fold"></div>
+          <div class="ui-card-body">
+            <span class="ui-list-title">Fold</span>
+            <span class="ui-price">£175</span>
+          </div>
+        </a>
+        <a class="ui-card ui-card-flush" href="storefront.html">
+          <div class="ui-frame ui-ratio-portrait"><img src="../demo/img/interval.svg" alt="Interval"></div>
+          <div class="ui-card-body">
+            <span class="ui-list-title">Interval</span>
+            <span class="ui-price">£130</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- site frame: footer — identical to storefront.html --------------------- -->
+  <footer class="ui-sitefoot">
+    <div class="ui-measure ui-measure-wide">
+      <div class="ui-sitefoot-cols">
+        <div>
+          <div class="ui-label">Shop</div>
+          <ul>
+            <li><a href="storefront.html">Prints</a></li>
+            <li><a href="storefront.html">Objects</a></li>
+            <li><a href="storefront.html">Gift cards</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="ui-label">Help</div>
+          <ul>
+            <li><a href="storefront.html">Shipping</a></li>
+            <li><a href="storefront.html">Returns</a></li>
+            <li><a href="storefront.html">Framing guide</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="ui-label">Studio</div>
+          <ul>
+            <li><a href="storefront.html">About</a></li>
+            <li><a href="storefront.html">Contact</a></li>
+            <li><a href="storefront.html">Trade enquiries</a></li>
+          </ul>
+        </div>
+        <div class="ui-field">
+          <label for="th" class="ui-label">Appearance</label>
+          <select class="ui-input" id="th" data-ui-theme>
+            <option>vanilla</option><option>blueprint</option><option>halo</option>
+            <option selected>graphite</option><option>oxide</option><option>vellum</option>
+          </select>
+          <button class="ui-mode-toggle" data-ui-mode="toggle" style="margin-top:var(--ui-s2)">
+            <span class="ui-mode-word" data-ui-mode-label>Night</span>◐
+          </button>
+        </div>
+      </div>
+
+      <div class="ui-sitefoot-base">
+        <span>&copy; 2026 Sjonis Editions</span>
+        <span>Placeholder drawings generated by
+          <a href="https://www.anthropic.com">Claude</a>, reviewed and approved by Gary.</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<dialog class="ui-dialog" id="cart">
+  <form method="dialog" class="ui-dialog-head">
+    <h2 class="ui-title">Your bag</h2>
+    <button class="ui-x" aria-label="Close" data-ui-close>&times;</button>
+  </form>
+  <div class="ui-dialog-body">
+    <ul class="ui-list">
+      <li class="ui-list-item">
+        <div class="ui-list-top">
+          <span class="ui-list-title">Lattice · Blue</span>
+          <span class="ui-price">£180</span>
+        </div>
+        <div class="ui-list-sub">Edition of 40 · 50×70cm</div>
+      </li>
+    </ul>
+  </div>
+  <div class="ui-dialog-foot">
+    <button class="ui-btn ui-btn-ghost" data-ui-close>Keep looking</button>
+    <button class="ui-btn" data-ui-close>Checkout</button>
+  </div>
+</dialog>
+
+<script src="../core/ui.js"></script>
+<script>
+/* The only page-specific script in the suite, and it is four lines: swap the
+   hero when a thumbnail is chosen. ui:choice is the event data-ui-choice
+   already fires, so the strip needs no wiring of its own. */
+document.addEventListener('ui:choice', function (e) {
+  var src = e.detail.button.getAttribute('data-view');
+  if (src) document.querySelector('#hero img').setAttribute('src', src);
+});
+</script>
+</body>
+</html>
