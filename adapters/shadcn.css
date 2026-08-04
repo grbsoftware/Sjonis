@@ -1,0 +1,83 @@
+/* =============================================================================
+   UI SUITE -> shadcn/ui
+
+   shadcn is themed entirely through CSS custom properties, so our tokens can
+   drive it directly. Load order:
+
+       ui.css  ->  themes.css  ->  shadcn.css  ->  shadcn's own globals.css
+
+   Then every shadcn component inherits whichever of our six themes is active,
+   and switching data-theme restyles the whole component set.
+
+   ---------------------------------------------------------------------------
+   ONE TRAP, AND IT BITES EVERYONE:
+
+   shadcn's `--accent` is NOT the brand colour. It is the muted hover/highlight
+   surface used by menu items, dropdown rows and command palette entries.
+   The brand colour in shadcn is `--primary`.
+
+   Map --ui-accent onto shadcn's --accent and every hover state in the app turns
+   neon. The mapping below is deliberate:
+
+       --ui-accent      ->  --primary        (brand)
+       --ui-surface-3   ->  --accent         (hover surface)
+   ---------------------------------------------------------------------------
+
+   Scope note: these are declared on :root AND .ui so they resolve whether the
+   theme sits on <html> or on a wrapper, matching ui.css.
+   ============================================================================= */
+
+:root,
+.ui {
+  /* ground ---------------------------------------------------------------- */
+  --background:            var(--ui-bg);
+  --foreground:            var(--ui-text);
+
+  /* raised surfaces ------------------------------------------------------- */
+  --card:                  var(--ui-surface);
+  --card-foreground:       var(--ui-text);
+  --popover:               var(--ui-surface);
+  --popover-foreground:    var(--ui-text);
+
+  /* brand ----------------------------------------------------------------- */
+  --primary:               var(--ui-accent);
+  --primary-foreground:    var(--ui-accent-ink);
+
+  /* recessed / muted ------------------------------------------------------ */
+  --secondary:             var(--ui-surface-2);
+  --secondary-foreground:  var(--ui-text);
+  --muted:                 var(--ui-surface-2);
+  --muted-foreground:      var(--ui-text-dim);
+
+  /* hover surface — see the trap above; this is NOT the brand accent ------- */
+  --accent:                var(--ui-surface-3);
+  --accent-foreground:     var(--ui-text);
+
+  /* state ----------------------------------------------------------------- */
+  --destructive:           var(--ui-crit);
+  --destructive-foreground: var(--ui-accent-ink);
+
+  /* lines and focus ------------------------------------------------------- */
+  --border:                var(--ui-line);
+  --input:                 var(--ui-line-strong);
+  --ring:                  var(--ui-accent);
+
+  /* shape ----------------------------------------------------------------- */
+  --radius:                var(--ui-radius);
+}
+
+/* -----------------------------------------------------------------------------
+   NOT MAPPED, ON PURPOSE
+
+   --chart-1..5   shadcn's categorical chart palette. Series colours are a
+                  separate problem from UI colour: they need to stay distinct
+                  from each other and survive colour-blindness, which our
+                  single accent cannot supply. Author them per project.
+
+   --sidebar-*    Only present in shadcn's sidebar block. Add if you use it:
+                  --sidebar: var(--ui-surface-2); etc.
+
+   Depth and blur do not cross over — shadcn leaves shadows to Tailwind
+   utilities. Our --ui-shadow / --ui-blur are unused here; apply them in your
+   own CSS if you want Halo's translucency on shadcn surfaces.
+   -------------------------------------------------------------------------- */

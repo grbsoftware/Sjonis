@@ -1,0 +1,685 @@
+<title>Interface Directions — Specimen Deck 01</title>
+
+<style>
+/* ============================================================
+   CATALOGUE CHROME  (--c-*)
+   Deliberately quiet. The specimens are the loud part; the
+   frame around them stays near-silent so it never competes.
+   ============================================================ */
+:root{
+  --c-paper:#F7F8F7; --c-raise:#FFFFFF; --c-ink:#16181A; --c-dim:#5E6468;
+  --c-faint:#8C9396; --c-line:#DFE2E1; --c-line2:#C8CDCB; --c-accent:#2F5D50;
+  --c-sans:"Segoe UI Variable Text","Segoe UI",-apple-system,system-ui,sans-serif;
+  --c-mono:"Cascadia Mono",Consolas,ui-monospace,"SF Mono",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --c-paper:#0E1011; --c-raise:#15181A; --c-ink:#E8EAE9; --c-dim:#8A9296;
+    --c-faint:#666E71; --c-line:#24282A; --c-line2:#333A3C; --c-accent:#7FB8A4;
+  }
+}
+:root[data-theme="dark"]{
+  --c-paper:#0E1011; --c-raise:#15181A; --c-ink:#E8EAE9; --c-dim:#8A9296;
+  --c-faint:#666E71; --c-line:#24282A; --c-line2:#333A3C; --c-accent:#7FB8A4;
+}
+:root[data-theme="light"]{
+  --c-paper:#F7F8F7; --c-raise:#FFFFFF; --c-ink:#16181A; --c-dim:#5E6468;
+  --c-faint:#8C9396; --c-line:#DFE2E1; --c-line2:#C8CDCB; --c-accent:#2F5D50;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--c-paper); color:var(--c-ink);
+  font-family:var(--c-sans); font-size:15px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.deck{max-width:1240px;margin:0 auto;padding:0 28px 96px}
+
+/* ---- masthead: a spec sheet, not a hero ---- */
+.masthead{padding:56px 0 28px;border-bottom:1px solid var(--c-line)}
+.eyebrow-c{
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--c-accent);font-weight:600;margin:0 0 14px;
+}
+.masthead h1{
+  margin:0;font-size:clamp(30px,4.4vw,46px);line-height:1.06;
+  letter-spacing:-.022em;font-weight:650;text-wrap:balance;max-width:16ch;
+}
+.standfirst{
+  margin:16px 0 0;max-width:64ch;color:var(--c-dim);font-size:15.5px;line-height:1.62;
+}
+.meta{
+  display:flex;flex-wrap:wrap;gap:0 30px;margin-top:26px;
+  font-family:var(--c-mono);font-size:11.5px;color:var(--c-faint);
+  font-variant-numeric:tabular-nums;
+}
+.meta b{color:var(--c-dim);font-weight:500}
+
+/* ---- layout ---- */
+.cols{display:grid;grid-template-columns:184px 1fr;gap:52px;align-items:start;margin-top:40px}
+@media (max-width:900px){.cols{grid-template-columns:1fr;gap:28px}}
+
+.index{position:sticky;top:24px}
+@media (max-width:900px){
+  .index{position:static;display:flex;gap:10px;overflow-x:auto;padding-bottom:8px}
+}
+.index-h{
+  font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--c-faint);font-weight:600;margin:0 0 14px;
+}
+@media (max-width:900px){.index-h{display:none}}
+.idx{
+  display:block;text-decoration:none;color:inherit;padding:11px 0;
+  border-bottom:1px solid var(--c-line);
+}
+@media (max-width:900px){
+  .idx{border-bottom:none;border:1px solid var(--c-line);border-radius:7px;
+       padding:9px 13px;flex:0 0 auto;background:var(--c-raise)}
+}
+.idx:last-child{border-bottom:none}
+.idx:hover .idx-n,.idx:focus-visible .idx-n{color:var(--c-accent)}
+.idx:focus-visible{outline:2px solid var(--c-accent);outline-offset:3px;border-radius:4px}
+.idx-n{font-size:13.5px;font-weight:600;letter-spacing:-.005em;display:block}
+.idx-t{font-size:11.5px;color:var(--c-faint);display:block;margin-top:1px}
+@media (max-width:900px){.idx-t{display:none}}
+.chips{display:flex;gap:3px;margin-top:8px}
+.chip{width:15px;height:15px;border-radius:3px;border:1px solid rgba(128,128,128,.22)}
+
+/* ---- plate ---- */
+.plate{margin-bottom:76px;scroll-margin-top:24px}
+.plate-head{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  gap:22px;flex-wrap:wrap;margin-bottom:18px;
+}
+.plate-no{
+  font-family:var(--c-mono);font-size:11.5px;color:var(--c-faint);
+  letter-spacing:.06em;margin:0 0 5px;
+}
+.plate-head h2{
+  margin:0;font-size:25px;letter-spacing:-.018em;font-weight:650;line-height:1.15;
+}
+.thesis{margin:7px 0 0;color:var(--c-dim);font-size:14px;max-width:56ch;line-height:1.55}
+.modeswap{
+  display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+  background:var(--c-raise);color:var(--c-dim);
+  border:1px solid var(--c-line2);border-radius:99px;
+  padding:6px 14px;font:inherit;font-size:12px;font-weight:550;
+  font-family:var(--c-sans);white-space:nowrap;
+}
+.modeswap:hover{color:var(--c-ink);border-color:var(--c-accent)}
+.modeswap:focus-visible{outline:2px solid var(--c-accent);outline-offset:2px}
+.modeswap span{font-size:13px;line-height:1}
+
+/* ---- spec strip: the token contract, doubles as build spec ---- */
+.spec{
+  display:flex;flex-wrap:wrap;gap:0 26px;row-gap:9px;
+  padding:13px 16px;margin-bottom:-1px;
+  border:1px solid var(--c-line);border-radius:9px 9px 0 0;
+  background:var(--c-raise);
+  font-family:var(--c-mono);font-size:11px;color:var(--c-faint);
+}
+.spec div{display:flex;align-items:center;gap:7px}
+.spec b{color:var(--c-dim);font-weight:500;letter-spacing:.04em}
+.sw{display:inline-flex;gap:3px}
+.sw i{width:13px;height:13px;border-radius:2px;border:1px solid rgba(128,128,128,.25)}
+
+.stage{
+  border:1px solid var(--c-line);border-radius:0 0 9px 9px;
+  overflow:hidden;background:var(--c-raise);
+}
+
+/* ============================================================
+   SPECIMEN TOKENS  (--s-*)
+   Namespaced away from chrome so the two cascades never collide.
+   Each plate is a sealed world: it sets every token, both modes.
+   ============================================================ */
+
+/* -- 01 GRAPHITE : calm precision, cool near-mono, steel accent -- */
+.plate[data-spec="graphite"]{
+  --s-bg:#0D0F12; --s-panel:#14171B; --s-panel2:#101317;
+  --s-line:#212630; --s-line2:#2C333F;
+  --s-text:#E6E9EE; --s-dim:#98A1AE; --s-faint:#626C7A;
+  --s-accent:#6D93C4; --s-accent-ink:#0B0E12;
+  --s-good:#4FB286; --s-warn:#D9A441; --s-crit:#E06C63;
+  --s-r:6px; --s-r2:4px; --s-pad:1; --s-fs:13px;
+  --s-face:var(--c-sans); --s-display:var(--c-sans); --s-mono:var(--c-mono);
+  --s-hw:600; --s-track:.02em; --s-shadow:0 1px 2px rgba(0,0,0,.4);
+  --s-blur:none; --s-glow:none;
+}
+.plate[data-spec="graphite"][data-mode="light"]{
+  --s-bg:#F4F6F8; --s-panel:#FFFFFF; --s-panel2:#EDF0F3;
+  --s-line:#DDE3E9; --s-line2:#C6CED6;
+  --s-text:#14181D; --s-dim:#59626C; --s-faint:#8B949E;
+  --s-accent:#3C63A8; --s-accent-ink:#FFFFFF;
+  --s-good:#1F8A5F; --s-warn:#A9741A; --s-crit:#C0453C;
+  --s-shadow:0 1px 2px rgba(16,24,40,.06);
+}
+
+/* -- 02 BLUEPRINT : drafting table, mono-dominant, square -- */
+.plate[data-spec="blueprint"]{
+  --s-bg:#071A24; --s-panel:#0B2431; --s-panel2:#061620;
+  --s-line:#14384A; --s-line2:#1E5169;
+  --s-text:#D6EAF2; --s-dim:#7FA9BC; --s-faint:#4E7789;
+  --s-accent:#35C6E8; --s-accent-ink:#04161E;
+  --s-good:#4ED6A4; --s-warn:#E8B84B; --s-crit:#FF6B6B;
+  --s-r:0px; --s-r2:0px; --s-pad:.92; --s-fs:12.5px;
+  --s-face:var(--c-mono); --s-display:var(--c-mono); --s-mono:var(--c-mono);
+  --s-hw:600; --s-track:.06em; --s-shadow:none;
+  --s-blur:none; --s-glow:none;
+}
+.plate[data-spec="blueprint"][data-mode="light"]{
+  --s-bg:#EEF4F7; --s-panel:#FFFFFF; --s-panel2:#E2ECF1;
+  --s-line:#C3D8E2; --s-line2:#9BBCCB;
+  --s-text:#06222E; --s-dim:#45697A; --s-faint:#7899A8;
+  --s-accent:#0B7FA0; --s-accent-ink:#FFFFFF;
+  --s-good:#0E7C5A; --s-warn:#96701B; --s-crit:#C2453F;
+}
+
+/* -- 03 OXIDE : warm industrial, rust signal, heavier rules -- */
+.plate[data-spec="oxide"]{
+  --s-bg:#17130F; --s-panel:#201B16; --s-panel2:#1A1512;
+  --s-line:#322920; --s-line2:#453829;
+  --s-text:#F0E7DC; --s-dim:#A99884; --s-faint:#776A5B;
+  --s-accent:#D2622A; --s-accent-ink:#1A0E07;
+  --s-good:#86A84E; --s-warn:#E0A03A; --s-crit:#C8433A;
+  --s-r:4px; --s-r2:3px; --s-pad:1.05; --s-fs:13px;
+  --s-face:var(--c-sans); --s-display:var(--c-sans); --s-mono:var(--c-mono);
+  --s-hw:700; --s-track:.05em; --s-shadow:0 2px 0 rgba(0,0,0,.28);
+  --s-blur:none; --s-glow:none;
+}
+.plate[data-spec="oxide"][data-mode="light"]{
+  --s-bg:#F5F0E8; --s-panel:#FFFFFF; --s-panel2:#EBE3D7;
+  --s-line:#D8CCBA; --s-line2:#B9A88F;
+  --s-text:#1F1811; --s-dim:#6B5C48; --s-faint:#93826B;
+  --s-accent:#B04A16; --s-accent-ink:#FFFFFF;
+  --s-good:#5C7A2A; --s-warn:#9A6C14; --s-crit:#A93A31;
+  --s-shadow:0 2px 0 rgba(120,96,64,.13);
+}
+
+/* -- 04 VELLUM : editorial calm, serif display, bone ground -- */
+.plate[data-spec="vellum"]{
+  --s-bg:#F2F3EE; --s-panel:#FBFBF8; --s-panel2:#E9EBE3;
+  --s-line:#DCDED4; --s-line2:#C2C6B8;
+  --s-text:#22241E; --s-dim:#5C6154; --s-faint:#8B9080;
+  --s-accent:#3A5470; --s-accent-ink:#FFFFFF;
+  --s-good:#3F7A52; --s-warn:#97742A; --s-crit:#A6453B;
+  --s-r:2px; --s-r2:2px; --s-pad:1.35; --s-fs:13.5px;
+  --s-face:var(--c-sans); --s-display:"Iowan Old Style",Georgia,"Times New Roman",serif;
+  --s-mono:var(--c-mono);
+  --s-hw:600; --s-track:.09em; --s-shadow:none;
+  --s-blur:none; --s-glow:none;
+}
+.plate[data-spec="vellum"][data-mode="dark"]{
+  --s-bg:#191A17; --s-panel:#212320; --s-panel2:#1C1E1B;
+  --s-line:#2E312C; --s-line2:#3F433C;
+  --s-text:#E9EAE3; --s-dim:#9BA093; --s-faint:#6F7469;
+  --s-accent:#8FB0D0; --s-accent-ink:#131519;
+  --s-good:#6FA87E; --s-warn:#C9A653; --s-crit:#CF7A70;
+}
+
+/* -- 05 HALO : soft depth, translucent layers, mint on violet-slate -- */
+.plate[data-spec="halo"]{
+  --s-bg:#0F1018; --s-panel:rgba(255,255,255,.055); --s-panel2:rgba(255,255,255,.028);
+  --s-line:rgba(255,255,255,.10); --s-line2:rgba(255,255,255,.18);
+  --s-text:#EDEDF5; --s-dim:#A3A3B8; --s-faint:#71718A;
+  --s-accent:#4FD6C1; --s-accent-ink:#06231F;
+  --s-good:#4FD6C1; --s-warn:#FFC46B; --s-crit:#FF7B8A;
+  --s-r:14px; --s-r2:9px; --s-pad:1.2; --s-fs:13px;
+  --s-face:var(--c-sans); --s-display:var(--c-sans); --s-mono:var(--c-mono);
+  --s-hw:600; --s-track:.02em;
+  --s-shadow:0 6px 22px rgba(0,0,0,.34); --s-blur:blur(18px);
+  --s-glow:radial-gradient(900px 420px at 76% -8%,rgba(79,214,193,.16),transparent 62%),
+           radial-gradient(700px 380px at 8% 104%,rgba(120,110,255,.15),transparent 60%);
+}
+.plate[data-spec="halo"][data-mode="light"]{
+  --s-bg:#EEEFF6; --s-panel:rgba(255,255,255,.72); --s-panel2:rgba(255,255,255,.46);
+  --s-line:rgba(20,20,45,.10); --s-line2:rgba(20,20,45,.19);
+  --s-text:#16172A; --s-dim:#55566E; --s-faint:#83849B;
+  --s-accent:#0E9C86; --s-accent-ink:#FFFFFF;
+  --s-good:#0E9C86; --s-warn:#B37A15; --s-crit:#CC4759;
+  --s-shadow:0 6px 22px rgba(30,32,70,.10);
+  --s-glow:radial-gradient(900px 420px at 76% -8%,rgba(14,156,134,.13),transparent 62%),
+           radial-gradient(700px 380px at 8% 104%,rgba(120,110,255,.13),transparent 60%);
+}
+
+/* ============================================================
+   THE SPECIMEN SCREEN
+   Identical markup in every plate — only tokens differ, so what
+   you are comparing is taste, never layout.
+   ============================================================ */
+.specimen{
+  background:var(--s-bg); background-image:var(--s-glow);
+  color:var(--s-text); font-family:var(--s-face); font-size:var(--s-fs);
+  display:grid; grid-template-columns:min(190px,26%) 1fr; min-height:452px;
+}
+@media (max-width:680px){.specimen{grid-template-columns:1fr}}
+
+/* -- rail -- */
+.rail{
+  background:var(--s-panel2); border-right:1px solid var(--s-line);
+  padding:calc(17px * var(--s-pad)) calc(14px * var(--s-pad));
+  display:flex; flex-direction:column; gap:calc(20px * var(--s-pad));
+  backdrop-filter:var(--s-blur);
+}
+@media (max-width:680px){
+  .rail{border-right:none;border-bottom:1px solid var(--s-line);
+        flex-direction:row;align-items:center;gap:14px;overflow-x:auto}
+  .railfoot{margin-left:auto!important}
+  .navlist{flex-direction:row!important;gap:3px!important}
+}
+.brand{display:flex;align-items:center;gap:9px}
+.mark{
+  width:21px;height:21px;border-radius:var(--s-r2);flex:0 0 auto;
+  background:var(--s-accent);
+  display:grid;place-items:center;
+  color:var(--s-accent-ink);font-size:11px;font-weight:800;font-family:var(--s-mono);
+}
+.brandname{font-weight:var(--s-hw);letter-spacing:-.01em;font-size:calc(var(--s-fs) + .5px)}
+.navlist{display:flex;flex-direction:column;gap:1px}
+.navitem{
+  padding:calc(7px * var(--s-pad)) 10px;border-radius:var(--s-r2);
+  color:var(--s-dim);cursor:pointer;font-size:var(--s-fs);
+  border:1px solid transparent;white-space:nowrap;
+}
+.navitem:hover{color:var(--s-text);background:var(--s-panel)}
+.navitem.on{
+  color:var(--s-text);background:var(--s-panel);
+  border-color:var(--s-line2);font-weight:var(--s-hw);
+}
+.railfoot{margin-top:auto;display:flex;align-items:center;gap:9px;min-width:0}
+.avatar{
+  width:24px;height:24px;border-radius:99px;flex:0 0 auto;
+  background:var(--s-panel);border:1px solid var(--s-line2);
+  display:grid;place-items:center;
+  font-size:9.5px;font-weight:700;font-family:var(--s-mono);color:var(--s-dim);
+}
+.who{font-size:11px;color:var(--s-faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* -- body -- */
+.bodycol{padding:calc(19px * var(--s-pad)) calc(21px * var(--s-pad));display:flex;
+     flex-direction:column;gap:calc(17px * var(--s-pad));min-width:0}
+.topbar{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.eyebrow-s{
+  font-size:9.5px;letter-spacing:var(--s-track);text-transform:uppercase;
+  color:var(--s-accent);font-weight:700;margin-bottom:5px;font-family:var(--s-face);
+}
+.title{
+  margin:0;font-family:var(--s-display);font-size:calc(var(--s-fs) + 8px);
+  font-weight:var(--s-hw);letter-spacing:-.015em;line-height:1.15;
+}
+.actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.search{
+  background:var(--s-panel);border:1px solid var(--s-line2);color:var(--s-text);
+  border-radius:var(--s-r2);padding:6px 10px;font:inherit;font-family:var(--s-mono);
+  font-size:11.5px;width:132px;backdrop-filter:var(--s-blur);
+}
+.search:focus{outline:2px solid var(--s-accent);outline-offset:1px}
+.btn,.btn-ghost{
+  border-radius:var(--s-r2);padding:6px 13px;font:inherit;font-size:calc(var(--s-fs) - .5px);
+  font-weight:var(--s-hw);cursor:pointer;font-family:var(--s-face);
+  letter-spacing:.005em;white-space:nowrap;
+}
+.btn{background:var(--s-accent);color:var(--s-accent-ink);border:1px solid var(--s-accent);
+     box-shadow:var(--s-shadow)}
+.btn:hover{filter:brightness(1.09)}
+.btn:focus-visible,.btn-ghost:focus-visible{outline:2px solid var(--s-accent);outline-offset:2px}
+.btn-ghost{background:var(--s-panel);color:var(--s-dim);border:1px solid var(--s-line2);
+           backdrop-filter:var(--s-blur)}
+.btn-ghost:hover{color:var(--s-text)}
+
+/* -- stat tiles -- */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(10px * var(--s-pad))}
+@media (max-width:560px){.stats{grid-template-columns:1fr}}
+.tile{
+  background:var(--s-panel);border:1px solid var(--s-line);border-radius:var(--s-r);
+  padding:calc(12px * var(--s-pad));display:flex;flex-direction:column;gap:7px;
+  box-shadow:var(--s-shadow);backdrop-filter:var(--s-blur);
+  min-width:0; /* 1fr tracks min to auto — without this a long value widens the grid */
+}
+.tile-k{
+  font-size:9.5px;letter-spacing:var(--s-track);text-transform:uppercase;
+  color:var(--s-faint);font-weight:600;
+}
+.tile-v{
+  font-size:calc(var(--s-fs) + 9px);font-weight:var(--s-hw);letter-spacing:-.02em;
+  line-height:1;font-variant-numeric:tabular-nums;font-family:var(--s-display);
+}
+.tile-v small{font-size:.5em;font-weight:500;color:var(--s-faint);letter-spacing:0;margin-left:2px}
+.spark{width:100%;height:26px;display:block;overflow:visible}
+
+/* -- table -- */
+.tablewrap{
+  border:1px solid var(--s-line);border-radius:var(--s-r);overflow:hidden;
+  background:var(--s-panel);box-shadow:var(--s-shadow);backdrop-filter:var(--s-blur);
+}
+.scroller{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:calc(var(--s-fs) - .5px)}
+thead th{
+  text-align:left;padding:calc(9px * var(--s-pad)) 13px;
+  font-size:9.5px;letter-spacing:var(--s-track);text-transform:uppercase;
+  color:var(--s-faint);font-weight:600;border-bottom:1px solid var(--s-line);
+  background:var(--s-panel2);white-space:nowrap;
+}
+tbody td{
+  padding:calc(9px * var(--s-pad)) 13px;border-bottom:1px solid var(--s-line);
+  color:var(--s-dim);white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--s-panel2)}
+.sha{font-family:var(--s-mono);color:var(--s-text);font-size:11.5px}
+.msg{color:var(--s-text);max-width:190px;overflow:hidden;text-overflow:ellipsis}
+.num{font-variant-numeric:tabular-nums;text-align:right}
+
+/* state encoded in form as well as colour — pill + severity dot */
+.pill{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:2.5px 9px;border-radius:99px;font-size:10.5px;font-weight:650;
+  letter-spacing:.03em;border:1px solid currentColor;
+}
+.pill::before{content:"";width:5px;height:5px;border-radius:99px;background:currentColor}
+.pill.live{color:var(--s-good)}
+.pill.build{color:var(--s-warn)}
+.pill.fail{color:var(--s-crit)}
+.plate[data-spec="blueprint"] .pill{border-radius:0}
+
+@media (prefers-reduced-motion:no-preference){
+  .navitem,.btn,.btn-ghost,.idx-n,.modeswap,tbody tr{transition:all .13s ease}
+}
+
+/* ---- closing note ---- */
+.closer{
+  margin-top:8px;padding:26px 28px;border:1px solid var(--c-line);
+  border-radius:10px;background:var(--c-raise);
+}
+.closer h3{margin:0 0 10px;font-size:16px;font-weight:650;letter-spacing:-.01em}
+.closer p{margin:0 0 12px;color:var(--c-dim);font-size:14px;max-width:70ch;line-height:1.6}
+.closer p:last-child{margin-bottom:0}
+.closer b{color:var(--c-ink);font-weight:600}
+</style>
+
+<div class="deck">
+
+  <header class="masthead">
+    <p class="eyebrow-c">Specimen deck · Iteration 01</p>
+    <h1>Five directions for one interface</h1>
+    <p class="standfirst">
+      Every plate below renders the same screen — the same deployments view, the same
+      data, the same component inventory. Only the token set changes. That is deliberate:
+      it isolates the one variable you are actually choosing on, which is taste, and keeps
+      layout from quietly doing the persuading.
+    </p>
+    <div class="meta">
+      <span><b>Directions</b> 5</span>
+      <span><b>Screen</b> Deployments · production</span>
+      <span><b>Modes</b> Light + dark, per plate</span>
+      <span><b>Fonts</b> System stacks, Windows-first</span>
+    </div>
+  </header>
+
+  <div class="cols">
+
+    <nav class="index" aria-label="Directions">
+      <p class="index-h">Contents</p>
+
+      <a class="idx" href="#graphite">
+        <span class="idx-n">Graphite</span>
+        <span class="idx-t">Calm precision</span>
+        <span class="chips">
+          <i class="chip" style="background:#0D0F12"></i><i class="chip" style="background:#14171B"></i>
+          <i class="chip" style="background:#6D93C4"></i><i class="chip" style="background:#E6E9EE"></i>
+        </span>
+      </a>
+
+      <a class="idx" href="#blueprint">
+        <span class="idx-n">Blueprint</span>
+        <span class="idx-t">Technical console</span>
+        <span class="chips">
+          <i class="chip" style="background:#071A24"></i><i class="chip" style="background:#0B2431"></i>
+          <i class="chip" style="background:#35C6E8"></i><i class="chip" style="background:#D6EAF2"></i>
+        </span>
+      </a>
+
+      <a class="idx" href="#oxide">
+        <span class="idx-n">Oxide</span>
+        <span class="idx-t">Warm industrial</span>
+        <span class="chips">
+          <i class="chip" style="background:#17130F"></i><i class="chip" style="background:#201B16"></i>
+          <i class="chip" style="background:#D2622A"></i><i class="chip" style="background:#F0E7DC"></i>
+        </span>
+      </a>
+
+      <a class="idx" href="#vellum">
+        <span class="idx-n">Vellum</span>
+        <span class="idx-t">Editorial calm</span>
+        <span class="chips">
+          <i class="chip" style="background:#F2F3EE"></i><i class="chip" style="background:#E9EBE3"></i>
+          <i class="chip" style="background:#3A5470"></i><i class="chip" style="background:#22241E"></i>
+        </span>
+      </a>
+
+      <a class="idx" href="#halo">
+        <span class="idx-n">Halo</span>
+        <span class="idx-t">Soft depth</span>
+        <span class="chips">
+          <i class="chip" style="background:#0F1018"></i><i class="chip" style="background:#232433"></i>
+          <i class="chip" style="background:#4FD6C1"></i><i class="chip" style="background:#EDEDF5"></i>
+        </span>
+      </a>
+    </nav>
+
+    <main id="plates"></main>
+  </div>
+
+  <section class="closer">
+    <h3>How to use this</h3>
+    <p>
+      Pick the plate you'd want to look at every day — not the one that photographs best.
+      These are five different arguments about attention: <b>Graphite</b> and <b>Blueprint</b>
+      assume you are working in the tool for hours and want it to disappear; <b>Oxide</b> and
+      <b>Halo</b> assume the interface should have a point of view; <b>Vellum</b> assumes
+      reading matters more than operating.
+    </p>
+    <p>
+      Tell me which one (or which two to cross), and iteration 02 goes deep on it: the full
+      token set, the layout archetypes beyond this one screen — split view, three-pane,
+      command palette, settings, empty and error states — and the component inventory
+      built out properly.
+    </p>
+  </section>
+</div>
+
+<!-- One screen, cloned into every plate. Identical by construction. -->
+<template id="tpl-screen">
+  <div class="specimen">
+    <aside class="rail">
+      <div class="brand"><span class="mark">N</span><span class="brandname">Northwind</span></div>
+      <nav class="navlist">
+        <div class="navitem on">Deployments</div>
+        <div class="navitem">Services</div>
+        <div class="navitem">Logs</div>
+        <div class="navitem">Metrics</div>
+        <div class="navitem">Settings</div>
+      </nav>
+      <div class="railfoot">
+        <span class="avatar">GB</span><span class="who">gary@northwind</span>
+      </div>
+    </aside>
+
+    <div class="bodycol">
+      <div class="topbar">
+        <div>
+          <div class="eyebrow-s">Production · us-east</div>
+          <h3 class="title">Deployments</h3>
+        </div>
+        <div class="actions">
+          <input class="search" value="branch:main" aria-label="Filter deployments" />
+          <button class="btn-ghost" type="button">Filter</button>
+          <button class="btn" type="button">Deploy</button>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="tile">
+          <span class="tile-k">Uptime · 30d</span>
+          <span class="tile-v">99.98<small>%</small></span>
+          <svg class="spark" viewBox="0 0 120 26" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0,20 L14,18 L28,19 L42,13 L56,15 L70,9 L84,11 L98,6 L112,8 L120,5 V26 H0 Z"
+                  fill="currentColor" opacity=".1"/>
+            <polyline points="0,20 14,18 28,19 42,13 56,15 70,9 84,11 98,6 112,8 120,5"
+                      fill="none" stroke="currentColor" stroke-width="1.5"
+                      stroke-linejoin="round" opacity=".55"/>
+            <circle cx="120" cy="5" r="2.6" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="tile">
+          <span class="tile-k">p95 latency</span>
+          <span class="tile-v">214<small>ms</small></span>
+          <svg class="spark" viewBox="0 0 120 26" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0,8 L14,11 L28,7 L42,14 L56,12 L70,17 L84,14 L98,19 L112,17 L120,20 V26 H0 Z"
+                  fill="currentColor" opacity=".1"/>
+            <polyline points="0,8 14,11 28,7 42,14 56,12 70,17 84,14 98,19 112,17 120,20"
+                      fill="none" stroke="currentColor" stroke-width="1.5"
+                      stroke-linejoin="round" opacity=".55"/>
+            <circle cx="120" cy="20" r="2.6" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="tile">
+          <span class="tile-k">Failed · 7d</span>
+          <span class="tile-v">2</span>
+          <svg class="spark" viewBox="0 0 120 26" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0,22 L14,22 L28,16 L42,21 L56,22 L70,20 L84,22 L98,12 L112,21 L120,22 V26 H0 Z"
+                  fill="currentColor" opacity=".1"/>
+            <polyline points="0,22 14,22 28,16 42,21 56,22 70,20 84,22 98,12 112,21 120,22"
+                      fill="none" stroke="currentColor" stroke-width="1.5"
+                      stroke-linejoin="round" opacity=".55"/>
+            <circle cx="120" cy="22" r="2.6" fill="currentColor"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="tablewrap">
+        <div class="scroller">
+          <table>
+            <thead>
+              <tr>
+                <th>Commit</th><th>Message</th><th>Status</th>
+                <th class="num">Build</th><th class="num">When</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="sha">4f2ac91</td>
+                <td class="msg">Cache warm path for session lookup</td>
+                <td><span class="pill live">Live</span></td>
+                <td class="num">1m 12s</td><td class="num">4m ago</td>
+              </tr>
+              <tr>
+                <td class="sha">b81de07</td>
+                <td class="msg">Bump edge runtime to 3.4.2</td>
+                <td><span class="pill build">Building</span></td>
+                <td class="num">—</td><td class="num">9m ago</td>
+              </tr>
+              <tr>
+                <td class="sha">e93c5f4</td>
+                <td class="msg">Retry policy for webhook delivery</td>
+                <td><span class="pill fail">Failed</span></td>
+                <td class="num">0m 38s</td><td class="num">1h ago</td>
+              </tr>
+              <tr>
+                <td class="sha">2a70bb8</td>
+                <td class="msg">Drop unused index on events table</td>
+                <td><span class="pill live">Live</span></td>
+                <td class="num">1m 04s</td><td class="num">3h ago</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+(function () {
+  var DIRECTIONS = [
+    { id:"graphite", no:"01", name:"Graphite", tag:"Calm precision", mode:"dark",
+      thesis:"Near-monochrome and cool, one restrained steel accent, hairline rules. Dense but never cramped. Built to be stared at for eight hours without asking for attention.",
+      swatches:["#0D0F12","#14171B","#6D93C4","#E6E9EE"],
+      spec:{ Radius:"6px", Base:"13px", Face:"Segoe UI", Density:"Compact" } },
+
+    { id:"blueprint", no:"02", name:"Blueprint", tag:"Technical console", mode:"dark",
+      thesis:"Drafting-table vernacular: ink blue ground, square corners, monospace throughout, cyan as the only signal. Reads as an instrument rather than a product.",
+      swatches:["#071A24","#0B2431","#35C6E8","#D6EAF2"],
+      spec:{ Radius:"0px", Base:"12.5px", Face:"Cascadia Mono", Density:"Tight" } },
+
+    { id:"oxide", no:"03", name:"Oxide", tag:"Warm industrial", mode:"dark",
+      thesis:"Warm charcoal with rust as the signal colour, heavier weights, wider tracking on labels, a hard drop shadow instead of a soft one. Machine shop, not showroom.",
+      swatches:["#17130F","#201B16","#D2622A","#F0E7DC"],
+      spec:{ Radius:"4px", Base:"13px", Face:"Segoe UI 700", Density:"Regular" } },
+
+    { id:"vellum", no:"04", name:"Vellum", tag:"Editorial calm", mode:"light",
+      thesis:"A cool bone ground — green-biased, not cream — with a serif for display and a slate blue accent. Low contrast, generous spacing. Assumes reading matters more than operating.",
+      swatches:["#F2F3EE","#E9EBE3","#3A5470","#22241E"],
+      spec:{ Radius:"2px", Base:"13.5px", Face:"Georgia + Segoe", Density:"Airy" } },
+
+    { id:"halo", no:"05", name:"Halo", tag:"Soft depth", mode:"dark",
+      thesis:"Translucent layers over a violet-slate ground, ambient glow, generous radii, mint as the accent. The 2026 spatial direction executed with restraint rather than as spectacle.",
+      swatches:["#0F1018","#232433","#4FD6C1","#EDEDF5"],
+      spec:{ Radius:"14px", Base:"13px", Face:"Segoe UI", Density:"Relaxed" } }
+  ];
+
+  var host = document.getElementById("plates");
+  var tpl  = document.getElementById("tpl-screen");
+  if (!host || !tpl) return;
+
+  DIRECTIONS.forEach(function (d) {
+    var plate = document.createElement("section");
+    plate.className = "plate";
+    plate.id = d.id;
+    plate.setAttribute("data-spec", d.id);
+    plate.setAttribute("data-mode", d.mode);
+
+    var swatchHTML = d.swatches.map(function (c) {
+      return '<i style="background:' + c + '"></i>';
+    }).join("");
+
+    var specHTML = Object.keys(d.spec).map(function (k) {
+      return "<div><b>" + k + "</b> " + d.spec[k] + "</div>";
+    }).join("");
+
+    var head = document.createElement("div");
+    head.className = "plate-head";
+    head.innerHTML =
+      "<div>" +
+        '<p class="plate-no">' + d.no + " / 05 &nbsp;·&nbsp; " + d.tag + "</p>" +
+        "<h2>" + d.name + "</h2>" +
+        '<p class="thesis">' + d.thesis + "</p>" +
+      "</div>";
+
+    var btn = document.createElement("button");
+    btn.className = "modeswap";
+    btn.type = "button";
+    btn.innerHTML = "<span>◐</span> " + (d.mode === "dark" ? "View light" : "View dark");
+    btn.addEventListener("click", function () {
+      var next = plate.getAttribute("data-mode") === "dark" ? "light" : "dark";
+      plate.setAttribute("data-mode", next);
+      btn.innerHTML = "<span>◐</span> " + (next === "dark" ? "View light" : "View dark");
+    });
+    head.appendChild(btn);
+
+    var spec = document.createElement("div");
+    spec.className = "spec";
+    spec.innerHTML =
+      '<div><b>Palette</b> <span class="sw">' + swatchHTML + "</span></div>" + specHTML;
+
+    var stage = document.createElement("div");
+    stage.className = "stage";
+    stage.appendChild(tpl.content.cloneNode(true));
+
+    plate.appendChild(head);
+    plate.appendChild(spec);
+    plate.appendChild(stage);
+    host.appendChild(plate);
+  });
+})();
+</script>

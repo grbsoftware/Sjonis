@@ -1,0 +1,140 @@
+{
+  "$description": "Open-licensed font catalogue for the UI Suite. Stores what helps you PICK a face, not just its name. Nothing here is bundled yet — this is the shortlist, see notes.verify.",
+
+  "notes": {
+    "license": "Every entry is SIL Open Font License 1.1: free to use, modify, bundle and ship inside a commercial product. The only restriction is you cannot sell the font on its own. Public Sans is US government work, also OFL.",
+    "verify": "Confirm the license file at download time. Foundries occasionally relicense, and a repo you redistribute from is the wrong place to be wrong.",
+    "formats": "Ship WOFF2 for web (~30% smaller than TTF, universally supported). Keep TTF/OTF for desktop app targets — GTK, WinUI and Qt read those, not WOFF2.",
+    "variable": "Prefer variable fonts. One file carries every weight, so a variable family usually beats shipping even two static weights on total bytes.",
+    "xHeight": "Qualitative, not measured. High x-height stays legible at small UI sizes; low x-height reads better at large display sizes. Judged by eye, not by tooling — treat as a hint, not data.",
+    "science": "Legibility properties here (x-height, counters, character differentiation) are backed by real reading research. The 'personality' of a face is genre convention, not intrinsic meaning — same caveat as colour, see references/palettes.md."
+  },
+
+  "fonts": {
+    "Inter": {
+      "category": "sans", "license": "OFL-1.1", "variable": true,
+      "xHeight": "high", "trueItalics": true,
+      "differentiates": true,
+      "goodFor": ["UI", "dashboards", "dense data"],
+      "caution": "The most-used UI sans on the web and the default 'AI-generated' look. Excellent face, zero distinctiveness.",
+      "source": "https://fonts.google.com/specimen/Inter"
+    },
+    "Public Sans": {
+      "category": "sans", "license": "OFL-1.1", "variable": true,
+      "xHeight": "high", "trueItalics": true,
+      "differentiates": true,
+      "goodFor": ["UI", "government", "civic", "plain-language"],
+      "caution": "Deliberately neutral. Reads as institutional, which is sometimes exactly wrong.",
+      "source": "https://fonts.google.com/specimen/Public+Sans"
+    },
+    "Source Sans 3": {
+      "category": "sans", "license": "OFL-1.1", "variable": true,
+      "xHeight": "medium", "trueItalics": true,
+      "differentiates": true,
+      "goodFor": ["UI", "long text", "mixed content"],
+      "source": "https://fonts.google.com/specimen/Source+Sans+3"
+    },
+    "Manrope": {
+      "category": "sans", "license": "OFL-1.1", "variable": true,
+      "xHeight": "medium", "trueItalics": false,
+      "differentiates": true,
+      "goodFor": ["consumer", "marketing", "soft geometric"],
+      "caution": "No true italic — the browser will synthesise a slant, which looks cheap at large sizes.",
+      "pairsWith": ["halo"],
+      "source": "https://fonts.google.com/specimen/Manrope"
+    },
+    "Plus Jakarta Sans": {
+      "category": "sans", "license": "OFL-1.1", "variable": true,
+      "xHeight": "high", "trueItalics": true,
+      "differentiates": true,
+      "goodFor": ["consumer", "product", "friendly geometric"],
+      "pairsWith": ["halo"],
+      "source": "https://fonts.google.com/specimen/Plus+Jakarta+Sans"
+    },
+    "Archivo": {
+      "category": "sans", "license": "OFL-1.1", "variable": true,
+      "xHeight": "high", "trueItalics": true,
+      "differentiates": true,
+      "goodFor": ["industrial", "signage", "high impact", "condensed widths"],
+      "note": "Variable axis includes width, so condensed and expanded come from the same file.",
+      "pairsWith": ["oxide"],
+      "source": "https://fonts.google.com/specimen/Archivo"
+    },
+    "Barlow": {
+      "category": "sans", "license": "OFL-1.1", "variable": false,
+      "xHeight": "medium", "trueItalics": true,
+      "differentiates": true,
+      "goodFor": ["industrial", "transport", "utilitarian"],
+      "caution": "Not variable — you ship one file per weight.",
+      "pairsWith": ["oxide"],
+      "source": "https://fonts.google.com/specimen/Barlow"
+    },
+    "Source Serif 4": {
+      "category": "serif", "license": "OFL-1.1", "variable": true,
+      "xHeight": "medium", "trueItalics": true,
+      "differentiates": true,
+      "goodFor": ["long-form reading", "reports", "documentation"],
+      "pairsWith": ["vellum"],
+      "source": "https://fonts.google.com/specimen/Source+Serif+4"
+    },
+    "Literata": {
+      "category": "serif", "license": "OFL-1.1", "variable": true,
+      "xHeight": "high", "trueItalics": true,
+      "differentiates": true,
+      "goodFor": ["screen reading", "e-books", "editorial"],
+      "note": "Drawn for screen reading specifically — higher x-height than most text serifs.",
+      "pairsWith": ["vellum"],
+      "source": "https://fonts.google.com/specimen/Literata"
+    },
+    "EB Garamond": {
+      "category": "serif", "license": "OFL-1.1", "variable": true,
+      "xHeight": "low", "trueItalics": true,
+      "differentiates": true,
+      "goodFor": ["display", "classical", "print-adjacent"],
+      "caution": "Low x-height. Beautiful large, muddy below ~15px.",
+      "source": "https://fonts.google.com/specimen/EB+Garamond"
+    },
+    "JetBrains Mono": {
+      "category": "mono", "license": "OFL-1.1", "variable": true,
+      "xHeight": "high", "trueItalics": true,
+      "differentiates": true,
+      "goodFor": ["code", "terminals", "technical UI"],
+      "note": "Tall x-height and hard character differentiation; optional ligatures.",
+      "pairsWith": ["blueprint"],
+      "source": "https://fonts.google.com/specimen/JetBrains+Mono"
+    },
+    "IBM Plex Mono": {
+      "category": "mono", "license": "OFL-1.1", "variable": false,
+      "xHeight": "medium", "trueItalics": true,
+      "differentiates": true,
+      "goodFor": ["code", "technical UI", "documentation"],
+      "note": "Part of the Plex superfamily — Sans and Serif siblings share skeletons, so mixing them looks intentional.",
+      "pairsWith": ["blueprint"],
+      "source": "https://fonts.google.com/specimen/IBM+Plex+Mono"
+    },
+    "Space Mono": {
+      "category": "mono", "license": "OFL-1.1", "variable": false,
+      "xHeight": "medium", "trueItalics": true,
+      "differentiates": true,
+      "goodFor": ["display", "retro-technical", "headlines"],
+      "caution": "A display mono, not a work mono. Painful for long code.",
+      "source": "https://fonts.google.com/specimen/Space+Mono"
+    },
+    "Fraunces": {
+      "category": "display", "license": "OFL-1.1", "variable": true,
+      "xHeight": "medium", "trueItalics": true,
+      "differentiates": false,
+      "goodFor": ["display", "editorial headlines", "character"],
+      "note": "Variable axes include softness and 'wonk'. Very expressive — headlines only.",
+      "source": "https://fonts.google.com/specimen/Fraunces"
+    },
+    "Instrument Serif": {
+      "category": "display", "license": "OFL-1.1", "variable": false,
+      "xHeight": "medium", "trueItalics": true,
+      "differentiates": false,
+      "goodFor": ["display", "large headlines", "editorial"],
+      "caution": "One weight only. Display sizes exclusively.",
+      "source": "https://fonts.google.com/specimen/Instrument+Serif"
+    }
+  }
+}

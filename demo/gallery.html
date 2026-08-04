@@ -1,0 +1,994 @@
+<title>UI Suite — Archetypes × Themes</title>
+
+<style>
+/* ===== gallery chrome (--g-*) : quiet, so the preview dominates ============ */
+:root{
+  --g-bg:#F7F8F7; --g-raise:#FFFFFF; --g-ink:#16181A; --g-dim:#5E6468;
+  --g-faint:#8C9396; --g-line:#DFE2E1; --g-line2:#C8CDCB; --g-accent:#2F5D50;
+  --g-sans:"Segoe UI Variable Text","Segoe UI",-apple-system,system-ui,sans-serif;
+  --g-mono:"Cascadia Mono",Consolas,ui-monospace,"SF Mono",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{--g-bg:#0E1011;--g-raise:#15181A;--g-ink:#E8EAE9;--g-dim:#8A9296;
+        --g-faint:#666E71;--g-line:#24282A;--g-line2:#333A3C;--g-accent:#7FB8A4}
+}
+:root[data-theme="dark"]{--g-bg:#0E1011;--g-raise:#15181A;--g-ink:#E8EAE9;--g-dim:#8A9296;
+        --g-faint:#666E71;--g-line:#24282A;--g-line2:#333A3C;--g-accent:#7FB8A4}
+:root[data-theme="light"]{--g-bg:#F7F8F7;--g-raise:#FFFFFF;--g-ink:#16181A;--g-dim:#5E6468;
+        --g-faint:#8C9396;--g-line:#DFE2E1;--g-line2:#C8CDCB;--g-accent:#2F5D50}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--g-bg);color:var(--g-ink);font-family:var(--g-sans);
+     font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1280px;margin:0 auto;padding:0 24px 80px}
+
+.mast{padding:44px 0 22px;border-bottom:1px solid var(--g-line)}
+.mast .eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--g-accent);font-weight:600;margin:0 0 12px}
+.mast h1{margin:0;font-size:clamp(26px,3.6vw,38px);line-height:1.08;
+  letter-spacing:-.022em;font-weight:650;max-width:20ch;text-wrap:balance}
+.mast p{margin:14px 0 0;max-width:66ch;color:var(--g-dim);font-size:15px;line-height:1.6}
+
+/* ---- control bar ---- */
+.controls{position:sticky;top:0;z-index:20;background:var(--g-bg);
+  border-bottom:1px solid var(--g-line);padding:16px 0;margin-bottom:22px}
+.ctl-row{display:flex;flex-wrap:wrap;gap:22px;align-items:flex-end}
+.ctl{display:flex;flex-direction:column;gap:6px;min-width:0}
+.ctl > label{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--g-faint);font-weight:600}
+.seg{display:flex;gap:3px;background:var(--g-raise);border:1px solid var(--g-line);
+     border-radius:8px;padding:3px;flex-wrap:wrap}
+.seg button{background:none;border:1px solid transparent;border-radius:5px;
+  padding:5px 11px;font:inherit;font-size:12.5px;font-weight:550;color:var(--g-dim);
+  cursor:pointer;white-space:nowrap}
+.seg button:hover{color:var(--g-ink)}
+.seg button[aria-pressed="true"]{background:var(--g-bg);border-color:var(--g-line2);color:var(--g-ink)}
+.seg button:focus-visible{outline:2px solid var(--g-accent);outline-offset:1px}
+input[type="range"]{width:132px;accent-color:var(--g-accent)}
+input[type="color"]{width:44px;height:30px;padding:2px;border:1px solid var(--g-line2);
+  border-radius:6px;background:var(--g-raise);cursor:pointer}
+.val{font-family:var(--g-mono);font-size:11.5px;color:var(--g-faint);
+     font-variant-numeric:tabular-nums}
+.linkish{background:none;border:none;padding:0;font:inherit;font-size:12.5px;
+  color:var(--g-accent);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+
+/* ---- preview frame ---- */
+.frame{border:1px solid var(--g-line);border-radius:11px;overflow:hidden;
+  box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.frame-bar{display:flex;align-items:center;gap:9px;padding:9px 14px;
+  background:var(--g-raise);border-bottom:1px solid var(--g-line)}
+.dot{width:9px;height:9px;border-radius:99px;background:var(--g-line2)}
+.frame-name{margin-left:6px;font-family:var(--g-mono);font-size:11.5px;color:var(--g-faint)}
+
+/* ---- export ---- */
+.export{margin-top:30px;border:1px solid var(--g-line);border-radius:11px;
+  background:var(--g-raise);padding:22px 24px}
+.export h2{margin:0 0 8px;font-size:16px;font-weight:650;letter-spacing:-.01em}
+.export p{margin:0 0 14px;color:var(--g-dim);font-size:14px;max-width:70ch}
+.export pre{margin:0;background:var(--g-bg);border:1px solid var(--g-line);
+  border-radius:8px;padding:15px 17px;overflow-x:auto;
+  font-family:var(--g-mono);font-size:12px;line-height:1.65;color:var(--g-ink)}
+.export-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
+
+/* =============================================================================
+   UI SUITE CORE  (inlined from core/ui.css — see that file for commentary)
+   ============================================================================= */
+:root{
+  --ui-bg:#fff;--ui-surface:#fff;--ui-surface-2:#f4f5f6;--ui-surface-3:#eceef0;
+  --ui-line:#e2e5e8;--ui-line-strong:#c9ced4;
+  --ui-text:#16181a;--ui-text-dim:#5d656c;--ui-text-faint:#8b9299;
+  --ui-accent:#2563eb;--ui-accent-hover:#1d4ed8;--ui-accent-ink:#fff;--ui-accent-soft:#e8effd;
+  --ui-good:#15803d;--ui-good-soft:#e6f4ea;--ui-warn:#a16207;--ui-warn-soft:#fdf3e0;
+  --ui-crit:#b91c1c;--ui-crit-soft:#fdeaea;--ui-info:#0369a1;--ui-info-soft:#e5f2fa;
+  --ui-radius-sm:4px;--ui-radius:7px;--ui-radius-lg:12px;--ui-radius-pill:999px;
+  --ui-density:1;
+  --ui-font:"Segoe UI Variable Text","Segoe UI",-apple-system,system-ui,sans-serif;
+  --ui-font-mono:"Cascadia Mono",Consolas,ui-monospace,"SF Mono",monospace;
+  --ui-fs-xs:10.5px;--ui-fs-sm:12px;--ui-fs:13.5px;--ui-fs-md:16px;--ui-fs-lg:21px;--ui-fs-xl:28px;
+  --ui-weight-body:400;--ui-weight-medium:550;--ui-weight-heading:640;
+  --ui-tracking-label:.08em;--ui-tracking-head:-.015em;
+  --ui-shadow:0 1px 2px rgba(16,24,40,.06);--ui-shadow-lg:0 8px 26px rgba(16,24,40,.10);
+  --ui-blur:none;--ui-ambient:none;--ui-dur:.14s;--ui-ease:cubic-bezier(.4,0,.2,1);
+}
+/* Derived tokens are declared on .ui as well as :root — a var() inside a custom
+   property is substituted where it is DECLARED, so a scale living only on :root
+   would freeze at :root's density and ignore any theme applied further down. */
+:root,.ui{
+  --ui-s1:calc(4px*var(--ui-density));--ui-s2:calc(8px*var(--ui-density));
+  --ui-s3:calc(12px*var(--ui-density));--ui-s4:calc(16px*var(--ui-density));
+  --ui-s5:calc(24px*var(--ui-density));--ui-s6:calc(32px*var(--ui-density));
+  --ui-s7:calc(48px*var(--ui-density));
+  --ui-font-display:var(--ui-font);
+}
+.ui{background:var(--ui-bg);background-image:var(--ui-ambient);color:var(--ui-text);
+    font-family:var(--ui-font);font-size:var(--ui-fs);line-height:1.55}
+.ui :focus-visible{outline:2px solid var(--ui-accent);outline-offset:2px;border-radius:var(--ui-radius-sm)}
+.ui-num{font-variant-numeric:tabular-nums;text-align:right}
+.ui-mono{font-family:var(--ui-font-mono)}
+.ui-title{margin:0;font-family:var(--ui-font-display);font-size:var(--ui-fs-lg);
+  font-weight:var(--ui-weight-heading);letter-spacing:var(--ui-tracking-head);
+  line-height:1.15;text-wrap:balance}
+.ui-title-lg{font-size:var(--ui-fs-xl)}
+.ui-label{font-size:var(--ui-fs-xs);letter-spacing:var(--ui-tracking-label);
+  text-transform:uppercase;font-weight:var(--ui-weight-medium);color:var(--ui-text-faint)}
+.ui-eyebrow{font-size:var(--ui-fs-xs);letter-spacing:var(--ui-tracking-label);
+  text-transform:uppercase;font-weight:var(--ui-weight-heading);color:var(--ui-accent)}
+.ui-faint{color:var(--ui-text-faint)}
+.ui-shell{display:grid;grid-template-columns:var(--ui-rail,248px) minmax(0,1fr);min-height:520px}
+.ui-rail{background:var(--ui-surface-2);border-right:1px solid var(--ui-line);
+  backdrop-filter:var(--ui-blur);padding:var(--ui-s4) var(--ui-s3);
+  display:flex;flex-direction:column;gap:var(--ui-s5);min-width:0}
+.ui-main{min-width:0;padding:var(--ui-s5) var(--ui-s5) var(--ui-s7);
+  display:flex;flex-direction:column;gap:var(--ui-s5)}
+@media (max-width:820px){
+  .ui-shell{grid-template-columns:minmax(0,1fr)}
+  .ui-rail{border-right:none;border-bottom:1px solid var(--ui-line);flex-direction:row;
+    align-items:center;gap:var(--ui-s3);overflow-x:auto;padding:var(--ui-s2) var(--ui-s3)}
+  .ui-rail .ui-nav{flex-direction:row;gap:var(--ui-s1)}
+  .ui-rail .ui-nav-group{margin-top:0}
+  .ui-rail .ui-nav-group > .ui-label{display:none}
+  .ui-rail-foot{margin-left:auto;margin-top:0}
+  .ui-main{padding:var(--ui-s4) var(--ui-s4) var(--ui-s6)}
+}
+.ui-brand{display:flex;align-items:center;gap:var(--ui-s2);min-width:0}
+.ui-mark{width:24px;height:24px;flex:0 0 auto;border-radius:var(--ui-radius-sm);
+  background:var(--ui-accent);color:var(--ui-accent-ink);display:grid;place-items:center;
+  font-family:var(--ui-font-mono);font-size:11px;font-weight:700}
+.ui-brand-name{font-weight:var(--ui-weight-heading);letter-spacing:-.01em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ui-nav{display:flex;flex-direction:column;gap:1px}
+.ui-nav-group{margin-top:var(--ui-s3)}
+.ui-nav-group > .ui-label{padding:0 var(--ui-s2) var(--ui-s1);display:block}
+.ui-nav-item{display:flex;align-items:center;gap:var(--ui-s2);
+  padding:calc(var(--ui-s2) - 1px) var(--ui-s2);border-radius:var(--ui-radius-sm);
+  border:1px solid transparent;color:var(--ui-text-dim);text-decoration:none;
+  white-space:nowrap;font-size:var(--ui-fs);cursor:pointer;
+  transition:background var(--ui-dur) var(--ui-ease),color var(--ui-dur) var(--ui-ease)}
+.ui-nav-item:hover{background:var(--ui-surface-3);color:var(--ui-text)}
+.ui-nav-item[aria-current]{background:var(--ui-surface);border-color:var(--ui-line-strong);
+  color:var(--ui-text);font-weight:var(--ui-weight-medium)}
+.ui-nav-count{margin-left:auto;font-size:var(--ui-fs-sm);color:var(--ui-text-faint);
+  font-variant-numeric:tabular-nums}
+.ui-rail-foot{margin-top:auto;display:flex;align-items:center;gap:var(--ui-s2);min-width:0}
+.ui-avatar{width:26px;height:26px;flex:0 0 auto;border-radius:var(--ui-radius-pill);
+  background:var(--ui-surface);border:1px solid var(--ui-line-strong);display:grid;
+  place-items:center;font-family:var(--ui-font-mono);font-size:10px;font-weight:700;color:var(--ui-text-dim)}
+.ui-toolbar{display:flex;justify-content:space-between;align-items:flex-end;
+  gap:var(--ui-s4);flex-wrap:wrap}
+.ui-toolbar-actions{display:flex;align-items:center;gap:var(--ui-s2);flex-wrap:wrap}
+.ui-btn,.ui-btn-ghost{display:inline-flex;align-items:center;gap:var(--ui-s2);
+  padding:calc(var(--ui-s2) - 1px) var(--ui-s3);border-radius:var(--ui-radius-sm);
+  font:inherit;font-size:var(--ui-fs);font-weight:var(--ui-weight-medium);
+  cursor:pointer;white-space:nowrap;transition:background var(--ui-dur) var(--ui-ease)}
+.ui-btn{background:var(--ui-accent);color:var(--ui-accent-ink);
+  border:1px solid var(--ui-accent);box-shadow:var(--ui-shadow)}
+.ui-btn:hover{background:var(--ui-accent-hover);border-color:var(--ui-accent-hover)}
+.ui-btn-ghost{background:var(--ui-surface);color:var(--ui-text-dim);
+  border:1px solid var(--ui-line-strong);backdrop-filter:var(--ui-blur)}
+.ui-btn-ghost:hover{color:var(--ui-text);background:var(--ui-surface-3)}
+.ui-input{background:var(--ui-surface);border:1px solid var(--ui-line-strong);
+  color:var(--ui-text);border-radius:var(--ui-radius-sm);
+  padding:calc(var(--ui-s2) - 1px) var(--ui-s3);font:inherit;font-size:var(--ui-fs);
+  backdrop-filter:var(--ui-blur)}
+.ui-input-mono{font-family:var(--ui-font-mono);font-size:var(--ui-fs-sm);width:128px}
+.ui-card{background:var(--ui-surface);border:1px solid var(--ui-line);
+  border-radius:var(--ui-radius);box-shadow:var(--ui-shadow);backdrop-filter:var(--ui-blur);
+  padding:var(--ui-s4);min-width:0}
+.ui-grid{display:grid;gap:var(--ui-s3)}
+.ui-grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:700px){.ui-grid-3{grid-template-columns:minmax(0,1fr)}}
+.ui-stat{display:flex;flex-direction:column;gap:var(--ui-s2);min-width:0}
+.ui-stat-value{font-family:var(--ui-font-display);font-size:var(--ui-fs-xl);
+  font-weight:var(--ui-weight-heading);letter-spacing:-.022em;line-height:1;
+  font-variant-numeric:tabular-nums}
+.ui-stat-value small{font-size:.46em;font-weight:var(--ui-weight-body);
+  color:var(--ui-text-faint);letter-spacing:0;margin-left:2px}
+.ui-spark{width:100%;height:28px;display:block;overflow:visible}
+.ui-delta{font-size:var(--ui-fs-sm);font-weight:var(--ui-weight-medium)}
+.ui-delta-up{color:var(--ui-good)}
+.ui-delta-down{color:var(--ui-crit)}
+.ui-pill{display:inline-flex;align-items:center;gap:6px;padding:2px var(--ui-s2);
+  border-radius:var(--ui-radius-pill);font-size:var(--ui-fs-sm);
+  font-weight:var(--ui-weight-medium);letter-spacing:.02em;border:1px solid currentColor;
+  white-space:nowrap}
+.ui-pill::before{content:"";width:5px;height:5px;border-radius:var(--ui-radius-pill);background:currentColor}
+.ui-pill-good{color:var(--ui-good)}
+.ui-pill-warn{color:var(--ui-warn)}
+.ui-pill-crit{color:var(--ui-crit)}
+.ui-pill-quiet{color:var(--ui-text-faint)}
+.ui-table-wrap{border:1px solid var(--ui-line);border-radius:var(--ui-radius);
+  background:var(--ui-surface);box-shadow:var(--ui-shadow);backdrop-filter:var(--ui-blur);overflow:hidden}
+.ui-scroll{overflow-x:auto}
+.ui-table{width:100%;border-collapse:collapse;font-size:var(--ui-fs)}
+.ui-table th{text-align:left;padding:var(--ui-s2) var(--ui-s3);font-size:var(--ui-fs-xs);
+  letter-spacing:var(--ui-tracking-label);text-transform:uppercase;
+  font-weight:var(--ui-weight-medium);color:var(--ui-text-faint);
+  background:var(--ui-surface-2);border-bottom:1px solid var(--ui-line);white-space:nowrap}
+.ui-table td{padding:var(--ui-s2) var(--ui-s3);border-bottom:1px solid var(--ui-line);
+  color:var(--ui-text-dim);white-space:nowrap}
+.ui-table tbody tr:last-child td{border-bottom:none}
+.ui-table tbody tr:hover td{background:var(--ui-surface-2)}
+.ui-cell-strong{color:var(--ui-text)}
+.ui-cell-clip{max-width:260px;overflow:hidden;text-overflow:ellipsis}
+.ui-banner{display:flex;gap:var(--ui-s3);align-items:flex-start;padding:var(--ui-s3);
+  border-radius:var(--ui-radius);border:1px solid currentColor;font-size:var(--ui-fs)}
+.ui-banner-warn{color:var(--ui-warn);background:var(--ui-warn-soft)}
+.ui-banner strong{display:block;margin-bottom:2px}
+.ui-banner span{color:var(--ui-text-dim)}
+
+/* split view */
+.ui-split{display:grid;grid-template-columns:var(--ui-list,290px) minmax(0,1fr);min-width:0;min-height:520px}
+@media (max-width:760px){.ui-split{grid-template-columns:minmax(0,1fr)}
+  .ui-split .ui-list{border-right:none;border-bottom:1px solid var(--ui-line);max-height:200px}}
+.ui-list{border-right:1px solid var(--ui-line);overflow-y:auto;min-width:0;background:var(--ui-surface-2)}
+.ui-list-item{display:flex;flex-direction:column;gap:2px;cursor:pointer;padding:var(--ui-s3);
+  border-bottom:1px solid var(--ui-line);border-left:2px solid transparent}
+.ui-list-item:hover{background:var(--ui-surface-3)}
+.ui-list-item[aria-selected="true"]{background:var(--ui-surface);border-left-color:var(--ui-accent)}
+.ui-list-top{display:flex;justify-content:space-between;gap:var(--ui-s2);align-items:baseline}
+.ui-list-title{font-weight:var(--ui-weight-medium);color:var(--ui-text);overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.ui-list-meta{font-size:var(--ui-fs-sm);color:var(--ui-text-faint);flex:0 0 auto}
+.ui-list-sub{font-size:var(--ui-fs-sm);color:var(--ui-text-dim);overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.ui-detail{padding:var(--ui-s5);display:flex;flex-direction:column;gap:var(--ui-s4);min-width:0}
+
+/* forms */
+.ui-form{display:flex;flex-direction:column;gap:var(--ui-s5);max-width:60ch}
+.ui-fieldset{display:flex;flex-direction:column;gap:var(--ui-s3);border:0;margin:0;padding:0}
+.ui-legend{font-size:var(--ui-fs-md);font-weight:var(--ui-weight-heading);
+  font-family:var(--ui-font-display);letter-spacing:var(--ui-tracking-head);padding:0 0 var(--ui-s1)}
+.ui-field{display:flex;flex-direction:column;gap:var(--ui-s1);min-width:0}
+.ui-field > label{font-size:var(--ui-fs);font-weight:var(--ui-weight-medium);color:var(--ui-text)}
+.ui-field .ui-input{width:100%}
+.ui-help{font-size:var(--ui-fs-sm);color:var(--ui-text-faint)}
+.ui-error{font-size:var(--ui-fs-sm);color:var(--ui-crit);display:flex;align-items:center;gap:5px}
+.ui-error::before{content:"";width:5px;height:5px;border-radius:var(--ui-radius-pill);
+  background:currentColor;flex:0 0 auto}
+.ui-input[aria-invalid="true"]{border-color:var(--ui-crit)}
+.ui-row{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--ui-s4);
+  padding:var(--ui-s3) 0;border-bottom:1px solid var(--ui-line)}
+.ui-row:last-child{border-bottom:none}
+.ui-row-text{display:flex;flex-direction:column;gap:2px;min-width:0}
+.ui-row-text b{font-weight:var(--ui-weight-medium)}
+.ui-switch{appearance:none;flex:0 0 auto;width:38px;height:21px;cursor:pointer;
+  border-radius:var(--ui-radius-pill);border:1px solid var(--ui-line-strong);
+  background:var(--ui-surface-2);position:relative;transition:background var(--ui-dur) var(--ui-ease)}
+.ui-switch::after{content:"";position:absolute;top:2px;left:2px;width:15px;height:15px;
+  border-radius:var(--ui-radius-pill);background:var(--ui-text-faint);
+  transition:transform var(--ui-dur) var(--ui-ease),background var(--ui-dur) var(--ui-ease)}
+.ui-switch:checked{background:var(--ui-accent);border-color:var(--ui-accent)}
+.ui-switch:checked::after{transform:translateX(17px);background:var(--ui-accent-ink)}
+
+/* command palette */
+.ui-stage-rel{position:relative}
+.ui-scrim{position:absolute;inset:0;display:grid;place-items:start center;padding-top:7%;
+  background:rgba(0,0,0,.34)}
+.ui-palette{width:min(520px,92%);background:var(--ui-surface);border:1px solid var(--ui-line-strong);
+  border-radius:var(--ui-radius-lg);box-shadow:var(--ui-shadow-lg);backdrop-filter:var(--ui-blur);
+  overflow:hidden}
+.ui-palette-input{width:100%;background:none;border:0;color:var(--ui-text);
+  padding:var(--ui-s3) var(--ui-s4);font:inherit;font-size:var(--ui-fs-md);
+  border-bottom:1px solid var(--ui-line)}
+.ui-palette-input:focus{outline:none}
+.ui-palette-list{max-height:230px;overflow-y:auto;padding:var(--ui-s1)}
+.ui-palette-item{display:flex;align-items:center;gap:var(--ui-s3);cursor:pointer;
+  padding:var(--ui-s2) var(--ui-s3);border-radius:var(--ui-radius-sm);color:var(--ui-text-dim)}
+.ui-palette-item[aria-selected="true"]{background:var(--ui-surface-3);color:var(--ui-text)}
+.ui-palette-item .ui-label{margin-left:auto}
+.ui-kbd{font-family:var(--ui-font-mono);font-size:var(--ui-fs-xs);padding:1px 5px;
+  border:1px solid var(--ui-line-strong);border-radius:var(--ui-radius-sm);color:var(--ui-text-faint)}
+
+@media (prefers-reduced-motion:reduce){.ui *{transition-duration:.01ms!important}}
+
+/* =============================================================================
+   THEMES (inlined from core/themes.css)
+   ============================================================================= */
+[data-ui-theme="vanilla"]{--ui-radius-sm:4px;--ui-radius:7px;--ui-radius-lg:12px;
+  --ui-density:1;--ui-fs:13.5px;--ui-weight-heading:640;--ui-tracking-label:.08em;
+  --ui-blur:none;--ui-ambient:none}
+[data-ui-theme="vanilla"][data-ui-mode="light"]{
+  --ui-bg:#FCFCFD;--ui-surface:#FFFFFF;--ui-surface-2:#F4F6F8;--ui-surface-3:#EAEEF2;
+  --ui-line:#E3E8EC;--ui-line-strong:#C8D0D8;--ui-text:#15191D;--ui-text-dim:#5A646E;
+  --ui-text-faint:#8A939C;--ui-accent:#2F6FE4;--ui-accent-hover:#245BC4;
+  --ui-accent-ink:#FFFFFF;--ui-accent-soft:#E9F0FC;
+  --ui-good:#15803D;--ui-good-soft:#E6F4EA;--ui-warn:#A16207;--ui-warn-soft:#FDF3E0;
+  --ui-crit:#B91C1C;--ui-crit-soft:#FDEAEA;--ui-info:#0369A1;--ui-info-soft:#E5F2FA;
+  --ui-shadow:0 1px 2px rgba(16,24,40,.06)}
+[data-ui-theme="vanilla"][data-ui-mode="dark"]{
+  --ui-bg:#0E1114;--ui-surface:#161A1F;--ui-surface-2:#12161A;--ui-surface-3:#1D2329;
+  --ui-line:#232930;--ui-line-strong:#313941;--ui-text:#E7EAEE;--ui-text-dim:#97A1AB;
+  --ui-text-faint:#6A737C;--ui-accent:#6C9BEF;--ui-accent-hover:#85AEF5;
+  --ui-accent-ink:#0A0D10;--ui-accent-soft:#16233A;
+  --ui-good:#4ADE80;--ui-good-soft:#12241A;--ui-warn:#FBBF24;--ui-warn-soft:#241D0E;
+  --ui-crit:#F87171;--ui-crit-soft:#2A1416;--ui-info:#5FB3E8;--ui-info-soft:#0F1F2B;
+  --ui-shadow:0 1px 2px rgba(0,0,0,.42)}
+
+[data-ui-theme="blueprint"]{--ui-radius-sm:0px;--ui-radius:0px;--ui-radius-lg:0px;
+  --ui-radius-pill:0px;--ui-density:.92;--ui-fs:13px;
+  --ui-font:"Cascadia Mono",Consolas,ui-monospace,"SF Mono",monospace;
+  --ui-font-display:var(--ui-font);--ui-weight-heading:600;--ui-tracking-label:.1em;
+  --ui-tracking-head:0em;--ui-blur:none;--ui-ambient:none;--ui-shadow:none}
+[data-ui-theme="blueprint"][data-ui-mode="dark"]{
+  --ui-bg:#071A24;--ui-surface:#0B2431;--ui-surface-2:#061620;--ui-surface-3:#113040;
+  --ui-line:#14384A;--ui-line-strong:#1E5169;--ui-text:#D6EAF2;--ui-text-dim:#7FA9BC;
+  --ui-text-faint:#4E7789;--ui-accent:#35C6E8;--ui-accent-hover:#5BD5F2;
+  --ui-accent-ink:#04161E;--ui-accent-soft:#0B2E3D;
+  --ui-good:#4ED6A4;--ui-good-soft:#082A24;--ui-warn:#E8B84B;--ui-warn-soft:#2A2310;
+  --ui-crit:#FF6B6B;--ui-crit-soft:#2E1416;--ui-info:#35C6E8;--ui-info-soft:#0B2E3D;
+  --ui-shadow:none}
+[data-ui-theme="blueprint"][data-ui-mode="light"]{
+  --ui-bg:#EEF4F7;--ui-surface:#FFFFFF;--ui-surface-2:#E2ECF1;--ui-surface-3:#D6E4EB;
+  --ui-line:#C3D8E2;--ui-line-strong:#9BBCCB;--ui-text:#06222E;--ui-text-dim:#45697A;
+  --ui-text-faint:#7899A8;--ui-accent:#0B7FA0;--ui-accent-hover:#096782;
+  --ui-accent-ink:#FFFFFF;--ui-accent-soft:#DCEEF4;
+  --ui-good:#0E7C5A;--ui-good-soft:#DFF1EA;--ui-warn:#96701B;--ui-warn-soft:#F7EEDA;
+  --ui-crit:#C2453F;--ui-crit-soft:#F8E4E3;--ui-info:#0B7FA0;--ui-info-soft:#DCEEF4;
+  --ui-shadow:none}
+
+[data-ui-theme="halo"]{--ui-radius-sm:9px;--ui-radius:14px;--ui-radius-lg:20px;
+  --ui-density:1.15;--ui-fs:13.5px;--ui-weight-heading:620;--ui-tracking-label:.07em;
+  --ui-blur:blur(18px)}
+[data-ui-theme="halo"][data-ui-mode="dark"]{
+  --ui-bg:#0F1018;
+  --ui-ambient:radial-gradient(1000px 460px at 78% -10%,rgba(79,214,193,.16),transparent 62%),
+               radial-gradient(760px 400px at 6% 106%,rgba(120,110,255,.15),transparent 60%);
+  --ui-surface:rgba(255,255,255,.055);--ui-surface-2:rgba(255,255,255,.028);
+  --ui-surface-3:rgba(255,255,255,.085);--ui-line:rgba(255,255,255,.10);
+  --ui-line-strong:rgba(255,255,255,.18);--ui-text:#EDEDF5;--ui-text-dim:#A3A3B8;
+  --ui-text-faint:#71718A;--ui-accent:#4FD6C1;--ui-accent-hover:#6FE3D1;
+  --ui-accent-ink:#06231F;--ui-accent-soft:rgba(79,214,193,.14);
+  --ui-good:#4FD6C1;--ui-good-soft:rgba(79,214,193,.13);
+  --ui-warn:#FFC46B;--ui-warn-soft:rgba(255,196,107,.13);
+  --ui-crit:#FF7B8A;--ui-crit-soft:rgba(255,123,138,.13);
+  --ui-info:#8AB4FF;--ui-info-soft:rgba(138,180,255,.13);
+  --ui-shadow:0 6px 22px rgba(0,0,0,.34)}
+[data-ui-theme="halo"][data-ui-mode="light"]{
+  --ui-bg:#EEEFF6;
+  --ui-ambient:radial-gradient(1000px 460px at 78% -10%,rgba(14,156,134,.13),transparent 62%),
+               radial-gradient(760px 400px at 6% 106%,rgba(120,110,255,.13),transparent 60%);
+  --ui-surface:rgba(255,255,255,.72);--ui-surface-2:rgba(255,255,255,.46);
+  --ui-surface-3:rgba(255,255,255,.92);--ui-line:rgba(20,20,45,.10);
+  --ui-line-strong:rgba(20,20,45,.19);--ui-text:#16172A;--ui-text-dim:#55566E;
+  --ui-text-faint:#83849B;--ui-accent:#0E9C86;--ui-accent-hover:#0B7E6C;
+  --ui-accent-ink:#FFFFFF;--ui-accent-soft:rgba(14,156,134,.12);
+  --ui-good:#0E9C86;--ui-good-soft:rgba(14,156,134,.12);
+  --ui-warn:#B37A15;--ui-warn-soft:rgba(179,122,21,.12);
+  --ui-crit:#CC4759;--ui-crit-soft:rgba(204,71,89,.12);
+  --ui-info:#3A6FD8;--ui-info-soft:rgba(58,111,216,.12);
+  --ui-shadow:0 6px 22px rgba(30,32,70,.10)}
+
+[data-ui-theme="graphite"]{--ui-radius-sm:4px;--ui-radius:6px;--ui-radius-lg:10px;
+  --ui-density:.95;--ui-fs:13px;--ui-weight-heading:600;--ui-tracking-label:.06em;
+  --ui-blur:none;--ui-ambient:none}
+[data-ui-theme="graphite"][data-ui-mode="dark"]{
+  --ui-bg:#0D0F12;--ui-surface:#14171B;--ui-surface-2:#101317;--ui-surface-3:#1A1F25;
+  --ui-line:#212630;--ui-line-strong:#2C333F;--ui-text:#E6E9EE;--ui-text-dim:#98A1AE;
+  --ui-text-faint:#626C7A;--ui-accent:#6D93C4;--ui-accent-hover:#87A9D5;
+  --ui-accent-ink:#0B0E12;--ui-accent-soft:#18212D;
+  --ui-good:#4FB286;--ui-good-soft:#10241C;--ui-warn:#D9A441;--ui-warn-soft:#241E10;
+  --ui-crit:#E06C63;--ui-crit-soft:#261414;--ui-info:#6D93C4;--ui-info-soft:#18212D;
+  --ui-shadow:0 1px 2px rgba(0,0,0,.4)}
+[data-ui-theme="graphite"][data-ui-mode="light"]{
+  --ui-bg:#F4F6F8;--ui-surface:#FFFFFF;--ui-surface-2:#EDF0F3;--ui-surface-3:#E3E8ED;
+  --ui-line:#DDE3E9;--ui-line-strong:#C6CED6;--ui-text:#14181D;--ui-text-dim:#59626C;
+  --ui-text-faint:#8B949E;--ui-accent:#3C63A8;--ui-accent-hover:#2F4E86;
+  --ui-accent-ink:#FFFFFF;--ui-accent-soft:#E7EDF7;
+  --ui-good:#1F8A5F;--ui-good-soft:#E3F2EB;--ui-warn:#A9741A;--ui-warn-soft:#F7EFDD;
+  --ui-crit:#C0453C;--ui-crit-soft:#F8E5E3;--ui-info:#3C63A8;--ui-info-soft:#E7EDF7;
+  --ui-shadow:0 1px 2px rgba(16,24,40,.06)}
+
+[data-ui-theme="oxide"]{--ui-radius-sm:3px;--ui-radius:4px;--ui-radius-lg:6px;
+  --ui-density:1.05;--ui-fs:13.5px;--ui-weight-heading:700;--ui-weight-medium:600;
+  --ui-tracking-label:.1em;--ui-blur:none;--ui-ambient:none}
+[data-ui-theme="oxide"][data-ui-mode="dark"]{
+  --ui-bg:#17130F;--ui-surface:#201B16;--ui-surface-2:#1A1512;--ui-surface-3:#2A231C;
+  --ui-line:#322920;--ui-line-strong:#453829;--ui-text:#F0E7DC;--ui-text-dim:#A99884;
+  --ui-text-faint:#776A5B;--ui-accent:#D2622A;--ui-accent-hover:#E4763D;
+  --ui-accent-ink:#1A0E07;--ui-accent-soft:#2C1A10;
+  --ui-good:#86A84E;--ui-good-soft:#1C2413;--ui-warn:#E0A03A;--ui-warn-soft:#2A2110;
+  --ui-crit:#C8433A;--ui-crit-soft:#2A1310;--ui-info:#5E9AA8;--ui-info-soft:#132123;
+  --ui-shadow:0 2px 0 rgba(0,0,0,.28)}
+[data-ui-theme="oxide"][data-ui-mode="light"]{
+  --ui-bg:#F5F0E8;--ui-surface:#FFFFFF;--ui-surface-2:#EBE3D7;--ui-surface-3:#E1D7C7;
+  --ui-line:#D8CCBA;--ui-line-strong:#B9A88F;--ui-text:#1F1811;--ui-text-dim:#6B5C48;
+  --ui-text-faint:#93826B;--ui-accent:#B04A16;--ui-accent-hover:#963E11;
+  --ui-accent-ink:#FFFFFF;--ui-accent-soft:#F6E5D8;
+  --ui-good:#5C7A2A;--ui-good-soft:#EAF0DC;--ui-warn:#9A6C14;--ui-warn-soft:#F7EEDA;
+  --ui-crit:#A93A31;--ui-crit-soft:#F7E2DF;--ui-info:#3D6E7A;--ui-info-soft:#E0ECEF;
+  --ui-shadow:0 2px 0 rgba(120,96,64,.13)}
+
+[data-ui-theme="vellum"]{--ui-radius-sm:2px;--ui-radius:2px;--ui-radius-lg:3px;
+  --ui-density:1.3;--ui-fs:14px;
+  --ui-font-display:"Iowan Old Style",Georgia,"Times New Roman",serif;
+  --ui-weight-heading:600;--ui-tracking-label:.12em;--ui-tracking-head:-.008em;
+  --ui-blur:none;--ui-ambient:none;--ui-shadow:none}
+[data-ui-theme="vellum"][data-ui-mode="light"]{
+  --ui-bg:#F2F3EE;--ui-surface:#FBFBF8;--ui-surface-2:#E9EBE3;--ui-surface-3:#E1E4DA;
+  --ui-line:#DCDED4;--ui-line-strong:#C2C6B8;--ui-text:#22241E;--ui-text-dim:#5C6154;
+  --ui-text-faint:#8B9080;--ui-accent:#3A5470;--ui-accent-hover:#2C4258;
+  --ui-accent-ink:#FFFFFF;--ui-accent-soft:#E4E9EF;
+  --ui-good:#3F7A52;--ui-good-soft:#E6EFE7;--ui-warn:#97742A;--ui-warn-soft:#F3EEDD;
+  --ui-crit:#A6453B;--ui-crit-soft:#F3E4E1;--ui-info:#3A5470;--ui-info-soft:#E4E9EF;
+  --ui-shadow:none}
+[data-ui-theme="vellum"][data-ui-mode="dark"]{
+  --ui-bg:#191A17;--ui-surface:#212320;--ui-surface-2:#1C1E1B;--ui-surface-3:#282B26;
+  --ui-line:#2E312C;--ui-line-strong:#3F433C;--ui-text:#E9EAE3;--ui-text-dim:#9BA093;
+  --ui-text-faint:#6F7469;--ui-accent:#8FB0D0;--ui-accent-hover:#A6C2DC;
+  --ui-accent-ink:#131519;--ui-accent-soft:#1E252C;
+  --ui-good:#6FA87E;--ui-good-soft:#16201A;--ui-warn:#C9A653;--ui-warn-soft:#221E12;
+  --ui-crit:#CF7A70;--ui-crit-soft:#241715;--ui-info:#8FB0D0;--ui-info-soft:#1E252C;
+  --ui-shadow:none}
+</style>
+
+<div class="wrap">
+
+  <header class="mast">
+    <p class="eyebrow">UI Suite · Iteration 02</p>
+    <h1>One archetype, six themes, every value tunable</h1>
+    <p>
+      The screen below never changes. Structure and appearance are separate axes:
+      the archetype supplies markup that contains no colour, size or typeface, and the
+      theme supplies tokens that fill them in. Change any control and watch which parts
+      move — then take the generated CSS at the bottom into your own project.
+    </p>
+  </header>
+
+  <div class="controls">
+    <div class="ctl-row">
+      <div class="ctl">
+        <label id="lbl-layout">Layout</label>
+        <div class="seg" role="group" aria-labelledby="lbl-layout" id="seg-layout"></div>
+      </div>
+      <div class="ctl">
+        <label id="lbl-theme">Theme</label>
+        <div class="seg" role="group" aria-labelledby="lbl-theme" id="seg-theme"></div>
+      </div>
+      <div class="ctl">
+        <label id="lbl-mode">Mode</label>
+        <div class="seg" role="group" aria-labelledby="lbl-mode" id="seg-mode"></div>
+      </div>
+      <div class="ctl">
+        <label for="rng-density">Density <span class="val" id="v-density">1.00</span></label>
+        <input type="range" id="rng-density" min="0.8" max="1.5" step="0.05" />
+      </div>
+      <div class="ctl">
+        <label for="rng-radius">Radius <span class="val" id="v-radius">7px</span></label>
+        <input type="range" id="rng-radius" min="0" max="20" step="1" />
+      </div>
+      <div class="ctl">
+        <label for="col-accent">Accent</label>
+        <input type="color" id="col-accent" />
+      </div>
+      <div class="ctl">
+        <label>&nbsp;</label>
+        <button class="linkish" id="btn-reset" type="button">Reset to theme defaults</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="frame">
+    <div class="frame-bar">
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      <span class="frame-name" id="frame-name">archetypes/app-shell.html · vanilla · light</span>
+    </div>
+
+    <div class="ui ui-stage-rel" id="preview" data-ui-theme="vanilla" data-ui-mode="light"></div>
+  </div>
+
+  <template id="lay-dashboard">
+      <div class="ui-shell">
+        <aside class="ui-rail">
+          <div class="ui-brand">
+            <span class="ui-mark">N</span><span class="ui-brand-name">Northwind</span>
+          </div>
+          <nav class="ui-nav" aria-label="Primary">
+            <a class="ui-nav-item" href="#" aria-current="page">Deployments <span class="ui-nav-count">12</span></a>
+            <a class="ui-nav-item" href="#">Services <span class="ui-nav-count">8</span></a>
+            <a class="ui-nav-item" href="#">Logs</a>
+            <a class="ui-nav-item" href="#">Metrics</a>
+            <div class="ui-nav-group">
+              <div class="ui-label">Account</div>
+              <a class="ui-nav-item" href="#">Team</a>
+              <a class="ui-nav-item" href="#">Billing</a>
+              <a class="ui-nav-item" href="#">Settings</a>
+            </div>
+          </nav>
+          <div class="ui-rail-foot">
+            <span class="ui-avatar">GB</span>
+            <span class="ui-faint" style="font-size:var(--ui-fs-sm)">gary@northwind</span>
+          </div>
+        </aside>
+
+        <main class="ui-main">
+          <div class="ui-toolbar">
+            <div>
+              <div class="ui-eyebrow">Production · us-east</div>
+              <h2 class="ui-title ui-title-lg">Deployments</h2>
+            </div>
+            <div class="ui-toolbar-actions">
+              <input class="ui-input ui-input-mono" value="branch:main" aria-label="Filter deployments" />
+              <button class="ui-btn-ghost" type="button">Filter</button>
+              <button class="ui-btn" type="button">Deploy</button>
+            </div>
+          </div>
+
+          <div class="ui-banner ui-banner-warn" role="status">
+            <div>
+              <strong>Build queue is backed up</strong>
+              <span>Deploys are starting about 4 minutes late. No action needed.</span>
+            </div>
+          </div>
+
+          <div class="ui-grid ui-grid-3">
+            <div class="ui-card ui-stat">
+              <span class="ui-label">Uptime · 30d</span>
+              <span class="ui-stat-value">99.98<small>%</small></span>
+              <svg class="ui-spark" viewBox="0 0 120 28" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M0,21 L15,19 L30,20 L45,14 L60,16 L75,10 L90,12 L105,7 L120,5 V28 H0 Z" fill="currentColor" opacity=".1"/>
+                <polyline points="0,21 15,19 30,20 45,14 60,16 75,10 90,12 105,7 120,5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" opacity=".55"/>
+                <circle cx="120" cy="5" r="2.6" fill="currentColor"/>
+              </svg>
+              <span class="ui-delta ui-delta-up">+0.04 pts</span>
+            </div>
+            <div class="ui-card ui-stat">
+              <span class="ui-label">p95 latency</span>
+              <span class="ui-stat-value">214<small>ms</small></span>
+              <svg class="ui-spark" viewBox="0 0 120 28" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M0,9 L15,12 L30,8 L45,15 L60,13 L75,18 L90,15 L105,20 L120,22 V28 H0 Z" fill="currentColor" opacity=".1"/>
+                <polyline points="0,9 15,12 30,8 45,15 60,13 75,18 90,15 105,20 120,22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" opacity=".55"/>
+                <circle cx="120" cy="22" r="2.6" fill="currentColor"/>
+              </svg>
+              <span class="ui-delta ui-delta-up">&minus;18 ms</span>
+            </div>
+            <div class="ui-card ui-stat">
+              <span class="ui-label">Failed · 7d</span>
+              <span class="ui-stat-value">2</span>
+              <svg class="ui-spark" viewBox="0 0 120 28" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M0,24 L15,24 L30,17 L45,23 L60,24 L75,22 L90,24 L105,13 L120,24 V28 H0 Z" fill="currentColor" opacity=".1"/>
+                <polyline points="0,24 15,24 30,17 45,23 60,24 75,22 90,24 105,13 120,24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" opacity=".55"/>
+                <circle cx="120" cy="24" r="2.6" fill="currentColor"/>
+              </svg>
+              <span class="ui-delta ui-delta-down">+1 vs prior</span>
+            </div>
+          </div>
+
+          <div class="ui-table-wrap">
+            <div class="ui-scroll">
+              <table class="ui-table">
+                <thead>
+                  <tr><th>Commit</th><th>Message</th><th>Author</th><th>Status</th>
+                      <th class="ui-num">Build</th><th class="ui-num">When</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="ui-mono ui-cell-strong">4f2ac91</td>
+                      <td class="ui-cell-strong ui-cell-clip">Cache warm path for session lookup</td>
+                      <td>r.okafor</td><td><span class="ui-pill ui-pill-good">Live</span></td>
+                      <td class="ui-num">1m 12s</td><td class="ui-num">4m ago</td></tr>
+                  <tr><td class="ui-mono ui-cell-strong">b81de07</td>
+                      <td class="ui-cell-strong ui-cell-clip">Bump edge runtime to 3.4.2</td>
+                      <td>s.lindqvist</td><td><span class="ui-pill ui-pill-warn">Building</span></td>
+                      <td class="ui-num">&mdash;</td><td class="ui-num">9m ago</td></tr>
+                  <tr><td class="ui-mono ui-cell-strong">e93c5f4</td>
+                      <td class="ui-cell-strong ui-cell-clip">Retry policy for webhook delivery</td>
+                      <td>r.okafor</td><td><span class="ui-pill ui-pill-crit">Failed</span></td>
+                      <td class="ui-num">0m 38s</td><td class="ui-num">1h ago</td></tr>
+                  <tr><td class="ui-mono ui-cell-strong">2a70bb8</td>
+                      <td class="ui-cell-strong ui-cell-clip">Drop unused index on events table</td>
+                      <td>m.haddad</td><td><span class="ui-pill ui-pill-good">Live</span></td>
+                      <td class="ui-num">1m 04s</td><td class="ui-num">3h ago</td></tr>
+                  <tr><td class="ui-mono ui-cell-strong">7c14e02</td>
+                      <td class="ui-cell-strong ui-cell-clip">Revert "Inline the auth middleware"</td>
+                      <td>s.lindqvist</td><td><span class="ui-pill ui-pill-quiet">Rolled back</span></td>
+                      <td class="ui-num">0m 51s</td><td class="ui-num">5h ago</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </main>
+      </div>
+  </template>
+
+
+  <!-- ============ SPLIT VIEW — list + detail ============ -->
+  <template id="lay-split">
+    <div class="ui-split">
+      <div class="ui-list" role="listbox" aria-label="Incidents">
+        <div class="ui-list-item" role="option" aria-selected="true">
+          <div class="ui-list-top"><span class="ui-list-title">Checkout 502s</span>
+            <span class="ui-list-meta">4m</span></div>
+          <div class="ui-list-sub">edge-router · 1,204 events</div>
+        </div>
+        <div class="ui-list-item" role="option" aria-selected="false">
+          <div class="ui-list-top"><span class="ui-list-title">Webhook retries spiking</span>
+            <span class="ui-list-meta">22m</span></div>
+          <div class="ui-list-sub">delivery-worker · 318 events</div>
+        </div>
+        <div class="ui-list-item" role="option" aria-selected="false">
+          <div class="ui-list-top"><span class="ui-list-title">Slow query on events</span>
+            <span class="ui-list-meta">1h</span></div>
+          <div class="ui-list-sub">postgres-primary · 47 events</div>
+        </div>
+        <div class="ui-list-item" role="option" aria-selected="false">
+          <div class="ui-list-top"><span class="ui-list-title">Cert expires in 6 days</span>
+            <span class="ui-list-meta">3h</span></div>
+          <div class="ui-list-sub">api.northwind.io · 1 event</div>
+        </div>
+        <div class="ui-list-item" role="option" aria-selected="false">
+          <div class="ui-list-top"><span class="ui-list-title">Disk 82% on node-3</span>
+            <span class="ui-list-meta">5h</span></div>
+          <div class="ui-list-sub">cluster-east · 12 events</div>
+        </div>
+      </div>
+
+      <div class="ui-detail">
+        <div class="ui-toolbar">
+          <div>
+            <div class="ui-eyebrow">Incident · INC-2291</div>
+            <h2 class="ui-title ui-title-lg">Checkout 502s</h2>
+          </div>
+          <div class="ui-toolbar-actions">
+            <button class="ui-btn-ghost" type="button">Snooze</button>
+            <button class="ui-btn" type="button">Acknowledge</button>
+          </div>
+        </div>
+
+        <div class="ui-banner ui-banner-warn" role="status">
+          <div><strong>Still firing</strong>
+            <span>Error rate has been above threshold for 4 minutes.</span></div>
+        </div>
+
+        <div class="ui-grid ui-grid-3">
+          <div class="ui-card ui-stat">
+            <span class="ui-label">Error rate</span>
+            <span class="ui-stat-value">4.8<small>%</small></span>
+          </div>
+          <div class="ui-card ui-stat">
+            <span class="ui-label">Affected</span>
+            <span class="ui-stat-value">1,204</span>
+          </div>
+          <div class="ui-card ui-stat">
+            <span class="ui-label">Duration</span>
+            <span class="ui-stat-value">4<small>m</small></span>
+          </div>
+        </div>
+
+        <div class="ui-card">
+          <div class="ui-label" style="margin-bottom:var(--ui-s2)">Timeline</div>
+          <div class="ui-row"><div class="ui-row-text"><b>Alert opened</b>
+            <span class="ui-faint">Error rate crossed 2% for 60s</span></div>
+            <span class="ui-list-meta">14:02</span></div>
+          <div class="ui-row"><div class="ui-row-text"><b>Deploy b81de07 finished</b>
+            <span class="ui-faint">Edge runtime 3.4.2</span></div>
+            <span class="ui-list-meta">14:01</span></div>
+          <div class="ui-row"><div class="ui-row-text"><b>Traffic shifted to us-east</b>
+            <span class="ui-faint">Automatic failover</span></div>
+            <span class="ui-list-meta">13:58</span></div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+
+  <!-- ============ SETTINGS — form, validation, empty state ============ -->
+  <template id="lay-settings">
+    <div class="ui-shell">
+      <aside class="ui-rail">
+        <div class="ui-brand"><span class="ui-mark">N</span>
+          <span class="ui-brand-name">Northwind</span></div>
+        <nav class="ui-nav" aria-label="Settings">
+          <a class="ui-nav-item" href="#" aria-current="page">General</a>
+          <a class="ui-nav-item" href="#">Members</a>
+          <a class="ui-nav-item" href="#">Notifications</a>
+          <a class="ui-nav-item" href="#">API keys</a>
+          <a class="ui-nav-item" href="#">Danger zone</a>
+        </nav>
+        <div class="ui-rail-foot"><span class="ui-avatar">GB</span>
+          <span class="ui-faint" style="font-size:var(--ui-fs-sm)">gary@northwind</span></div>
+      </aside>
+
+      <main class="ui-main">
+        <div>
+          <div class="ui-eyebrow">Workspace</div>
+          <h2 class="ui-title ui-title-lg">General</h2>
+        </div>
+
+        <form class="ui-form" onsubmit="return false">
+          <fieldset class="ui-fieldset">
+            <legend class="ui-legend">Identity</legend>
+
+            <div class="ui-field">
+              <label for="f-name">Workspace name</label>
+              <input class="ui-input" id="f-name" value="Northwind" />
+              <span class="ui-help">Shown in the sidebar and on invitations.</span>
+            </div>
+
+            <div class="ui-field">
+              <label for="f-slug">URL</label>
+              <input class="ui-input ui-input-mono" id="f-slug"
+                     value="north wind" aria-invalid="true" aria-describedby="f-slug-err" />
+              <span class="ui-error" id="f-slug-err">Spaces aren't allowed. Try "north-wind".</span>
+            </div>
+          </fieldset>
+
+          <fieldset class="ui-fieldset">
+            <legend class="ui-legend">Deploys</legend>
+            <div class="ui-row">
+              <div class="ui-row-text"><b>Require review before production</b>
+                <span class="ui-faint">Someone other than the author must approve.</span></div>
+              <input class="ui-switch" type="checkbox" checked aria-label="Require review" />
+            </div>
+            <div class="ui-row">
+              <div class="ui-row-text"><b>Auto-rollback on error spike</b>
+                <span class="ui-faint">Revert if errors exceed 5% for two minutes.</span></div>
+              <input class="ui-switch" type="checkbox" checked aria-label="Auto-rollback" />
+            </div>
+            <div class="ui-row">
+              <div class="ui-row-text"><b>Notify on every deploy</b>
+                <span class="ui-faint">Off by default — most teams find this noisy.</span></div>
+              <input class="ui-switch" type="checkbox" aria-label="Notify on deploy" />
+            </div>
+          </fieldset>
+
+          <fieldset class="ui-fieldset">
+            <legend class="ui-legend">API keys</legend>
+            <div class="ui-card">
+              <div class="ui-empty">
+                <span class="ui-empty-title">No API keys yet</span>
+                <p>Keys let external services trigger deploys. You'll only see the
+                   secret once, when it's created.</p>
+                <button class="ui-btn" type="button" style="margin-top:var(--ui-s2)">Create key</button>
+              </div>
+            </div>
+          </fieldset>
+
+          <div class="ui-toolbar-actions">
+            <button class="ui-btn" type="submit">Save changes</button>
+            <button class="ui-btn-ghost" type="button">Discard</button>
+          </div>
+        </form>
+      </main>
+    </div>
+  </template>
+
+
+  <!-- ============ COMMAND PALETTE — overlay on the dashboard ============ -->
+  <template id="lay-palette">
+    <div class="ui-shell">
+      <aside class="ui-rail">
+        <div class="ui-brand"><span class="ui-mark">N</span>
+          <span class="ui-brand-name">Northwind</span></div>
+        <nav class="ui-nav" aria-label="Primary">
+          <a class="ui-nav-item" href="#" aria-current="page">Deployments</a>
+          <a class="ui-nav-item" href="#">Services</a>
+          <a class="ui-nav-item" href="#">Logs</a>
+          <a class="ui-nav-item" href="#">Metrics</a>
+        </nav>
+        <div class="ui-rail-foot"><span class="ui-avatar">GB</span>
+          <span class="ui-faint" style="font-size:var(--ui-fs-sm)">gary@northwind</span></div>
+      </aside>
+      <main class="ui-main">
+        <div class="ui-toolbar">
+          <div>
+            <div class="ui-eyebrow">Production · us-east</div>
+            <h2 class="ui-title ui-title-lg">Deployments</h2>
+          </div>
+        </div>
+        <div class="ui-grid ui-grid-3">
+          <div class="ui-card ui-stat"><span class="ui-label">Uptime · 30d</span>
+            <span class="ui-stat-value">99.98<small>%</small></span></div>
+          <div class="ui-card ui-stat"><span class="ui-label">p95 latency</span>
+            <span class="ui-stat-value">214<small>ms</small></span></div>
+          <div class="ui-card ui-stat"><span class="ui-label">Failed · 7d</span>
+            <span class="ui-stat-value">2</span></div>
+        </div>
+      </main>
+    </div>
+
+    <div class="ui-scrim">
+      <div class="ui-palette" role="dialog" aria-label="Command palette">
+        <input class="ui-palette-input" value="dep" aria-label="Type a command" />
+        <div class="ui-palette-list" role="listbox">
+          <div class="ui-palette-item" role="option" aria-selected="true">
+            Deploy to production <span class="ui-label">⏎</span></div>
+          <div class="ui-palette-item" role="option" aria-selected="false">
+            Redeploy last build <span class="ui-kbd" style="margin-left:auto">⌘R</span></div>
+          <div class="ui-palette-item" role="option" aria-selected="false">
+            Roll back to 2a70bb8 <span class="ui-label">deploys</span></div>
+          <div class="ui-palette-item" role="option" aria-selected="false">
+            Open deploy logs <span class="ui-label">logs</span></div>
+          <div class="ui-palette-item" role="option" aria-selected="false">
+            Pause deployments <span class="ui-label">danger</span></div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <section class="export">
+    <div class="export-head">
+      <div>
+        <h2>Your overrides</h2>
+        <p>
+          Everything you changed above, as CSS. Paste it after <code>themes.css</code> loads.
+          Move a control and this updates; if it says no overrides, you are on the theme's
+          own values.
+        </p>
+      </div>
+    </div>
+    <pre id="out"><code></code></pre>
+  </section>
+</div>
+
+<script>
+(function () {
+  var THEMES = ["vanilla","blueprint","halo","graphite","oxide","vellum"];
+  var MODES  = ["light","dark"];
+
+  /* Each theme's own values, so we only export what genuinely differs. */
+  var BASE = {
+    vanilla:  { density:"1",    radius:7,  accent:{light:"#2F6FE4",dark:"#6C9BEF"}, pref:"light" },
+    blueprint:{ density:".92",  radius:0,  accent:{light:"#0B7FA0",dark:"#35C6E8"}, pref:"dark"  },
+    halo:     { density:"1.15", radius:14, accent:{light:"#0E9C86",dark:"#4FD6C1"}, pref:"dark"  },
+    graphite: { density:".95",  radius:6,  accent:{light:"#3C63A8",dark:"#6D93C4"}, pref:"dark"  },
+    oxide:    { density:"1.05", radius:4,  accent:{light:"#B04A16",dark:"#D2622A"}, pref:"dark"  },
+    vellum:   { density:"1.3",  radius:2,  accent:{light:"#3A5470",dark:"#8FB0D0"}, pref:"light" }
+  };
+
+  var pv    = document.getElementById("preview");
+  var out   = document.querySelector("#out code");
+  var fname = document.getElementById("frame-name");
+  var rngD  = document.getElementById("rng-density");
+  var rngR  = document.getElementById("rng-radius");
+  var colA  = document.getElementById("col-accent");
+  var vD    = document.getElementById("v-density");
+  var vR    = document.getElementById("v-radius");
+
+  /* Each layout opens in a different theme, so the first thing you see is that
+     the two axes are genuinely independent. Both stay switchable after. */
+  var LAYOUTS = [
+    { id:"dashboard", label:"Dashboard", tpl:"lay-dashboard", theme:"vanilla"   },
+    { id:"split",     label:"Split view", tpl:"lay-split",    theme:"blueprint" },
+    { id:"settings",  label:"Settings",  tpl:"lay-settings",  theme:"vellum"    },
+    { id:"palette",   label:"Palette",   tpl:"lay-palette",   theme:"halo"      }
+  ];
+
+  var state = { layout:"dashboard", theme:"vanilla", mode:"light",
+                density:null, radius:null, accent:null };
+
+  function layoutDef(id){
+    for (var i=0;i<LAYOUTS.length;i++) if (LAYOUTS[i].id===id) return LAYOUTS[i];
+    return LAYOUTS[0];
+  }
+
+  function mount(){
+    var tpl = document.getElementById(layoutDef(state.layout).tpl);
+    pv.innerHTML = "";
+    if (tpl) pv.appendChild(tpl.content.cloneNode(true));
+  }
+
+  function seg(host, items, get, set){
+    host.innerHTML = "";
+    items.forEach(function(it){
+      var b = document.createElement("button");
+      b.type = "button";
+      b.textContent = it;
+      b.setAttribute("aria-pressed", String(get() === it));
+      b.addEventListener("click", function(){ set(it); });
+      host.appendChild(b);
+    });
+  }
+
+  /* Relative luminance → decides whether text on the accent is black or white. */
+  function ink(hex){
+    var c = hex.replace("#","");
+    var f = function(v){ v/=255; return v<=.03928 ? v/12.92 : Math.pow((v+.055)/1.055,2.4); };
+    var L = .2126*f(parseInt(c.slice(0,2),16)) +
+            .7152*f(parseInt(c.slice(2,4),16)) +
+            .0722*f(parseInt(c.slice(4,6),16));
+    return L > .45 ? "#0B0E12" : "#FFFFFF";
+  }
+  function shift(hex, amt){
+    var c = hex.replace("#",""), o = "#";
+    for (var i=0;i<3;i++){
+      var v = parseInt(c.substr(i*2,2),16) + amt;
+      o += Math.max(0,Math.min(255,v)).toString(16).padStart(2,"0");
+    }
+    return o;
+  }
+
+  function apply(){
+    var b = BASE[state.theme];
+
+    pv.setAttribute("data-ui-theme", state.theme);
+    pv.setAttribute("data-ui-mode",  state.mode);
+
+    pv.style.removeProperty("--ui-density");
+    pv.style.removeProperty("--ui-radius");
+    pv.style.removeProperty("--ui-radius-sm");
+    pv.style.removeProperty("--ui-radius-lg");
+    pv.style.removeProperty("--ui-accent");
+    pv.style.removeProperty("--ui-accent-hover");
+    pv.style.removeProperty("--ui-accent-ink");
+
+    if (state.density !== null) pv.style.setProperty("--ui-density", state.density);
+    if (state.radius !== null){
+      pv.style.setProperty("--ui-radius", state.radius + "px");
+      pv.style.setProperty("--ui-radius-sm", Math.max(0, Math.round(state.radius*0.6)) + "px");
+      pv.style.setProperty("--ui-radius-lg", Math.round(state.radius*1.5) + "px");
+    }
+    if (state.accent !== null){
+      pv.style.setProperty("--ui-accent", state.accent);
+      pv.style.setProperty("--ui-accent-hover", shift(state.accent, state.mode==="dark" ? 22 : -26));
+      pv.style.setProperty("--ui-accent-ink", ink(state.accent));
+    }
+
+    /* controls reflect effective values */
+    var dens = state.density !== null ? state.density : b.density;
+    var rad  = state.radius  !== null ? state.radius  : b.radius;
+    var acc  = state.accent  !== null ? state.accent  : b.accent[state.mode];
+    rngD.value = dens; vD.textContent = parseFloat(dens).toFixed(2);
+    rngR.value = rad;  vR.textContent = rad + "px";
+    colA.value = acc;
+
+    fname.textContent = "archetypes/" + state.layout + ".html · "
+                      + state.theme + " · " + state.mode;
+
+    seg(document.getElementById("seg-layout"), LAYOUTS.map(function(l){return l.label;}),
+        function(){ return layoutDef(state.layout).label; },
+        function(label){
+          var def = LAYOUTS.filter(function(l){return l.label===label;})[0];
+          state.layout = def.id;
+          state.theme  = def.theme;              /* show the pairing it was designed in */
+          state.mode   = BASE[def.theme].pref;
+          state.density=null; state.radius=null; state.accent=null;
+          mount(); apply();
+        });
+    seg(document.getElementById("seg-theme"), THEMES,
+        function(){return state.theme;},
+        function(v){ state.theme=v; state.mode=BASE[v].pref;
+                     state.density=null; state.radius=null; state.accent=null; apply(); });
+    seg(document.getElementById("seg-mode"), MODES,
+        function(){return state.mode;},
+        function(v){ state.mode=v; apply(); });
+
+    render();
+  }
+
+  function render(){
+    var b = BASE[state.theme], lines = [];
+    if (state.density !== null && state.density !== b.density)
+      lines.push("  --ui-density:      " + state.density + ";");
+    if (state.radius !== null && state.radius !== b.radius){
+      lines.push("  --ui-radius:       " + state.radius + "px;");
+      lines.push("  --ui-radius-sm:    " + Math.max(0,Math.round(state.radius*0.6)) + "px;");
+      lines.push("  --ui-radius-lg:    " + Math.round(state.radius*1.5) + "px;");
+    }
+    if (state.accent !== null && state.accent.toLowerCase() !== b.accent[state.mode].toLowerCase()){
+      lines.push("  --ui-accent:       " + state.accent.toUpperCase() + ";");
+      lines.push("  --ui-accent-hover: " + shift(state.accent, state.mode==="dark"?22:-26).toUpperCase() + ";");
+      lines.push("  --ui-accent-ink:   " + ink(state.accent) + ";");
+    }
+
+    if (!lines.length){
+      out.textContent =
+        "/* No overrides — this is theme \"" + state.theme + "\" (" + state.mode + ") as shipped.\n" +
+        "   Use it directly:  <html data-theme=\"" + state.theme + "\" data-mode=\"" + state.mode + "\"> */";
+      return;
+    }
+    out.textContent =
+      "/* Tuned from \"" + state.theme + "\". Load after themes.css. */\n" +
+      "[data-theme=\"" + state.theme + "\"][data-mode=\"" + state.mode + "\"]{\n" +
+      lines.join("\n") + "\n}";
+  }
+
+  rngD.addEventListener("input", function(){ state.density = this.value; apply(); });
+  rngR.addEventListener("input", function(){ state.radius  = parseInt(this.value,10); apply(); });
+  colA.addEventListener("input", function(){ state.accent  = this.value; apply(); });
+  document.getElementById("btn-reset").addEventListener("click", function(){
+    state.density=null; state.radius=null; state.accent=null; apply();
+  });
+
+  mount();
+  apply();
+})();
+</script>

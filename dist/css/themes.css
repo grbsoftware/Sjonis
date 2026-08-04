@@ -1,0 +1,519 @@
+/* GENERATED from tokens/themes.tokens.json — do not edit by hand.
+   Run: python tools/build_themes.py css */
+
+/* ==========================================================================
+   VANILLA — Neutral but designed. The open-source default and the worked example for authoring a theme.
+   ========================================================================== */
+[data-theme="vanilla"]{
+  --ui-scheme:light;
+  --ui-radius-sm:4px;
+  --ui-radius:7px;
+  --ui-radius-lg:12px;
+  --ui-density:1;
+  --ui-fs:13.5px;
+  --ui-font:"Segoe UI Variable Text","Segoe UI",-apple-system,system-ui,sans-serif;
+  --ui-font-display:var(--ui-font);
+  --ui-weight-heading:640;
+  --ui-tracking-label:.08em;
+  --ui-blur:none;
+  --ui-ambient:none;
+  --ui-bg:#FCFCFD;
+  --ui-surface:#FFFFFF;
+  --ui-surface-2:#F4F6F8;
+  --ui-surface-3:#EAEEF2;
+  --ui-line:#E3E8EC;
+  --ui-line-strong:#C8D0D8;
+  --ui-text:#15191D;
+  --ui-text-dim:#5A646E;
+  --ui-text-faint:#8A939C;
+  --ui-accent:#2F6FE4;
+  --ui-accent-hover:#245BC4;
+  --ui-accent-ink:#FFFFFF;
+  --ui-accent-soft:#E9F0FC;
+  --ui-shadow:0 1px 2px rgba(16,24,40,.06);
+  --ui-shadow-lg:0 8px 26px rgba(16,24,40,.10);
+}
+
+[data-theme="vanilla"][data-mode="light"]{
+  --ui-scheme:light;
+  --ui-bg:#FCFCFD;
+  --ui-surface:#FFFFFF;
+  --ui-surface-2:#F4F6F8;
+  --ui-surface-3:#EAEEF2;
+  --ui-line:#E3E8EC;
+  --ui-line-strong:#C8D0D8;
+  --ui-text:#15191D;
+  --ui-text-dim:#5A646E;
+  --ui-text-faint:#8A939C;
+  --ui-accent:#2F6FE4;
+  --ui-accent-hover:#245BC4;
+  --ui-accent-ink:#FFFFFF;
+  --ui-accent-soft:#E9F0FC;
+  --ui-good:#15803D;
+  --ui-good-soft:#E6F4EA;
+  --ui-warn:#A16207;
+  --ui-warn-soft:#FDF3E0;
+  --ui-crit:#B91C1C;
+  --ui-crit-soft:#FDEAEA;
+  --ui-info:#0369A1;
+  --ui-info-soft:#E5F2FA;
+  --ui-shadow:0 1px 2px rgba(16,24,40,.06);
+  --ui-shadow-lg:0 8px 26px rgba(16,24,40,.10);
+}
+
+[data-theme="vanilla"][data-mode="dark"]{
+  --ui-scheme:dark;
+  --ui-bg:#0E1114;
+  --ui-surface:#161A1F;
+  --ui-surface-2:#12161A;
+  --ui-surface-3:#1D2329;
+  --ui-line:#232930;
+  --ui-line-strong:#313941;
+  --ui-text:#E7EAEE;
+  --ui-text-dim:#97A1AB;
+  --ui-text-faint:#6A737C;
+  --ui-accent:#6C9BEF;
+  --ui-accent-hover:#85AEF5;
+  --ui-accent-ink:#0A0D10;
+  --ui-accent-soft:#16233A;
+  --ui-good:#4ADE80;
+  --ui-good-soft:#12241A;
+  --ui-warn:#FBBF24;
+  --ui-warn-soft:#241D0E;
+  --ui-crit:#F87171;
+  --ui-crit-soft:#2A1416;
+  --ui-info:#5FB3E8;
+  --ui-info-soft:#0F1F2B;
+  --ui-shadow:0 1px 2px rgba(0,0,0,.42);
+  --ui-shadow-lg:0 8px 26px rgba(0,0,0,.5);
+}
+
+/* ==========================================================================
+   BLUEPRINT — Technical console. Square corners, monospace throughout, cyan as the only signal colour.
+   ========================================================================== */
+[data-theme="blueprint"]{
+  --ui-scheme:dark;
+  --ui-radius-sm:0px;
+  --ui-radius:0px;
+  --ui-radius-lg:0px;
+  --ui-radius-pill:0px;
+  --ui-density:.92;
+  --ui-fs:13px;
+  --ui-font:"Cascadia Mono",Consolas,ui-monospace,"SF Mono",monospace;
+  --ui-font-display:var(--ui-font);
+  --ui-weight-heading:600;
+  --ui-tracking-label:.1em;
+  --ui-tracking-head:0em;
+  --ui-blur:none;
+  --ui-ambient:none;
+  --ui-shadow:none;
+  --ui-shadow-lg:0 8px 24px rgba(0,0,0,.4);
+  --ui-bg:#071A24;
+  --ui-surface:#0B2431;
+  --ui-surface-2:#061620;
+  --ui-surface-3:#113040;
+  --ui-line:#14384A;
+  --ui-line-strong:#1E5169;
+  --ui-text:#D6EAF2;
+  --ui-text-dim:#7FA9BC;
+  --ui-text-faint:#4E7789;
+  --ui-accent:#35C6E8;
+  --ui-accent-hover:#5BD5F2;
+  --ui-accent-ink:#04161E;
+  --ui-accent-soft:#0B2E3D;
+}
+
+[data-theme="blueprint"][data-mode="light"]{
+  --ui-scheme:light;
+  --ui-bg:#EEF4F7;
+  --ui-surface:#FFFFFF;
+  --ui-surface-2:#E2ECF1;
+  --ui-surface-3:#D6E4EB;
+  --ui-line:#C3D8E2;
+  --ui-line-strong:#9BBCCB;
+  --ui-text:#06222E;
+  --ui-text-dim:#45697A;
+  --ui-text-faint:#7899A8;
+  --ui-accent:#0B7FA0;
+  --ui-accent-hover:#096782;
+  --ui-accent-ink:#FFFFFF;
+  --ui-accent-soft:#DCEEF4;
+  --ui-good:#0E7C5A;
+  --ui-good-soft:#DFF1EA;
+  --ui-warn:#96701B;
+  --ui-warn-soft:#F7EEDA;
+  --ui-crit:#C2453F;
+  --ui-crit-soft:#F8E4E3;
+  --ui-info:#0B7FA0;
+  --ui-info-soft:#DCEEF4;
+  --ui-shadow:none;
+}
+
+[data-theme="blueprint"][data-mode="dark"]{
+  --ui-scheme:dark;
+  --ui-bg:#071A24;
+  --ui-surface:#0B2431;
+  --ui-surface-2:#061620;
+  --ui-surface-3:#113040;
+  --ui-line:#14384A;
+  --ui-line-strong:#1E5169;
+  --ui-text:#D6EAF2;
+  --ui-text-dim:#7FA9BC;
+  --ui-text-faint:#4E7789;
+  --ui-accent:#35C6E8;
+  --ui-accent-hover:#5BD5F2;
+  --ui-accent-ink:#04161E;
+  --ui-accent-soft:#0B2E3D;
+  --ui-good:#4ED6A4;
+  --ui-good-soft:#082A24;
+  --ui-warn:#E8B84B;
+  --ui-warn-soft:#2A2310;
+  --ui-crit:#FF6B6B;
+  --ui-crit-soft:#2E1416;
+  --ui-info:#35C6E8;
+  --ui-info-soft:#0B2E3D;
+  --ui-shadow:none;
+}
+
+/* ==========================================================================
+   HALO — Soft depth. Translucent layers, ambient glow, generous radii, mint accent.
+   ========================================================================== */
+[data-theme="halo"]{
+  --ui-scheme:dark;
+  --ui-radius-sm:9px;
+  --ui-radius:14px;
+  --ui-radius-lg:20px;
+  --ui-density:1.15;
+  --ui-fs:13.5px;
+  --ui-font:"Segoe UI Variable Text","Segoe UI",-apple-system,system-ui,sans-serif;
+  --ui-font-display:var(--ui-font);
+  --ui-weight-heading:620;
+  --ui-tracking-label:.07em;
+  --ui-blur:blur(18px);
+  --ui-bg:#0F1018;
+  --ui-ambient:radial-gradient(1000px 460px at 78% -10%,rgba(79,214,193,.16),transparent 62%), radial-gradient(760px 400px at 6% 106%,rgba(120,110,255,.15),transparent 60%);
+  --ui-surface:rgba(255,255,255,.055);
+  --ui-surface-2:rgba(255,255,255,.028);
+  --ui-surface-3:rgba(255,255,255,.085);
+  --ui-line:rgba(255,255,255,.10);
+  --ui-line-strong:rgba(255,255,255,.18);
+  --ui-text:#EDEDF5;
+  --ui-text-dim:#A3A3B8;
+  --ui-text-faint:#71718A;
+  --ui-accent:#4FD6C1;
+  --ui-accent-hover:#6FE3D1;
+  --ui-accent-ink:#06231F;
+  --ui-accent-soft:rgba(79,214,193,.14);
+  --ui-shadow:0 6px 22px rgba(0,0,0,.34);
+  --ui-shadow-lg:0 18px 48px rgba(0,0,0,.44);
+}
+
+[data-theme="halo"][data-mode="light"]{
+  --ui-scheme:light;
+  --ui-bg:#EEEFF6;
+  --ui-ambient:radial-gradient(1000px 460px at 78% -10%,rgba(14,156,134,.13),transparent 62%), radial-gradient(760px 400px at 6% 106%,rgba(120,110,255,.13),transparent 60%);
+  --ui-surface:rgba(255,255,255,.72);
+  --ui-surface-2:rgba(255,255,255,.46);
+  --ui-surface-3:rgba(255,255,255,.92);
+  --ui-line:rgba(20,20,45,.10);
+  --ui-line-strong:rgba(20,20,45,.19);
+  --ui-text:#16172A;
+  --ui-text-dim:#55566E;
+  --ui-text-faint:#83849B;
+  --ui-accent:#0E9C86;
+  --ui-accent-hover:#0B7E6C;
+  --ui-accent-ink:#FFFFFF;
+  --ui-accent-soft:rgba(14,156,134,.12);
+  --ui-good:#0E9C86;
+  --ui-good-soft:rgba(14,156,134,.12);
+  --ui-warn:#B37A15;
+  --ui-warn-soft:rgba(179,122,21,.12);
+  --ui-crit:#CC4759;
+  --ui-crit-soft:rgba(204,71,89,.12);
+  --ui-info:#3A6FD8;
+  --ui-info-soft:rgba(58,111,216,.12);
+  --ui-shadow:0 6px 22px rgba(30,32,70,.10);
+  --ui-shadow-lg:0 18px 48px rgba(30,32,70,.14);
+}
+
+[data-theme="halo"][data-mode="dark"]{
+  --ui-scheme:dark;
+  --ui-bg:#0F1018;
+  --ui-ambient:radial-gradient(1000px 460px at 78% -10%,rgba(79,214,193,.16),transparent 62%), radial-gradient(760px 400px at 6% 106%,rgba(120,110,255,.15),transparent 60%);
+  --ui-surface:rgba(255,255,255,.055);
+  --ui-surface-2:rgba(255,255,255,.028);
+  --ui-surface-3:rgba(255,255,255,.085);
+  --ui-line:rgba(255,255,255,.10);
+  --ui-line-strong:rgba(255,255,255,.18);
+  --ui-text:#EDEDF5;
+  --ui-text-dim:#A3A3B8;
+  --ui-text-faint:#71718A;
+  --ui-accent:#4FD6C1;
+  --ui-accent-hover:#6FE3D1;
+  --ui-accent-ink:#06231F;
+  --ui-accent-soft:rgba(79,214,193,.14);
+  --ui-good:#4FD6C1;
+  --ui-good-soft:rgba(79,214,193,.13);
+  --ui-warn:#FFC46B;
+  --ui-warn-soft:rgba(255,196,107,.13);
+  --ui-crit:#FF7B8A;
+  --ui-crit-soft:rgba(255,123,138,.13);
+  --ui-info:#8AB4FF;
+  --ui-info-soft:rgba(138,180,255,.13);
+  --ui-shadow:0 6px 22px rgba(0,0,0,.34);
+  --ui-shadow-lg:0 18px 48px rgba(0,0,0,.44);
+}
+
+/* ==========================================================================
+   GRAPHITE — Calm precision. Cool near-monochrome, one restrained steel accent, hairline rules.
+   ========================================================================== */
+[data-theme="graphite"]{
+  --ui-scheme:dark;
+  --ui-radius-sm:4px;
+  --ui-radius:6px;
+  --ui-radius-lg:10px;
+  --ui-density:.95;
+  --ui-fs:13px;
+  --ui-font:"Segoe UI Variable Text","Segoe UI",-apple-system,system-ui,sans-serif;
+  --ui-font-display:var(--ui-font);
+  --ui-weight-heading:600;
+  --ui-tracking-label:.06em;
+  --ui-blur:none;
+  --ui-ambient:none;
+  --ui-bg:#0D0F12;
+  --ui-surface:#14171B;
+  --ui-surface-2:#101317;
+  --ui-surface-3:#1A1F25;
+  --ui-line:#212630;
+  --ui-line-strong:#2C333F;
+  --ui-text:#E6E9EE;
+  --ui-text-dim:#98A1AE;
+  --ui-text-faint:#626C7A;
+  --ui-accent:#6D93C4;
+  --ui-accent-hover:#87A9D5;
+  --ui-accent-ink:#0B0E12;
+  --ui-accent-soft:#18212D;
+  --ui-shadow:0 1px 2px rgba(0,0,0,.4);
+}
+
+[data-theme="graphite"][data-mode="light"]{
+  --ui-scheme:light;
+  --ui-bg:#F4F6F8;
+  --ui-surface:#FFFFFF;
+  --ui-surface-2:#EDF0F3;
+  --ui-surface-3:#E3E8ED;
+  --ui-line:#DDE3E9;
+  --ui-line-strong:#C6CED6;
+  --ui-text:#14181D;
+  --ui-text-dim:#59626C;
+  --ui-text-faint:#8B949E;
+  --ui-accent:#3C63A8;
+  --ui-accent-hover:#2F4E86;
+  --ui-accent-ink:#FFFFFF;
+  --ui-accent-soft:#E7EDF7;
+  --ui-good:#1F8A5F;
+  --ui-good-soft:#E3F2EB;
+  --ui-warn:#A9741A;
+  --ui-warn-soft:#F7EFDD;
+  --ui-crit:#C0453C;
+  --ui-crit-soft:#F8E5E3;
+  --ui-info:#3C63A8;
+  --ui-info-soft:#E7EDF7;
+  --ui-shadow:0 1px 2px rgba(16,24,40,.06);
+}
+
+[data-theme="graphite"][data-mode="dark"]{
+  --ui-scheme:dark;
+  --ui-bg:#0D0F12;
+  --ui-surface:#14171B;
+  --ui-surface-2:#101317;
+  --ui-surface-3:#1A1F25;
+  --ui-line:#212630;
+  --ui-line-strong:#2C333F;
+  --ui-text:#E6E9EE;
+  --ui-text-dim:#98A1AE;
+  --ui-text-faint:#626C7A;
+  --ui-accent:#6D93C4;
+  --ui-accent-hover:#87A9D5;
+  --ui-accent-ink:#0B0E12;
+  --ui-accent-soft:#18212D;
+  --ui-good:#4FB286;
+  --ui-good-soft:#10241C;
+  --ui-warn:#D9A441;
+  --ui-warn-soft:#241E10;
+  --ui-crit:#E06C63;
+  --ui-crit-soft:#261414;
+  --ui-info:#6D93C4;
+  --ui-info-soft:#18212D;
+  --ui-shadow:0 1px 2px rgba(0,0,0,.4);
+}
+
+/* ==========================================================================
+   OXIDE — Warm industrial. Rust signal colour, heavier weights, hard drop shadow.
+   ========================================================================== */
+[data-theme="oxide"]{
+  --ui-scheme:dark;
+  --ui-radius-sm:3px;
+  --ui-radius:4px;
+  --ui-radius-lg:6px;
+  --ui-density:1.05;
+  --ui-fs:13.5px;
+  --ui-font:"Segoe UI Variable Text","Segoe UI",-apple-system,system-ui,sans-serif;
+  --ui-font-display:var(--ui-font);
+  --ui-weight-heading:700;
+  --ui-weight-medium:600;
+  --ui-tracking-label:.1em;
+  --ui-blur:none;
+  --ui-ambient:none;
+  --ui-bg:#17130F;
+  --ui-surface:#201B16;
+  --ui-surface-2:#1A1512;
+  --ui-surface-3:#2A231C;
+  --ui-line:#322920;
+  --ui-line-strong:#453829;
+  --ui-text:#F0E7DC;
+  --ui-text-dim:#A99884;
+  --ui-text-faint:#776A5B;
+  --ui-accent:#D2622A;
+  --ui-accent-hover:#E4763D;
+  --ui-accent-ink:#1A0E07;
+  --ui-accent-soft:#2C1A10;
+  --ui-shadow:0 2px 0 rgba(0,0,0,.28);
+}
+
+[data-theme="oxide"][data-mode="light"]{
+  --ui-scheme:light;
+  --ui-bg:#F5F0E8;
+  --ui-surface:#FFFFFF;
+  --ui-surface-2:#EBE3D7;
+  --ui-surface-3:#E1D7C7;
+  --ui-line:#D8CCBA;
+  --ui-line-strong:#B9A88F;
+  --ui-text:#1F1811;
+  --ui-text-dim:#6B5C48;
+  --ui-text-faint:#93826B;
+  --ui-accent:#B04A16;
+  --ui-accent-hover:#963E11;
+  --ui-accent-ink:#FFFFFF;
+  --ui-accent-soft:#F6E5D8;
+  --ui-good:#5C7A2A;
+  --ui-good-soft:#EAF0DC;
+  --ui-warn:#9A6C14;
+  --ui-warn-soft:#F7EEDA;
+  --ui-crit:#A93A31;
+  --ui-crit-soft:#F7E2DF;
+  --ui-info:#3D6E7A;
+  --ui-info-soft:#E0ECEF;
+  --ui-shadow:0 2px 0 rgba(120,96,64,.13);
+}
+
+[data-theme="oxide"][data-mode="dark"]{
+  --ui-scheme:dark;
+  --ui-bg:#17130F;
+  --ui-surface:#201B16;
+  --ui-surface-2:#1A1512;
+  --ui-surface-3:#2A231C;
+  --ui-line:#322920;
+  --ui-line-strong:#453829;
+  --ui-text:#F0E7DC;
+  --ui-text-dim:#A99884;
+  --ui-text-faint:#776A5B;
+  --ui-accent:#D2622A;
+  --ui-accent-hover:#E4763D;
+  --ui-accent-ink:#1A0E07;
+  --ui-accent-soft:#2C1A10;
+  --ui-good:#86A84E;
+  --ui-good-soft:#1C2413;
+  --ui-warn:#E0A03A;
+  --ui-warn-soft:#2A2110;
+  --ui-crit:#C8433A;
+  --ui-crit-soft:#2A1310;
+  --ui-info:#5E9AA8;
+  --ui-info-soft:#132123;
+  --ui-shadow:0 2px 0 rgba(0,0,0,.28);
+}
+
+/* ==========================================================================
+   VELLUM — Editorial calm. Cool bone ground, serif display, generous spacing, low contrast.
+   ========================================================================== */
+[data-theme="vellum"]{
+  --ui-scheme:light;
+  --ui-radius-sm:2px;
+  --ui-radius:2px;
+  --ui-radius-lg:3px;
+  --ui-density:1.3;
+  --ui-fs:14px;
+  --ui-font:"Segoe UI Variable Text","Segoe UI",-apple-system,system-ui,sans-serif;
+  --ui-font-display:"Iowan Old Style",Georgia,"Times New Roman",serif;
+  --ui-weight-heading:600;
+  --ui-tracking-label:.12em;
+  --ui-tracking-head:-.008em;
+  --ui-blur:none;
+  --ui-ambient:none;
+  --ui-shadow:none;
+  --ui-bg:#F2F3EE;
+  --ui-surface:#FBFBF8;
+  --ui-surface-2:#E9EBE3;
+  --ui-surface-3:#E1E4DA;
+  --ui-line:#DCDED4;
+  --ui-line-strong:#C2C6B8;
+  --ui-text:#22241E;
+  --ui-text-dim:#5C6154;
+  --ui-text-faint:#8B9080;
+  --ui-accent:#3A5470;
+  --ui-accent-hover:#2C4258;
+  --ui-accent-ink:#FFFFFF;
+  --ui-accent-soft:#E4E9EF;
+}
+
+[data-theme="vellum"][data-mode="light"]{
+  --ui-scheme:light;
+  --ui-bg:#F2F3EE;
+  --ui-surface:#FBFBF8;
+  --ui-surface-2:#E9EBE3;
+  --ui-surface-3:#E1E4DA;
+  --ui-line:#DCDED4;
+  --ui-line-strong:#C2C6B8;
+  --ui-text:#22241E;
+  --ui-text-dim:#5C6154;
+  --ui-text-faint:#8B9080;
+  --ui-accent:#3A5470;
+  --ui-accent-hover:#2C4258;
+  --ui-accent-ink:#FFFFFF;
+  --ui-accent-soft:#E4E9EF;
+  --ui-good:#3F7A52;
+  --ui-good-soft:#E6EFE7;
+  --ui-warn:#97742A;
+  --ui-warn-soft:#F3EEDD;
+  --ui-crit:#A6453B;
+  --ui-crit-soft:#F3E4E1;
+  --ui-info:#3A5470;
+  --ui-info-soft:#E4E9EF;
+  --ui-shadow:none;
+}
+
+[data-theme="vellum"][data-mode="dark"]{
+  --ui-scheme:dark;
+  --ui-bg:#191A17;
+  --ui-surface:#212320;
+  --ui-surface-2:#1C1E1B;
+  --ui-surface-3:#282B26;
+  --ui-line:#2E312C;
+  --ui-line-strong:#3F433C;
+  --ui-text:#E9EAE3;
+  --ui-text-dim:#9BA093;
+  --ui-text-faint:#6F7469;
+  --ui-accent:#8FB0D0;
+  --ui-accent-hover:#A6C2DC;
+  --ui-accent-ink:#131519;
+  --ui-accent-soft:#1E252C;
+  --ui-good:#6FA87E;
+  --ui-good-soft:#16201A;
+  --ui-warn:#C9A653;
+  --ui-warn-soft:#221E12;
+  --ui-crit:#CF7A70;
+  --ui-crit-soft:#241715;
+  --ui-info:#8FB0D0;
+  --ui-info-soft:#1E252C;
+  --ui-shadow:none;
+}

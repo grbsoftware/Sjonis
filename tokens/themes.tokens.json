@@ -1,0 +1,2643 @@
+{
+  "$description": "UI Suite theme tokens. Generated from core/themes.css by tools/css_to_tokens.py \u2014 see tools/build_themes.py for the inverse.",
+  "theme": {
+    "vanilla": {
+      "$description": "Neutral but designed. The open-source default and the worked example for authoring a theme.",
+      "base": {
+        "scheme": {
+          "$value": "light",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "radius-sm": {
+          "$type": "dimension",
+          "$value": "4px"
+        },
+        "radius": {
+          "$type": "dimension",
+          "$value": "7px"
+        },
+        "radius-lg": {
+          "$type": "dimension",
+          "$value": "12px"
+        },
+        "density": {
+          "$type": "number",
+          "$value": "1"
+        },
+        "fs": {
+          "$type": "dimension",
+          "$value": "13.5px"
+        },
+        "font": {
+          "$type": "fontFamily",
+          "$value": "\"Segoe UI Variable Text\",\"Segoe UI\",-apple-system,system-ui,sans-serif"
+        },
+        "font-display": {
+          "$type": "fontFamily",
+          "$value": "var(--ui-font)"
+        },
+        "weight-heading": {
+          "$type": "number",
+          "$value": "640"
+        },
+        "tracking-label": {
+          "$type": "dimension",
+          "$value": ".08em"
+        },
+        "blur": {
+          "$value": "none",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "ambient": {
+          "$value": "none",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "#FCFCFD"
+        },
+        "surface": {
+          "$type": "color",
+          "$value": "#FFFFFF"
+        },
+        "surface-2": {
+          "$type": "color",
+          "$value": "#F4F6F8"
+        },
+        "surface-3": {
+          "$type": "color",
+          "$value": "#EAEEF2"
+        },
+        "line": {
+          "$type": "color",
+          "$value": "#E3E8EC"
+        },
+        "line-strong": {
+          "$type": "color",
+          "$value": "#C8D0D8"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#15191D"
+        },
+        "text-dim": {
+          "$type": "color",
+          "$value": "#5A646E"
+        },
+        "text-faint": {
+          "$type": "color",
+          "$value": "#8A939C"
+        },
+        "accent": {
+          "$type": "color",
+          "$value": "#2F6FE4"
+        },
+        "accent-hover": {
+          "$type": "color",
+          "$value": "#245BC4"
+        },
+        "accent-ink": {
+          "$type": "color",
+          "$value": "#FFFFFF"
+        },
+        "accent-soft": {
+          "$type": "color",
+          "$value": "#E9F0FC"
+        },
+        "shadow": {
+          "$value": "0 1px 2px rgba(16,24,40,.06)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "shadow-lg": {
+          "$value": "0 8px 26px rgba(16,24,40,.10)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "cat-1": {
+          "$type": "color",
+          "$value": "#2A78D6"
+        },
+        "cat-2": {
+          "$type": "color",
+          "$value": "#EB6834"
+        },
+        "cat-3": {
+          "$type": "color",
+          "$value": "#1BAF7A"
+        },
+        "cat-4": {
+          "$type": "color",
+          "$value": "#EDA100"
+        },
+        "cat-5": {
+          "$type": "color",
+          "$value": "#E87BA4"
+        },
+        "cat-6": {
+          "$type": "color",
+          "$value": "#008300"
+        },
+        "cat-7": {
+          "$type": "color",
+          "$value": "#4A3AA7"
+        },
+        "cat-8": {
+          "$type": "color",
+          "$value": "#E34948"
+        }
+      },
+      "light": {
+        "scheme": {
+          "$value": "light",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "#FCFCFD"
+        },
+        "surface": {
+          "$type": "color",
+          "$value": "#FFFFFF"
+        },
+        "surface-2": {
+          "$type": "color",
+          "$value": "#F4F6F8"
+        },
+        "surface-3": {
+          "$type": "color",
+          "$value": "#EAEEF2"
+        },
+        "line": {
+          "$type": "color",
+          "$value": "#E3E8EC"
+        },
+        "line-strong": {
+          "$type": "color",
+          "$value": "#C8D0D8"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#15191D"
+        },
+        "text-dim": {
+          "$type": "color",
+          "$value": "#5A646E"
+        },
+        "text-faint": {
+          "$type": "color",
+          "$value": "#8A939C"
+        },
+        "accent": {
+          "$type": "color",
+          "$value": "#2F6FE4"
+        },
+        "accent-hover": {
+          "$type": "color",
+          "$value": "#245BC4"
+        },
+        "accent-ink": {
+          "$type": "color",
+          "$value": "#FFFFFF"
+        },
+        "accent-soft": {
+          "$type": "color",
+          "$value": "#E9F0FC"
+        },
+        "good": {
+          "$type": "color",
+          "$value": "#15803D"
+        },
+        "good-soft": {
+          "$type": "color",
+          "$value": "#E6F4EA"
+        },
+        "warn": {
+          "$type": "color",
+          "$value": "#A16207"
+        },
+        "warn-soft": {
+          "$type": "color",
+          "$value": "#FDF3E0"
+        },
+        "crit": {
+          "$type": "color",
+          "$value": "#B91C1C"
+        },
+        "crit-soft": {
+          "$type": "color",
+          "$value": "#FDEAEA"
+        },
+        "info": {
+          "$type": "color",
+          "$value": "#0369A1"
+        },
+        "info-soft": {
+          "$type": "color",
+          "$value": "#E5F2FA"
+        },
+        "shadow": {
+          "$value": "0 1px 2px rgba(16,24,40,.06)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "shadow-lg": {
+          "$value": "0 8px 26px rgba(16,24,40,.10)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "cat-1": {
+          "$type": "color",
+          "$value": "#2A78D6"
+        },
+        "cat-2": {
+          "$type": "color",
+          "$value": "#EB6834"
+        },
+        "cat-3": {
+          "$type": "color",
+          "$value": "#1BAF7A"
+        },
+        "cat-4": {
+          "$type": "color",
+          "$value": "#EDA100"
+        },
+        "cat-5": {
+          "$type": "color",
+          "$value": "#E87BA4"
+        },
+        "cat-6": {
+          "$type": "color",
+          "$value": "#008300"
+        },
+        "cat-7": {
+          "$type": "color",
+          "$value": "#4A3AA7"
+        },
+        "cat-8": {
+          "$type": "color",
+          "$value": "#E34948"
+        }
+      },
+      "dark": {
+        "scheme": {
+          "$value": "dark",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "#0E1114"
+        },
+        "surface": {
+          "$type": "color",
+          "$value": "#161A1F"
+        },
+        "surface-2": {
+          "$type": "color",
+          "$value": "#12161A"
+        },
+        "surface-3": {
+          "$type": "color",
+          "$value": "#1D2329"
+        },
+        "line": {
+          "$type": "color",
+          "$value": "#232930"
+        },
+        "line-strong": {
+          "$type": "color",
+          "$value": "#313941"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#E7EAEE"
+        },
+        "text-dim": {
+          "$type": "color",
+          "$value": "#97A1AB"
+        },
+        "text-faint": {
+          "$type": "color",
+          "$value": "#6A737C"
+        },
+        "accent": {
+          "$type": "color",
+          "$value": "#6C9BEF"
+        },
+        "accent-hover": {
+          "$type": "color",
+          "$value": "#85AEF5"
+        },
+        "accent-ink": {
+          "$type": "color",
+          "$value": "#0A0D10"
+        },
+        "accent-soft": {
+          "$type": "color",
+          "$value": "#16233A"
+        },
+        "good": {
+          "$type": "color",
+          "$value": "#4ADE80"
+        },
+        "good-soft": {
+          "$type": "color",
+          "$value": "#12241A"
+        },
+        "warn": {
+          "$type": "color",
+          "$value": "#FBBF24"
+        },
+        "warn-soft": {
+          "$type": "color",
+          "$value": "#241D0E"
+        },
+        "crit": {
+          "$type": "color",
+          "$value": "#F87171"
+        },
+        "crit-soft": {
+          "$type": "color",
+          "$value": "#2A1416"
+        },
+        "info": {
+          "$type": "color",
+          "$value": "#5FB3E8"
+        },
+        "info-soft": {
+          "$type": "color",
+          "$value": "#0F1F2B"
+        },
+        "shadow": {
+          "$value": "0 1px 2px rgba(0,0,0,.42)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "shadow-lg": {
+          "$value": "0 8px 26px rgba(0,0,0,.5)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "cat-1": {
+          "$type": "color",
+          "$value": "#3987E5"
+        },
+        "cat-2": {
+          "$type": "color",
+          "$value": "#D95926"
+        },
+        "cat-3": {
+          "$type": "color",
+          "$value": "#199E70"
+        },
+        "cat-4": {
+          "$type": "color",
+          "$value": "#C98500"
+        },
+        "cat-5": {
+          "$type": "color",
+          "$value": "#D55181"
+        },
+        "cat-6": {
+          "$type": "color",
+          "$value": "#008300"
+        },
+        "cat-7": {
+          "$type": "color",
+          "$value": "#9085E9"
+        },
+        "cat-8": {
+          "$type": "color",
+          "$value": "#E66767"
+        }
+      }
+    },
+    "blueprint": {
+      "$description": "Technical console. Square corners, monospace throughout, cyan as the only signal colour.",
+      "base": {
+        "scheme": {
+          "$value": "dark",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "radius-sm": {
+          "$type": "dimension",
+          "$value": "0px"
+        },
+        "radius": {
+          "$type": "dimension",
+          "$value": "0px"
+        },
+        "radius-lg": {
+          "$type": "dimension",
+          "$value": "0px"
+        },
+        "radius-pill": {
+          "$type": "dimension",
+          "$value": "0px"
+        },
+        "density": {
+          "$type": "number",
+          "$value": ".92"
+        },
+        "fs": {
+          "$type": "dimension",
+          "$value": "13px"
+        },
+        "font": {
+          "$type": "fontFamily",
+          "$value": "\"Cascadia Mono\",Consolas,ui-monospace,\"SF Mono\",monospace"
+        },
+        "font-display": {
+          "$type": "fontFamily",
+          "$value": "var(--ui-font)"
+        },
+        "weight-heading": {
+          "$type": "number",
+          "$value": "600"
+        },
+        "tracking-label": {
+          "$type": "dimension",
+          "$value": ".1em"
+        },
+        "tracking-head": {
+          "$type": "dimension",
+          "$value": "0em"
+        },
+        "blur": {
+          "$value": "none",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "ambient": {
+          "$value": "none",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "shadow": {
+          "$value": "none",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "shadow-lg": {
+          "$value": "0 8px 24px rgba(0,0,0,.4)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "#071A24"
+        },
+        "surface": {
+          "$type": "color",
+          "$value": "#0B2431"
+        },
+        "surface-2": {
+          "$type": "color",
+          "$value": "#061620"
+        },
+        "surface-3": {
+          "$type": "color",
+          "$value": "#113040"
+        },
+        "line": {
+          "$type": "color",
+          "$value": "#14384A"
+        },
+        "line-strong": {
+          "$type": "color",
+          "$value": "#1E5169"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#D6EAF2"
+        },
+        "text-dim": {
+          "$type": "color",
+          "$value": "#7FA9BC"
+        },
+        "text-faint": {
+          "$type": "color",
+          "$value": "#4E7789"
+        },
+        "accent": {
+          "$type": "color",
+          "$value": "#35C6E8"
+        },
+        "accent-hover": {
+          "$type": "color",
+          "$value": "#5BD5F2"
+        },
+        "accent-ink": {
+          "$type": "color",
+          "$value": "#04161E"
+        },
+        "accent-soft": {
+          "$type": "color",
+          "$value": "#0B2E3D"
+        },
+        "cat-1": {
+          "$type": "color",
+          "$value": "#3987E5"
+        },
+        "cat-2": {
+          "$type": "color",
+          "$value": "#D95926"
+        },
+        "cat-3": {
+          "$type": "color",
+          "$value": "#199E70"
+        },
+        "cat-4": {
+          "$type": "color",
+          "$value": "#C98500"
+        },
+        "cat-5": {
+          "$type": "color",
+          "$value": "#D55181"
+        },
+        "cat-6": {
+          "$type": "color",
+          "$value": "#008300"
+        },
+        "cat-7": {
+          "$type": "color",
+          "$value": "#9085E9"
+        },
+        "cat-8": {
+          "$type": "color",
+          "$value": "#E66767"
+        }
+      },
+      "dark": {
+        "scheme": {
+          "$value": "dark",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "#071A24"
+        },
+        "surface": {
+          "$type": "color",
+          "$value": "#0B2431"
+        },
+        "surface-2": {
+          "$type": "color",
+          "$value": "#061620"
+        },
+        "surface-3": {
+          "$type": "color",
+          "$value": "#113040"
+        },
+        "line": {
+          "$type": "color",
+          "$value": "#14384A"
+        },
+        "line-strong": {
+          "$type": "color",
+          "$value": "#1E5169"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#D6EAF2"
+        },
+        "text-dim": {
+          "$type": "color",
+          "$value": "#7FA9BC"
+        },
+        "text-faint": {
+          "$type": "color",
+          "$value": "#4E7789"
+        },
+        "accent": {
+          "$type": "color",
+          "$value": "#35C6E8"
+        },
+        "accent-hover": {
+          "$type": "color",
+          "$value": "#5BD5F2"
+        },
+        "accent-ink": {
+          "$type": "color",
+          "$value": "#04161E"
+        },
+        "accent-soft": {
+          "$type": "color",
+          "$value": "#0B2E3D"
+        },
+        "good": {
+          "$type": "color",
+          "$value": "#4ED6A4"
+        },
+        "good-soft": {
+          "$type": "color",
+          "$value": "#082A24"
+        },
+        "warn": {
+          "$type": "color",
+          "$value": "#E8B84B"
+        },
+        "warn-soft": {
+          "$type": "color",
+          "$value": "#2A2310"
+        },
+        "crit": {
+          "$type": "color",
+          "$value": "#FF6B6B"
+        },
+        "crit-soft": {
+          "$type": "color",
+          "$value": "#2E1416"
+        },
+        "info": {
+          "$type": "color",
+          "$value": "#35C6E8"
+        },
+        "info-soft": {
+          "$type": "color",
+          "$value": "#0B2E3D"
+        },
+        "shadow": {
+          "$value": "none",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "cat-1": {
+          "$type": "color",
+          "$value": "#3987E5"
+        },
+        "cat-2": {
+          "$type": "color",
+          "$value": "#D95926"
+        },
+        "cat-3": {
+          "$type": "color",
+          "$value": "#199E70"
+        },
+        "cat-4": {
+          "$type": "color",
+          "$value": "#C98500"
+        },
+        "cat-5": {
+          "$type": "color",
+          "$value": "#D55181"
+        },
+        "cat-6": {
+          "$type": "color",
+          "$value": "#008300"
+        },
+        "cat-7": {
+          "$type": "color",
+          "$value": "#9085E9"
+        },
+        "cat-8": {
+          "$type": "color",
+          "$value": "#E66767"
+        }
+      },
+      "light": {
+        "scheme": {
+          "$value": "light",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "#EEF4F7"
+        },
+        "surface": {
+          "$type": "color",
+          "$value": "#FFFFFF"
+        },
+        "surface-2": {
+          "$type": "color",
+          "$value": "#E2ECF1"
+        },
+        "surface-3": {
+          "$type": "color",
+          "$value": "#D6E4EB"
+        },
+        "line": {
+          "$type": "color",
+          "$value": "#C3D8E2"
+        },
+        "line-strong": {
+          "$type": "color",
+          "$value": "#9BBCCB"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#06222E"
+        },
+        "text-dim": {
+          "$type": "color",
+          "$value": "#45697A"
+        },
+        "text-faint": {
+          "$type": "color",
+          "$value": "#7899A8"
+        },
+        "accent": {
+          "$type": "color",
+          "$value": "#0B7FA0"
+        },
+        "accent-hover": {
+          "$type": "color",
+          "$value": "#096782"
+        },
+        "accent-ink": {
+          "$type": "color",
+          "$value": "#FFFFFF"
+        },
+        "accent-soft": {
+          "$type": "color",
+          "$value": "#DCEEF4"
+        },
+        "good": {
+          "$type": "color",
+          "$value": "#0E7C5A"
+        },
+        "good-soft": {
+          "$type": "color",
+          "$value": "#DFF1EA"
+        },
+        "warn": {
+          "$type": "color",
+          "$value": "#96701B"
+        },
+        "warn-soft": {
+          "$type": "color",
+          "$value": "#F7EEDA"
+        },
+        "crit": {
+          "$type": "color",
+          "$value": "#C2453F"
+        },
+        "crit-soft": {
+          "$type": "color",
+          "$value": "#F8E4E3"
+        },
+        "info": {
+          "$type": "color",
+          "$value": "#0B7FA0"
+        },
+        "info-soft": {
+          "$type": "color",
+          "$value": "#DCEEF4"
+        },
+        "shadow": {
+          "$value": "none",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "cat-1": {
+          "$type": "color",
+          "$value": "#2A78D6"
+        },
+        "cat-2": {
+          "$type": "color",
+          "$value": "#EB6834"
+        },
+        "cat-3": {
+          "$type": "color",
+          "$value": "#1BAF7A"
+        },
+        "cat-4": {
+          "$type": "color",
+          "$value": "#EDA100"
+        },
+        "cat-5": {
+          "$type": "color",
+          "$value": "#E87BA4"
+        },
+        "cat-6": {
+          "$type": "color",
+          "$value": "#008300"
+        },
+        "cat-7": {
+          "$type": "color",
+          "$value": "#4A3AA7"
+        },
+        "cat-8": {
+          "$type": "color",
+          "$value": "#E34948"
+        }
+      }
+    },
+    "halo": {
+      "$description": "Soft depth. Translucent layers, ambient glow, generous radii, mint accent.",
+      "base": {
+        "scheme": {
+          "$value": "dark",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "radius-sm": {
+          "$type": "dimension",
+          "$value": "9px"
+        },
+        "radius": {
+          "$type": "dimension",
+          "$value": "14px"
+        },
+        "radius-lg": {
+          "$type": "dimension",
+          "$value": "20px"
+        },
+        "density": {
+          "$type": "number",
+          "$value": "1.15"
+        },
+        "fs": {
+          "$type": "dimension",
+          "$value": "13.5px"
+        },
+        "font": {
+          "$type": "fontFamily",
+          "$value": "\"Segoe UI Variable Text\",\"Segoe UI\",-apple-system,system-ui,sans-serif"
+        },
+        "font-display": {
+          "$type": "fontFamily",
+          "$value": "var(--ui-font)"
+        },
+        "weight-heading": {
+          "$type": "number",
+          "$value": "620"
+        },
+        "tracking-label": {
+          "$type": "dimension",
+          "$value": ".07em"
+        },
+        "blur": {
+          "$value": "blur(18px)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "#0F1018"
+        },
+        "ambient": {
+          "$value": "radial-gradient(1000px 460px at 78% -10%,rgba(79,214,193,.16),transparent 62%), radial-gradient(760px 400px at 6% 106%,rgba(120,110,255,.15),transparent 60%)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "surface": {
+          "$type": "color",
+          "$value": "rgba(255,255,255,.055)"
+        },
+        "surface-2": {
+          "$type": "color",
+          "$value": "rgba(255,255,255,.028)"
+        },
+        "surface-3": {
+          "$type": "color",
+          "$value": "rgba(255,255,255,.085)"
+        },
+        "line": {
+          "$type": "color",
+          "$value": "rgba(255,255,255,.10)"
+        },
+        "line-strong": {
+          "$type": "color",
+          "$value": "rgba(255,255,255,.18)"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#EDEDF5"
+        },
+        "text-dim": {
+          "$type": "color",
+          "$value": "#A3A3B8"
+        },
+        "text-faint": {
+          "$type": "color",
+          "$value": "#71718A"
+        },
+        "accent": {
+          "$type": "color",
+          "$value": "#4FD6C1"
+        },
+        "accent-hover": {
+          "$type": "color",
+          "$value": "#6FE3D1"
+        },
+        "accent-ink": {
+          "$type": "color",
+          "$value": "#06231F"
+        },
+        "accent-soft": {
+          "$type": "color",
+          "$value": "rgba(79,214,193,.14)"
+        },
+        "shadow": {
+          "$value": "0 6px 22px rgba(0,0,0,.34)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "shadow-lg": {
+          "$value": "0 18px 48px rgba(0,0,0,.44)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "cat-1": {
+          "$type": "color",
+          "$value": "#3987E5"
+        },
+        "cat-2": {
+          "$type": "color",
+          "$value": "#D95926"
+        },
+        "cat-3": {
+          "$type": "color",
+          "$value": "#199E70"
+        },
+        "cat-4": {
+          "$type": "color",
+          "$value": "#C98500"
+        },
+        "cat-5": {
+          "$type": "color",
+          "$value": "#D55181"
+        },
+        "cat-6": {
+          "$type": "color",
+          "$value": "#008300"
+        },
+        "cat-7": {
+          "$type": "color",
+          "$value": "#9085E9"
+        },
+        "cat-8": {
+          "$type": "color",
+          "$value": "#E66767"
+        }
+      },
+      "dark": {
+        "scheme": {
+          "$value": "dark",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "#0F1018"
+        },
+        "ambient": {
+          "$value": "radial-gradient(1000px 460px at 78% -10%,rgba(79,214,193,.16),transparent 62%), radial-gradient(760px 400px at 6% 106%,rgba(120,110,255,.15),transparent 60%)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "surface": {
+          "$type": "color",
+          "$value": "rgba(255,255,255,.055)"
+        },
+        "surface-2": {
+          "$type": "color",
+          "$value": "rgba(255,255,255,.028)"
+        },
+        "surface-3": {
+          "$type": "color",
+          "$value": "rgba(255,255,255,.085)"
+        },
+        "line": {
+          "$type": "color",
+          "$value": "rgba(255,255,255,.10)"
+        },
+        "line-strong": {
+          "$type": "color",
+          "$value": "rgba(255,255,255,.18)"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#EDEDF5"
+        },
+        "text-dim": {
+          "$type": "color",
+          "$value": "#A3A3B8"
+        },
+        "text-faint": {
+          "$type": "color",
+          "$value": "#71718A"
+        },
+        "accent": {
+          "$type": "color",
+          "$value": "#4FD6C1"
+        },
+        "accent-hover": {
+          "$type": "color",
+          "$value": "#6FE3D1"
+        },
+        "accent-ink": {
+          "$type": "color",
+          "$value": "#06231F"
+        },
+        "accent-soft": {
+          "$type": "color",
+          "$value": "rgba(79,214,193,.14)"
+        },
+        "good": {
+          "$type": "color",
+          "$value": "#4FD6C1"
+        },
+        "good-soft": {
+          "$type": "color",
+          "$value": "rgba(79,214,193,.13)"
+        },
+        "warn": {
+          "$type": "color",
+          "$value": "#FFC46B"
+        },
+        "warn-soft": {
+          "$type": "color",
+          "$value": "rgba(255,196,107,.13)"
+        },
+        "crit": {
+          "$type": "color",
+          "$value": "#FF7B8A"
+        },
+        "crit-soft": {
+          "$type": "color",
+          "$value": "rgba(255,123,138,.13)"
+        },
+        "info": {
+          "$type": "color",
+          "$value": "#8AB4FF"
+        },
+        "info-soft": {
+          "$type": "color",
+          "$value": "rgba(138,180,255,.13)"
+        },
+        "shadow": {
+          "$value": "0 6px 22px rgba(0,0,0,.34)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "shadow-lg": {
+          "$value": "0 18px 48px rgba(0,0,0,.44)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "cat-1": {
+          "$type": "color",
+          "$value": "#3987E5"
+        },
+        "cat-2": {
+          "$type": "color",
+          "$value": "#D95926"
+        },
+        "cat-3": {
+          "$type": "color",
+          "$value": "#199E70"
+        },
+        "cat-4": {
+          "$type": "color",
+          "$value": "#C98500"
+        },
+        "cat-5": {
+          "$type": "color",
+          "$value": "#D55181"
+        },
+        "cat-6": {
+          "$type": "color",
+          "$value": "#008300"
+        },
+        "cat-7": {
+          "$type": "color",
+          "$value": "#9085E9"
+        },
+        "cat-8": {
+          "$type": "color",
+          "$value": "#E66767"
+        }
+      },
+      "light": {
+        "scheme": {
+          "$value": "light",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "#EEEFF6"
+        },
+        "ambient": {
+          "$value": "radial-gradient(1000px 460px at 78% -10%,rgba(14,156,134,.13),transparent 62%), radial-gradient(760px 400px at 6% 106%,rgba(120,110,255,.13),transparent 60%)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "surface": {
+          "$type": "color",
+          "$value": "rgba(255,255,255,.72)"
+        },
+        "surface-2": {
+          "$type": "color",
+          "$value": "rgba(255,255,255,.46)"
+        },
+        "surface-3": {
+          "$type": "color",
+          "$value": "rgba(255,255,255,.92)"
+        },
+        "line": {
+          "$type": "color",
+          "$value": "rgba(20,20,45,.10)"
+        },
+        "line-strong": {
+          "$type": "color",
+          "$value": "rgba(20,20,45,.19)"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#16172A"
+        },
+        "text-dim": {
+          "$type": "color",
+          "$value": "#55566E"
+        },
+        "text-faint": {
+          "$type": "color",
+          "$value": "#83849B"
+        },
+        "accent": {
+          "$type": "color",
+          "$value": "#0E9C86"
+        },
+        "accent-hover": {
+          "$type": "color",
+          "$value": "#0B7E6C"
+        },
+        "accent-ink": {
+          "$type": "color",
+          "$value": "#FFFFFF"
+        },
+        "accent-soft": {
+          "$type": "color",
+          "$value": "rgba(14,156,134,.12)"
+        },
+        "good": {
+          "$type": "color",
+          "$value": "#0E9C86"
+        },
+        "good-soft": {
+          "$type": "color",
+          "$value": "rgba(14,156,134,.12)"
+        },
+        "warn": {
+          "$type": "color",
+          "$value": "#B37A15"
+        },
+        "warn-soft": {
+          "$type": "color",
+          "$value": "rgba(179,122,21,.12)"
+        },
+        "crit": {
+          "$type": "color",
+          "$value": "#CC4759"
+        },
+        "crit-soft": {
+          "$type": "color",
+          "$value": "rgba(204,71,89,.12)"
+        },
+        "info": {
+          "$type": "color",
+          "$value": "#3A6FD8"
+        },
+        "info-soft": {
+          "$type": "color",
+          "$value": "rgba(58,111,216,.12)"
+        },
+        "shadow": {
+          "$value": "0 6px 22px rgba(30,32,70,.10)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "shadow-lg": {
+          "$value": "0 18px 48px rgba(30,32,70,.14)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "cat-1": {
+          "$type": "color",
+          "$value": "#2A78D6"
+        },
+        "cat-2": {
+          "$type": "color",
+          "$value": "#EB6834"
+        },
+        "cat-3": {
+          "$type": "color",
+          "$value": "#1BAF7A"
+        },
+        "cat-4": {
+          "$type": "color",
+          "$value": "#EDA100"
+        },
+        "cat-5": {
+          "$type": "color",
+          "$value": "#E87BA4"
+        },
+        "cat-6": {
+          "$type": "color",
+          "$value": "#008300"
+        },
+        "cat-7": {
+          "$type": "color",
+          "$value": "#4A3AA7"
+        },
+        "cat-8": {
+          "$type": "color",
+          "$value": "#E34948"
+        }
+      }
+    },
+    "graphite": {
+      "$description": "Calm precision. Cool near-monochrome, one restrained steel accent, hairline rules.",
+      "base": {
+        "scheme": {
+          "$value": "dark",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "radius-sm": {
+          "$type": "dimension",
+          "$value": "4px"
+        },
+        "radius": {
+          "$type": "dimension",
+          "$value": "6px"
+        },
+        "radius-lg": {
+          "$type": "dimension",
+          "$value": "10px"
+        },
+        "density": {
+          "$type": "number",
+          "$value": ".95"
+        },
+        "fs": {
+          "$type": "dimension",
+          "$value": "13px"
+        },
+        "font": {
+          "$type": "fontFamily",
+          "$value": "\"Segoe UI Variable Text\",\"Segoe UI\",-apple-system,system-ui,sans-serif"
+        },
+        "font-display": {
+          "$type": "fontFamily",
+          "$value": "var(--ui-font)"
+        },
+        "weight-heading": {
+          "$type": "number",
+          "$value": "600"
+        },
+        "tracking-label": {
+          "$type": "dimension",
+          "$value": ".06em"
+        },
+        "blur": {
+          "$value": "none",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "ambient": {
+          "$value": "none",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "#0D0F12"
+        },
+        "surface": {
+          "$type": "color",
+          "$value": "#14171B"
+        },
+        "surface-2": {
+          "$type": "color",
+          "$value": "#101317"
+        },
+        "surface-3": {
+          "$type": "color",
+          "$value": "#1A1F25"
+        },
+        "line": {
+          "$type": "color",
+          "$value": "#212630"
+        },
+        "line-strong": {
+          "$type": "color",
+          "$value": "#2C333F"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#E6E9EE"
+        },
+        "text-dim": {
+          "$type": "color",
+          "$value": "#98A1AE"
+        },
+        "text-faint": {
+          "$type": "color",
+          "$value": "#626C7A"
+        },
+        "accent": {
+          "$type": "color",
+          "$value": "#6D93C4"
+        },
+        "accent-hover": {
+          "$type": "color",
+          "$value": "#87A9D5"
+        },
+        "accent-ink": {
+          "$type": "color",
+          "$value": "#0B0E12"
+        },
+        "accent-soft": {
+          "$type": "color",
+          "$value": "#18212D"
+        },
+        "shadow": {
+          "$value": "0 1px 2px rgba(0,0,0,.4)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "cat-1": {
+          "$type": "color",
+          "$value": "#3987E5"
+        },
+        "cat-2": {
+          "$type": "color",
+          "$value": "#D95926"
+        },
+        "cat-3": {
+          "$type": "color",
+          "$value": "#199E70"
+        },
+        "cat-4": {
+          "$type": "color",
+          "$value": "#C98500"
+        },
+        "cat-5": {
+          "$type": "color",
+          "$value": "#D55181"
+        },
+        "cat-6": {
+          "$type": "color",
+          "$value": "#008300"
+        },
+        "cat-7": {
+          "$type": "color",
+          "$value": "#9085E9"
+        },
+        "cat-8": {
+          "$type": "color",
+          "$value": "#E66767"
+        }
+      },
+      "dark": {
+        "scheme": {
+          "$value": "dark",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "#0D0F12"
+        },
+        "surface": {
+          "$type": "color",
+          "$value": "#14171B"
+        },
+        "surface-2": {
+          "$type": "color",
+          "$value": "#101317"
+        },
+        "surface-3": {
+          "$type": "color",
+          "$value": "#1A1F25"
+        },
+        "line": {
+          "$type": "color",
+          "$value": "#212630"
+        },
+        "line-strong": {
+          "$type": "color",
+          "$value": "#2C333F"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#E6E9EE"
+        },
+        "text-dim": {
+          "$type": "color",
+          "$value": "#98A1AE"
+        },
+        "text-faint": {
+          "$type": "color",
+          "$value": "#626C7A"
+        },
+        "accent": {
+          "$type": "color",
+          "$value": "#6D93C4"
+        },
+        "accent-hover": {
+          "$type": "color",
+          "$value": "#87A9D5"
+        },
+        "accent-ink": {
+          "$type": "color",
+          "$value": "#0B0E12"
+        },
+        "accent-soft": {
+          "$type": "color",
+          "$value": "#18212D"
+        },
+        "good": {
+          "$type": "color",
+          "$value": "#4FB286"
+        },
+        "good-soft": {
+          "$type": "color",
+          "$value": "#10241C"
+        },
+        "warn": {
+          "$type": "color",
+          "$value": "#D9A441"
+        },
+        "warn-soft": {
+          "$type": "color",
+          "$value": "#241E10"
+        },
+        "crit": {
+          "$type": "color",
+          "$value": "#E06C63"
+        },
+        "crit-soft": {
+          "$type": "color",
+          "$value": "#261414"
+        },
+        "info": {
+          "$type": "color",
+          "$value": "#6D93C4"
+        },
+        "info-soft": {
+          "$type": "color",
+          "$value": "#18212D"
+        },
+        "shadow": {
+          "$value": "0 1px 2px rgba(0,0,0,.4)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "cat-1": {
+          "$type": "color",
+          "$value": "#3987E5"
+        },
+        "cat-2": {
+          "$type": "color",
+          "$value": "#D95926"
+        },
+        "cat-3": {
+          "$type": "color",
+          "$value": "#199E70"
+        },
+        "cat-4": {
+          "$type": "color",
+          "$value": "#C98500"
+        },
+        "cat-5": {
+          "$type": "color",
+          "$value": "#D55181"
+        },
+        "cat-6": {
+          "$type": "color",
+          "$value": "#008300"
+        },
+        "cat-7": {
+          "$type": "color",
+          "$value": "#9085E9"
+        },
+        "cat-8": {
+          "$type": "color",
+          "$value": "#E66767"
+        }
+      },
+      "light": {
+        "scheme": {
+          "$value": "light",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "#F4F6F8"
+        },
+        "surface": {
+          "$type": "color",
+          "$value": "#FFFFFF"
+        },
+        "surface-2": {
+          "$type": "color",
+          "$value": "#EDF0F3"
+        },
+        "surface-3": {
+          "$type": "color",
+          "$value": "#E3E8ED"
+        },
+        "line": {
+          "$type": "color",
+          "$value": "#DDE3E9"
+        },
+        "line-strong": {
+          "$type": "color",
+          "$value": "#C6CED6"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#14181D"
+        },
+        "text-dim": {
+          "$type": "color",
+          "$value": "#59626C"
+        },
+        "text-faint": {
+          "$type": "color",
+          "$value": "#8B949E"
+        },
+        "accent": {
+          "$type": "color",
+          "$value": "#3C63A8"
+        },
+        "accent-hover": {
+          "$type": "color",
+          "$value": "#2F4E86"
+        },
+        "accent-ink": {
+          "$type": "color",
+          "$value": "#FFFFFF"
+        },
+        "accent-soft": {
+          "$type": "color",
+          "$value": "#E7EDF7"
+        },
+        "good": {
+          "$type": "color",
+          "$value": "#1F8A5F"
+        },
+        "good-soft": {
+          "$type": "color",
+          "$value": "#E3F2EB"
+        },
+        "warn": {
+          "$type": "color",
+          "$value": "#A9741A"
+        },
+        "warn-soft": {
+          "$type": "color",
+          "$value": "#F7EFDD"
+        },
+        "crit": {
+          "$type": "color",
+          "$value": "#C0453C"
+        },
+        "crit-soft": {
+          "$type": "color",
+          "$value": "#F8E5E3"
+        },
+        "info": {
+          "$type": "color",
+          "$value": "#3C63A8"
+        },
+        "info-soft": {
+          "$type": "color",
+          "$value": "#E7EDF7"
+        },
+        "shadow": {
+          "$value": "0 1px 2px rgba(16,24,40,.06)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "cat-1": {
+          "$type": "color",
+          "$value": "#2A78D6"
+        },
+        "cat-2": {
+          "$type": "color",
+          "$value": "#EB6834"
+        },
+        "cat-3": {
+          "$type": "color",
+          "$value": "#1BAF7A"
+        },
+        "cat-4": {
+          "$type": "color",
+          "$value": "#EDA100"
+        },
+        "cat-5": {
+          "$type": "color",
+          "$value": "#E87BA4"
+        },
+        "cat-6": {
+          "$type": "color",
+          "$value": "#008300"
+        },
+        "cat-7": {
+          "$type": "color",
+          "$value": "#4A3AA7"
+        },
+        "cat-8": {
+          "$type": "color",
+          "$value": "#E34948"
+        }
+      }
+    },
+    "oxide": {
+      "$description": "Warm industrial. Rust signal colour, heavier weights, hard drop shadow.",
+      "base": {
+        "scheme": {
+          "$value": "dark",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "radius-sm": {
+          "$type": "dimension",
+          "$value": "3px"
+        },
+        "radius": {
+          "$type": "dimension",
+          "$value": "4px"
+        },
+        "radius-lg": {
+          "$type": "dimension",
+          "$value": "6px"
+        },
+        "density": {
+          "$type": "number",
+          "$value": "1.05"
+        },
+        "fs": {
+          "$type": "dimension",
+          "$value": "13.5px"
+        },
+        "font": {
+          "$type": "fontFamily",
+          "$value": "\"Segoe UI Variable Text\",\"Segoe UI\",-apple-system,system-ui,sans-serif"
+        },
+        "font-display": {
+          "$type": "fontFamily",
+          "$value": "var(--ui-font)"
+        },
+        "weight-heading": {
+          "$type": "number",
+          "$value": "700"
+        },
+        "weight-medium": {
+          "$type": "number",
+          "$value": "600"
+        },
+        "tracking-label": {
+          "$type": "dimension",
+          "$value": ".1em"
+        },
+        "blur": {
+          "$value": "none",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "ambient": {
+          "$value": "none",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "#17130F"
+        },
+        "surface": {
+          "$type": "color",
+          "$value": "#201B16"
+        },
+        "surface-2": {
+          "$type": "color",
+          "$value": "#1A1512"
+        },
+        "surface-3": {
+          "$type": "color",
+          "$value": "#2A231C"
+        },
+        "line": {
+          "$type": "color",
+          "$value": "#322920"
+        },
+        "line-strong": {
+          "$type": "color",
+          "$value": "#453829"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#F0E7DC"
+        },
+        "text-dim": {
+          "$type": "color",
+          "$value": "#A99884"
+        },
+        "text-faint": {
+          "$type": "color",
+          "$value": "#776A5B"
+        },
+        "accent": {
+          "$type": "color",
+          "$value": "#D2622A"
+        },
+        "accent-hover": {
+          "$type": "color",
+          "$value": "#E4763D"
+        },
+        "accent-ink": {
+          "$type": "color",
+          "$value": "#1A0E07"
+        },
+        "accent-soft": {
+          "$type": "color",
+          "$value": "#2C1A10"
+        },
+        "shadow": {
+          "$value": "0 2px 0 rgba(0,0,0,.28)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "cat-1": {
+          "$type": "color",
+          "$value": "#3987E5"
+        },
+        "cat-2": {
+          "$type": "color",
+          "$value": "#D95926"
+        },
+        "cat-3": {
+          "$type": "color",
+          "$value": "#199E70"
+        },
+        "cat-4": {
+          "$type": "color",
+          "$value": "#C98500"
+        },
+        "cat-5": {
+          "$type": "color",
+          "$value": "#D55181"
+        },
+        "cat-6": {
+          "$type": "color",
+          "$value": "#008300"
+        },
+        "cat-7": {
+          "$type": "color",
+          "$value": "#9085E9"
+        },
+        "cat-8": {
+          "$type": "color",
+          "$value": "#E66767"
+        }
+      },
+      "dark": {
+        "scheme": {
+          "$value": "dark",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "#17130F"
+        },
+        "surface": {
+          "$type": "color",
+          "$value": "#201B16"
+        },
+        "surface-2": {
+          "$type": "color",
+          "$value": "#1A1512"
+        },
+        "surface-3": {
+          "$type": "color",
+          "$value": "#2A231C"
+        },
+        "line": {
+          "$type": "color",
+          "$value": "#322920"
+        },
+        "line-strong": {
+          "$type": "color",
+          "$value": "#453829"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#F0E7DC"
+        },
+        "text-dim": {
+          "$type": "color",
+          "$value": "#A99884"
+        },
+        "text-faint": {
+          "$type": "color",
+          "$value": "#776A5B"
+        },
+        "accent": {
+          "$type": "color",
+          "$value": "#D2622A"
+        },
+        "accent-hover": {
+          "$type": "color",
+          "$value": "#E4763D"
+        },
+        "accent-ink": {
+          "$type": "color",
+          "$value": "#1A0E07"
+        },
+        "accent-soft": {
+          "$type": "color",
+          "$value": "#2C1A10"
+        },
+        "good": {
+          "$type": "color",
+          "$value": "#86A84E"
+        },
+        "good-soft": {
+          "$type": "color",
+          "$value": "#1C2413"
+        },
+        "warn": {
+          "$type": "color",
+          "$value": "#E0A03A"
+        },
+        "warn-soft": {
+          "$type": "color",
+          "$value": "#2A2110"
+        },
+        "crit": {
+          "$type": "color",
+          "$value": "#C8433A"
+        },
+        "crit-soft": {
+          "$type": "color",
+          "$value": "#2A1310"
+        },
+        "info": {
+          "$type": "color",
+          "$value": "#5E9AA8"
+        },
+        "info-soft": {
+          "$type": "color",
+          "$value": "#132123"
+        },
+        "shadow": {
+          "$value": "0 2px 0 rgba(0,0,0,.28)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "cat-1": {
+          "$type": "color",
+          "$value": "#3987E5"
+        },
+        "cat-2": {
+          "$type": "color",
+          "$value": "#D95926"
+        },
+        "cat-3": {
+          "$type": "color",
+          "$value": "#199E70"
+        },
+        "cat-4": {
+          "$type": "color",
+          "$value": "#C98500"
+        },
+        "cat-5": {
+          "$type": "color",
+          "$value": "#D55181"
+        },
+        "cat-6": {
+          "$type": "color",
+          "$value": "#008300"
+        },
+        "cat-7": {
+          "$type": "color",
+          "$value": "#9085E9"
+        },
+        "cat-8": {
+          "$type": "color",
+          "$value": "#E66767"
+        }
+      },
+      "light": {
+        "scheme": {
+          "$value": "light",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "#F5F0E8"
+        },
+        "surface": {
+          "$type": "color",
+          "$value": "#FFFFFF"
+        },
+        "surface-2": {
+          "$type": "color",
+          "$value": "#EBE3D7"
+        },
+        "surface-3": {
+          "$type": "color",
+          "$value": "#E1D7C7"
+        },
+        "line": {
+          "$type": "color",
+          "$value": "#D8CCBA"
+        },
+        "line-strong": {
+          "$type": "color",
+          "$value": "#B9A88F"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#1F1811"
+        },
+        "text-dim": {
+          "$type": "color",
+          "$value": "#6B5C48"
+        },
+        "text-faint": {
+          "$type": "color",
+          "$value": "#93826B"
+        },
+        "accent": {
+          "$type": "color",
+          "$value": "#B04A16"
+        },
+        "accent-hover": {
+          "$type": "color",
+          "$value": "#963E11"
+        },
+        "accent-ink": {
+          "$type": "color",
+          "$value": "#FFFFFF"
+        },
+        "accent-soft": {
+          "$type": "color",
+          "$value": "#F6E5D8"
+        },
+        "good": {
+          "$type": "color",
+          "$value": "#5C7A2A"
+        },
+        "good-soft": {
+          "$type": "color",
+          "$value": "#EAF0DC"
+        },
+        "warn": {
+          "$type": "color",
+          "$value": "#9A6C14"
+        },
+        "warn-soft": {
+          "$type": "color",
+          "$value": "#F7EEDA"
+        },
+        "crit": {
+          "$type": "color",
+          "$value": "#A93A31"
+        },
+        "crit-soft": {
+          "$type": "color",
+          "$value": "#F7E2DF"
+        },
+        "info": {
+          "$type": "color",
+          "$value": "#3D6E7A"
+        },
+        "info-soft": {
+          "$type": "color",
+          "$value": "#E0ECEF"
+        },
+        "shadow": {
+          "$value": "0 2px 0 rgba(120,96,64,.13)",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "cat-1": {
+          "$type": "color",
+          "$value": "#2A78D6"
+        },
+        "cat-2": {
+          "$type": "color",
+          "$value": "#EB6834"
+        },
+        "cat-3": {
+          "$type": "color",
+          "$value": "#1BAF7A"
+        },
+        "cat-4": {
+          "$type": "color",
+          "$value": "#EDA100"
+        },
+        "cat-5": {
+          "$type": "color",
+          "$value": "#E87BA4"
+        },
+        "cat-6": {
+          "$type": "color",
+          "$value": "#008300"
+        },
+        "cat-7": {
+          "$type": "color",
+          "$value": "#4A3AA7"
+        },
+        "cat-8": {
+          "$type": "color",
+          "$value": "#E34948"
+        }
+      }
+    },
+    "vellum": {
+      "$description": "Editorial calm. Cool bone ground, serif display, generous spacing, low contrast.",
+      "base": {
+        "scheme": {
+          "$value": "light",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "radius-sm": {
+          "$type": "dimension",
+          "$value": "2px"
+        },
+        "radius": {
+          "$type": "dimension",
+          "$value": "2px"
+        },
+        "radius-lg": {
+          "$type": "dimension",
+          "$value": "3px"
+        },
+        "density": {
+          "$type": "number",
+          "$value": "1.3"
+        },
+        "fs": {
+          "$type": "dimension",
+          "$value": "14px"
+        },
+        "font": {
+          "$type": "fontFamily",
+          "$value": "\"Segoe UI Variable Text\",\"Segoe UI\",-apple-system,system-ui,sans-serif"
+        },
+        "font-display": {
+          "$type": "fontFamily",
+          "$value": "\"Iowan Old Style\",Georgia,\"Times New Roman\",serif"
+        },
+        "weight-heading": {
+          "$type": "number",
+          "$value": "600"
+        },
+        "tracking-label": {
+          "$type": "dimension",
+          "$value": ".12em"
+        },
+        "tracking-head": {
+          "$type": "dimension",
+          "$value": "-.008em"
+        },
+        "blur": {
+          "$value": "none",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "ambient": {
+          "$value": "none",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "shadow": {
+          "$value": "none",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "#F2F3EE"
+        },
+        "surface": {
+          "$type": "color",
+          "$value": "#FBFBF8"
+        },
+        "surface-2": {
+          "$type": "color",
+          "$value": "#E9EBE3"
+        },
+        "surface-3": {
+          "$type": "color",
+          "$value": "#E1E4DA"
+        },
+        "line": {
+          "$type": "color",
+          "$value": "#DCDED4"
+        },
+        "line-strong": {
+          "$type": "color",
+          "$value": "#C2C6B8"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#22241E"
+        },
+        "text-dim": {
+          "$type": "color",
+          "$value": "#5C6154"
+        },
+        "text-faint": {
+          "$type": "color",
+          "$value": "#8B9080"
+        },
+        "accent": {
+          "$type": "color",
+          "$value": "#3A5470"
+        },
+        "accent-hover": {
+          "$type": "color",
+          "$value": "#2C4258"
+        },
+        "accent-ink": {
+          "$type": "color",
+          "$value": "#FFFFFF"
+        },
+        "accent-soft": {
+          "$type": "color",
+          "$value": "#E4E9EF"
+        },
+        "cat-1": {
+          "$type": "color",
+          "$value": "#2A78D6"
+        },
+        "cat-2": {
+          "$type": "color",
+          "$value": "#EB6834"
+        },
+        "cat-3": {
+          "$type": "color",
+          "$value": "#1BAF7A"
+        },
+        "cat-4": {
+          "$type": "color",
+          "$value": "#EDA100"
+        },
+        "cat-5": {
+          "$type": "color",
+          "$value": "#E87BA4"
+        },
+        "cat-6": {
+          "$type": "color",
+          "$value": "#008300"
+        },
+        "cat-7": {
+          "$type": "color",
+          "$value": "#4A3AA7"
+        },
+        "cat-8": {
+          "$type": "color",
+          "$value": "#E34948"
+        }
+      },
+      "light": {
+        "scheme": {
+          "$value": "light",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "#F2F3EE"
+        },
+        "surface": {
+          "$type": "color",
+          "$value": "#FBFBF8"
+        },
+        "surface-2": {
+          "$type": "color",
+          "$value": "#E9EBE3"
+        },
+        "surface-3": {
+          "$type": "color",
+          "$value": "#E1E4DA"
+        },
+        "line": {
+          "$type": "color",
+          "$value": "#DCDED4"
+        },
+        "line-strong": {
+          "$type": "color",
+          "$value": "#C2C6B8"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#22241E"
+        },
+        "text-dim": {
+          "$type": "color",
+          "$value": "#5C6154"
+        },
+        "text-faint": {
+          "$type": "color",
+          "$value": "#8B9080"
+        },
+        "accent": {
+          "$type": "color",
+          "$value": "#3A5470"
+        },
+        "accent-hover": {
+          "$type": "color",
+          "$value": "#2C4258"
+        },
+        "accent-ink": {
+          "$type": "color",
+          "$value": "#FFFFFF"
+        },
+        "accent-soft": {
+          "$type": "color",
+          "$value": "#E4E9EF"
+        },
+        "good": {
+          "$type": "color",
+          "$value": "#3F7A52"
+        },
+        "good-soft": {
+          "$type": "color",
+          "$value": "#E6EFE7"
+        },
+        "warn": {
+          "$type": "color",
+          "$value": "#97742A"
+        },
+        "warn-soft": {
+          "$type": "color",
+          "$value": "#F3EEDD"
+        },
+        "crit": {
+          "$type": "color",
+          "$value": "#A6453B"
+        },
+        "crit-soft": {
+          "$type": "color",
+          "$value": "#F3E4E1"
+        },
+        "info": {
+          "$type": "color",
+          "$value": "#3A5470"
+        },
+        "info-soft": {
+          "$type": "color",
+          "$value": "#E4E9EF"
+        },
+        "shadow": {
+          "$value": "none",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "cat-1": {
+          "$type": "color",
+          "$value": "#2A78D6"
+        },
+        "cat-2": {
+          "$type": "color",
+          "$value": "#EB6834"
+        },
+        "cat-3": {
+          "$type": "color",
+          "$value": "#1BAF7A"
+        },
+        "cat-4": {
+          "$type": "color",
+          "$value": "#EDA100"
+        },
+        "cat-5": {
+          "$type": "color",
+          "$value": "#E87BA4"
+        },
+        "cat-6": {
+          "$type": "color",
+          "$value": "#008300"
+        },
+        "cat-7": {
+          "$type": "color",
+          "$value": "#4A3AA7"
+        },
+        "cat-8": {
+          "$type": "color",
+          "$value": "#E34948"
+        }
+      },
+      "dark": {
+        "scheme": {
+          "$value": "dark",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "bg": {
+          "$type": "color",
+          "$value": "#191A17"
+        },
+        "surface": {
+          "$type": "color",
+          "$value": "#212320"
+        },
+        "surface-2": {
+          "$type": "color",
+          "$value": "#1C1E1B"
+        },
+        "surface-3": {
+          "$type": "color",
+          "$value": "#282B26"
+        },
+        "line": {
+          "$type": "color",
+          "$value": "#2E312C"
+        },
+        "line-strong": {
+          "$type": "color",
+          "$value": "#3F433C"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#E9EAE3"
+        },
+        "text-dim": {
+          "$type": "color",
+          "$value": "#9BA093"
+        },
+        "text-faint": {
+          "$type": "color",
+          "$value": "#6F7469"
+        },
+        "accent": {
+          "$type": "color",
+          "$value": "#8FB0D0"
+        },
+        "accent-hover": {
+          "$type": "color",
+          "$value": "#A6C2DC"
+        },
+        "accent-ink": {
+          "$type": "color",
+          "$value": "#131519"
+        },
+        "accent-soft": {
+          "$type": "color",
+          "$value": "#1E252C"
+        },
+        "good": {
+          "$type": "color",
+          "$value": "#6FA87E"
+        },
+        "good-soft": {
+          "$type": "color",
+          "$value": "#16201A"
+        },
+        "warn": {
+          "$type": "color",
+          "$value": "#C9A653"
+        },
+        "warn-soft": {
+          "$type": "color",
+          "$value": "#221E12"
+        },
+        "crit": {
+          "$type": "color",
+          "$value": "#CF7A70"
+        },
+        "crit-soft": {
+          "$type": "color",
+          "$value": "#241715"
+        },
+        "info": {
+          "$type": "color",
+          "$value": "#8FB0D0"
+        },
+        "info-soft": {
+          "$type": "color",
+          "$value": "#1E252C"
+        },
+        "shadow": {
+          "$value": "none",
+          "$extensions": {
+            "design.uisuite": {
+              "raw": "css"
+            }
+          }
+        },
+        "cat-1": {
+          "$type": "color",
+          "$value": "#3987E5"
+        },
+        "cat-2": {
+          "$type": "color",
+          "$value": "#D95926"
+        },
+        "cat-3": {
+          "$type": "color",
+          "$value": "#199E70"
+        },
+        "cat-4": {
+          "$type": "color",
+          "$value": "#C98500"
+        },
+        "cat-5": {
+          "$type": "color",
+          "$value": "#D55181"
+        },
+        "cat-6": {
+          "$type": "color",
+          "$value": "#008300"
+        },
+        "cat-7": {
+          "$type": "color",
+          "$value": "#9085E9"
+        },
+        "cat-8": {
+          "$type": "color",
+          "$value": "#E66767"
+        }
+      }
+    }
+  }
+}

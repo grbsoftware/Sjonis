@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en" data-theme="vanilla" data-mode="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>App shell — UI Suite archetype</title>
+<link rel="stylesheet" href="../core/ui.css" />
+<link rel="stylesheet" href="../core/themes.css" />
+<style>
+  html,body{height:100%;margin:0}
+  body{background:var(--ui-bg)}
+</style>
+</head>
+<body class="ui">
+
+<!--
+  ARCHETYPE: app shell / dashboard
+  Swap the theme by changing data-theme on <html>: vanilla | blueprint | halo |
+  graphite | oxide | vellum. Add data-mode="light|dark" to force a mode.
+  No class in this file encodes a colour, a size, or a typeface.
+-->
+
+<div class="ui-shell">
+
+  <aside class="ui-rail">
+    <div class="ui-brand">
+      <span class="ui-mark">N</span>
+      <span class="ui-brand-name">Northwind</span>
+    </div>
+
+    <nav class="ui-nav" aria-label="Primary">
+      <a class="ui-nav-item" href="#" aria-current="page">Deployments <span class="ui-nav-count">12</span></a>
+      <a class="ui-nav-item" href="#">Services <span class="ui-nav-count">8</span></a>
+      <a class="ui-nav-item" href="#">Logs</a>
+      <a class="ui-nav-item" href="#">Metrics</a>
+
+      <div class="ui-nav-group">
+        <div class="ui-label">Account</div>
+        <a class="ui-nav-item" href="#">Team</a>
+        <a class="ui-nav-item" href="#">Billing</a>
+        <a class="ui-nav-item" href="#">Settings</a>
+      </div>
+    </nav>
+
+    <div class="ui-rail-foot">
+      <span class="ui-avatar">GB</span>
+      <span class="ui-faint" style="font-size:var(--ui-fs-sm)">gary@northwind</span>
+    </div>
+  </aside>
+
+  <main class="ui-main">
+
+    <div class="ui-toolbar">
+      <div>
+        <div class="ui-eyebrow">Production · us-east</div>
+        <h1 class="ui-title ui-title-lg">Deployments</h1>
+      </div>
+      <div class="ui-toolbar-actions">
+        <input class="ui-input ui-input-mono" value="branch:main" aria-label="Filter deployments" />
+        <button class="ui-btn-ghost" type="button">Filter</button>
+        <button class="ui-btn" type="button">Deploy</button>
+      </div>
+    </div>
+
+    <div class="ui-banner ui-banner-warn" role="status">
+      <div>
+        <strong>Build queue is backed up</strong>
+        <span>Deploys are starting about 4 minutes late. No action needed.</span>
+      </div>
+    </div>
+
+    <div class="ui-grid ui-grid-3">
+      <div class="ui-card ui-stat">
+        <span class="ui-label">Uptime · 30d</span>
+        <span class="ui-stat-value">99.98<small>%</small></span>
+        <svg class="ui-spark" viewBox="0 0 120 28" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0,21 L15,19 L30,20 L45,14 L60,16 L75,10 L90,12 L105,7 L120,5 V28 H0 Z" fill="currentColor" opacity=".1"/>
+          <polyline points="0,21 15,19 30,20 45,14 60,16 75,10 90,12 105,7 120,5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" opacity=".55"/>
+          <circle cx="120" cy="5" r="2.6" fill="currentColor"/>
+        </svg>
+        <span class="ui-delta ui-delta-up">+0.04 pts</span>
+      </div>
+
+      <div class="ui-card ui-stat">
+        <span class="ui-label">p95 latency</span>
+        <span class="ui-stat-value">214<small>ms</small></span>
+        <svg class="ui-spark" viewBox="0 0 120 28" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0,9 L15,12 L30,8 L45,15 L60,13 L75,18 L90,15 L105,20 L120,22 V28 H0 Z" fill="currentColor" opacity=".1"/>
+          <polyline points="0,9 15,12 30,8 45,15 60,13 75,18 90,15 105,20 120,22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" opacity=".55"/>
+          <circle cx="120" cy="22" r="2.6" fill="currentColor"/>
+        </svg>
+        <span class="ui-delta ui-delta-up">−18 ms</span>
+      </div>
+
+      <div class="ui-card ui-stat">
+        <span class="ui-label">Failed · 7d</span>
+        <span class="ui-stat-value">2</span>
+        <svg class="ui-spark" viewBox="0 0 120 28" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0,24 L15,24 L30,17 L45,23 L60,24 L75,22 L90,24 L105,13 L120,24 V28 H0 Z" fill="currentColor" opacity=".1"/>
+          <polyline points="0,24 15,24 30,17 45,23 60,24 75,22 90,24 105,13 120,24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" opacity=".55"/>
+          <circle cx="120" cy="24" r="2.6" fill="currentColor"/>
+        </svg>
+        <span class="ui-delta ui-delta-down">+1 vs prior</span>
+      </div>
+    </div>
+
+    <div class="ui-table-wrap">
+      <div class="ui-scroll">
+        <table class="ui-table">
+          <thead>
+            <tr>
+              <th>Commit</th><th>Message</th><th>Author</th><th>Status</th>
+              <th class="ui-num">Build</th><th class="ui-num">When</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="ui-mono ui-cell-strong">4f2ac91</td>
+              <td class="ui-cell-strong ui-cell-clip">Cache warm path for session lookup</td>
+              <td>r.okafor</td>
+              <td><span class="ui-pill ui-pill-good">Live</span></td>
+              <td class="ui-num">1m 12s</td><td class="ui-num">4m ago</td>
+            </tr>
+            <tr>
+              <td class="ui-mono ui-cell-strong">b81de07</td>
+              <td class="ui-cell-strong ui-cell-clip">Bump edge runtime to 3.4.2</td>
+              <td>s.lindqvist</td>
+              <td><span class="ui-pill ui-pill-warn">Building</span></td>
+              <td class="ui-num">—</td><td class="ui-num">9m ago</td>
+            </tr>
+            <tr>
+              <td class="ui-mono ui-cell-strong">e93c5f4</td>
+              <td class="ui-cell-strong ui-cell-clip">Retry policy for webhook delivery</td>
+              <td>r.okafor</td>
+              <td><span class="ui-pill ui-pill-crit">Failed</span></td>
+              <td class="ui-num">0m 38s</td><td class="ui-num">1h ago</td>
+            </tr>
+            <tr>
+              <td class="ui-mono ui-cell-strong">2a70bb8</td>
+              <td class="ui-cell-strong ui-cell-clip">Drop unused index on events table</td>
+              <td>m.haddad</td>
+              <td><span class="ui-pill ui-pill-good">Live</span></td>
+              <td class="ui-num">1m 04s</td><td class="ui-num">3h ago</td>
+            </tr>
+            <tr>
+              <td class="ui-mono ui-cell-strong">7c14e02</td>
+              <td class="ui-cell-strong ui-cell-clip">Revert "Inline the auth middleware"</td>
+              <td>s.lindqvist</td>
+              <td><span class="ui-pill ui-pill-quiet">Rolled back</span></td>
+              <td class="ui-num">0m 51s</td><td class="ui-num">5h ago</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!-- UI Suite — oxide / light — generated, do not edit -->
+<!-- WinUI 3 / UWP. For WPF, x:Double needs
+     xmlns:sys="clr-namespace:System;assembly=mscorlib" and sys:Double. -->
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Color x:Key="UiBgColor">#FFF5F0E8</Color>
+    <Color x:Key="UiSurfaceColor">#FFFFFFFF</Color>
+    <Color x:Key="UiSurface2Color">#FFEBE3D7</Color>
+    <Color x:Key="UiSurface3Color">#FFE1D7C7</Color>
+    <Color x:Key="UiLineColor">#FFD8CCBA</Color>
+    <Color x:Key="UiLineStrongColor">#FFB9A88F</Color>
+    <Color x:Key="UiTextColor">#FF1F1811</Color>
+    <Color x:Key="UiTextDimColor">#FF6B5C48</Color>
+    <Color x:Key="UiTextFaintColor">#FF93826B</Color>
+    <Color x:Key="UiAccentColor">#FFB04A16</Color>
+    <Color x:Key="UiAccentHoverColor">#FF963E11</Color>
+    <Color x:Key="UiAccentInkColor">#FFFFFFFF</Color>
+    <Color x:Key="UiAccentSoftColor">#FFF6E5D8</Color>
+    <Color x:Key="UiGoodColor">#FF5C7A2A</Color>
+    <Color x:Key="UiGoodSoftColor">#FFEAF0DC</Color>
+    <Color x:Key="UiWarnColor">#FF9A6C14</Color>
+    <Color x:Key="UiWarnSoftColor">#FFF7EEDA</Color>
+    <Color x:Key="UiCritColor">#FFA93A31</Color>
+    <Color x:Key="UiCritSoftColor">#FFF7E2DF</Color>
+    <Color x:Key="UiInfoColor">#FF3D6E7A</Color>
+    <Color x:Key="UiInfoSoftColor">#FFE0ECEF</Color>
+
+    <SolidColorBrush x:Key="UiBg" Color="{StaticResource UiBgColor}" />
+    <SolidColorBrush x:Key="UiSurface" Color="{StaticResource UiSurfaceColor}" />
+    <SolidColorBrush x:Key="UiSurface2" Color="{StaticResource UiSurface2Color}" />
+    <SolidColorBrush x:Key="UiSurface3" Color="{StaticResource UiSurface3Color}" />
+    <SolidColorBrush x:Key="UiLine" Color="{StaticResource UiLineColor}" />
+    <SolidColorBrush x:Key="UiLineStrong" Color="{StaticResource UiLineStrongColor}" />
+    <SolidColorBrush x:Key="UiText" Color="{StaticResource UiTextColor}" />
+    <SolidColorBrush x:Key="UiTextDim" Color="{StaticResource UiTextDimColor}" />
+    <SolidColorBrush x:Key="UiTextFaint" Color="{StaticResource UiTextFaintColor}" />
+    <SolidColorBrush x:Key="UiAccent" Color="{StaticResource UiAccentColor}" />
+    <SolidColorBrush x:Key="UiAccentHover" Color="{StaticResource UiAccentHoverColor}" />
+    <SolidColorBrush x:Key="UiAccentInk" Color="{StaticResource UiAccentInkColor}" />
+    <SolidColorBrush x:Key="UiAccentSoft" Color="{StaticResource UiAccentSoftColor}" />
+    <SolidColorBrush x:Key="UiGood" Color="{StaticResource UiGoodColor}" />
+    <SolidColorBrush x:Key="UiGoodSoft" Color="{StaticResource UiGoodSoftColor}" />
+    <SolidColorBrush x:Key="UiWarn" Color="{StaticResource UiWarnColor}" />
+    <SolidColorBrush x:Key="UiWarnSoft" Color="{StaticResource UiWarnSoftColor}" />
+    <SolidColorBrush x:Key="UiCrit" Color="{StaticResource UiCritColor}" />
+    <SolidColorBrush x:Key="UiCritSoft" Color="{StaticResource UiCritSoftColor}" />
+    <SolidColorBrush x:Key="UiInfo" Color="{StaticResource UiInfoColor}" />
+    <SolidColorBrush x:Key="UiInfoSoft" Color="{StaticResource UiInfoSoftColor}" />
+
+    <x:Double x:Key="UiRadiusSm">3</x:Double>
+    <x:Double x:Key="UiRadius">4</x:Double>
+    <x:Double x:Key="UiRadiusLg">6</x:Double>
+    <x:Double x:Key="UiDensity">1.05</x:Double>
+    <x:Double x:Key="UiFs">13.5</x:Double>
+    <x:Double x:Key="UiWeightHeading">700</x:Double>
+    <x:Double x:Key="UiWeightMedium">600</x:Double>
+    <x:Double x:Key="UiTrackingLabel">.1</x:Double>
+
+    <!-- Not expressible as a XAML resource: scheme, font, font-display, blur, ambient, shadow
+         Depth on Windows is Mica/Acrylic + ThemeShadow, set in code
+         or on the element — not a brush. -->
+
+</ResourceDictionary>

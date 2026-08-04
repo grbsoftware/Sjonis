@@ -1,0 +1,95 @@
+/* =============================================================================
+   UI SUITE -> Tailwind v4
+
+   Tailwind v4 is built on CSS variables, so the bridge is one file and no
+   config. `@theme inline` maps our tokens onto Tailwind's namespaces, which
+   generates the matching utilities.
+
+       @import "tailwindcss";
+       @import "../core/ui.css";
+       @import "../core/themes.css";
+       @import "./tailwind-v4.css";
+
+   Then bg-ground / text-ink / border-line / rounded-ui / p-1 … all resolve
+   through the active theme, and changing data-theme restyles everything.
+
+   `inline` matters: without it Tailwind copies the value at build time and the
+   utilities freeze to whichever theme was active when you compiled. With it,
+   the utility emits var(--ui-*) and stays live at runtime.
+   ============================================================================= */
+
+@theme inline {
+  /* colour — names avoid Tailwind's built-ins so nothing is shadowed ------- */
+  --color-ground:       var(--ui-bg);
+  --color-surface:      var(--ui-surface);
+  --color-surface-2:    var(--ui-surface-2);
+  --color-surface-3:    var(--ui-surface-3);
+
+  --color-line:         var(--ui-line);
+  --color-line-strong:  var(--ui-line-strong);
+
+  --color-ink:          var(--ui-text);
+  --color-ink-dim:      var(--ui-text-dim);
+  --color-ink-faint:    var(--ui-text-faint);
+
+  --color-brand:        var(--ui-accent);
+  --color-brand-hover:  var(--ui-accent-hover);
+  --color-brand-ink:    var(--ui-accent-ink);
+  --color-brand-soft:   var(--ui-accent-soft);
+
+  /* semantic stays separate from brand — a rebrand must not change meaning */
+  --color-good:         var(--ui-good);
+  --color-good-soft:    var(--ui-good-soft);
+  --color-warn:         var(--ui-warn);
+  --color-warn-soft:    var(--ui-warn-soft);
+  --color-crit:         var(--ui-crit);
+  --color-crit-soft:    var(--ui-crit-soft);
+  --color-info:         var(--ui-info);
+  --color-info-soft:    var(--ui-info-soft);
+
+  /* shape -> rounded-ui, rounded-ui-sm, rounded-ui-lg ---------------------- */
+  --radius-ui-sm:       var(--ui-radius-sm);
+  --radius-ui:          var(--ui-radius);
+  --radius-ui-lg:       var(--ui-radius-lg);
+
+  /* spacing — Tailwind's numeric scale, driven by our density multiplier.
+     p-1 through p-7 now scale with the theme instead of being fixed. ------- */
+  --spacing-1:          var(--ui-s1);
+  --spacing-2:          var(--ui-s2);
+  --spacing-3:          var(--ui-s3);
+  --spacing-4:          var(--ui-s4);
+  --spacing-5:          var(--ui-s5);
+  --spacing-6:          var(--ui-s6);
+  --spacing-7:          var(--ui-s7);
+
+  /* type ------------------------------------------------------------------ */
+  --font-ui:            var(--ui-font);
+  --font-display:       var(--ui-font-display);
+  --font-mono:          var(--ui-font-mono);
+
+  --text-xs:            var(--ui-fs-xs);
+  --text-sm:            var(--ui-fs-sm);
+  --text-base:          var(--ui-fs);
+  --text-md:            var(--ui-fs-md);
+  --text-lg:            var(--ui-fs-lg);
+  --text-xl:            var(--ui-fs-xl);
+
+  /* depth ----------------------------------------------------------------- */
+  --shadow-ui:          var(--ui-shadow);
+  --shadow-ui-lg:       var(--ui-shadow-lg);
+
+  --ease-ui:            var(--ui-ease);
+}
+
+/* -----------------------------------------------------------------------------
+   WORTH KNOWING
+
+   Overriding --spacing-1..7 changes what p-1, gap-4, m-6 mean project-wide.
+   That is the point — density becomes a single dial — but it will surprise
+   anyone expecting stock Tailwind spacing. Drop that block if you would rather
+   keep Tailwind's defaults and use our --ui-s* directly via arbitrary values,
+   e.g. p-[var(--ui-s4)].
+
+   Halo's translucency needs backdrop-blur-[18px] or the --ui-blur value applied
+   directly; Tailwind has no token namespace for backdrop-filter.
+   -------------------------------------------------------------------------- */

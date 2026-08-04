@@ -1,0 +1,45 @@
+/* UI Suite — vellum / light — GTK4 */
+/* Requires GTK 4.16+, which added CSS custom properties and var().
+   Widget rules are NOT generated: GTK selectors are widget names
+   (window, headerbar, button) and its supported property set is a
+   subset of web CSS. Author those against these tokens. */
+
+:root {
+  --ui-scheme: light;
+  --ui-radius-sm: 2px;
+  --ui-radius: 2px;
+  --ui-radius-lg: 3px;
+  --ui-density: 1.3;
+  --ui-fs: 14px;
+  --ui-font: "Segoe UI Variable Text","Segoe UI",-apple-system,system-ui,sans-serif;
+  --ui-font-display: "Iowan Old Style",Georgia,"Times New Roman",serif;
+  --ui-weight-heading: 600;
+  --ui-tracking-label: .12em;
+  --ui-tracking-head: -.008em;
+  --ui-shadow: none;
+  --ui-bg: #F2F3EE;
+  --ui-surface: #FBFBF8;
+  --ui-surface-2: #E9EBE3;
+  --ui-surface-3: #E1E4DA;
+  --ui-line: #DCDED4;
+  --ui-line-strong: #C2C6B8;
+  --ui-text: #22241E;
+  --ui-text-dim: #5C6154;
+  --ui-text-faint: #8B9080;
+  --ui-accent: #3A5470;
+  --ui-accent-hover: #2C4258;
+  --ui-accent-ink: #FFFFFF;
+  --ui-accent-soft: #E4E9EF;
+  --ui-good: #3F7A52;
+  --ui-good-soft: #E6EFE7;
+  --ui-warn: #97742A;
+  --ui-warn-soft: #F3EEDD;
+  --ui-crit: #A6453B;
+  --ui-crit-soft: #F3E4E1;
+  --ui-info: #3A5470;
+  --ui-info-soft: #E4E9EF;
+}
+
+/* No GTK equivalent, omitted: blur, ambient
+   Translucency/blur is compositor-dependent on Linux —
+   raise surface opacity instead of relying on blur. */

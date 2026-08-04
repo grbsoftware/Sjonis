@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sjonis — behaviour layer</title>
+
+<link rel="stylesheet" href="../core/ui.css">
+<link rel="stylesheet" href="../core/themes.css">
+<style>
+  html,body{height:100%;margin:0}
+  /* Only page-level scaffolding lives here. Everything else is a suite class. */
+  .stack{display:flex;flex-direction:column;gap:var(--ui-s5)}
+  .strip{display:flex;gap:var(--ui-s2);align-items:center;flex-wrap:wrap}
+</style>
+
+<body>
+<div class="ui" data-theme="blueprint" data-mode="light" data-ui-density-keys style="min-height:100%">
+<div class="ui-shell">
+
+  <!-- rail ------------------------------------------------------------------->
+  <aside class="ui-rail">
+    <div class="ui-brand"><div class="ui-mark">SJ</div><div class="ui-brand-name">Sjonis</div></div>
+
+    <nav class="ui-nav">
+      <a class="ui-nav-item" aria-current="page" href="#">Behaviour<span class="ui-nav-count">11</span></a>
+      <a class="ui-nav-item" href="gallery.html">Gallery</a>
+      <a class="ui-nav-item" href="#" data-ui-tip="Layer 3 does not exist yet">React layer</a>
+    </nav>
+
+    <div class="ui-nav-group">
+      <div class="ui-label">Appearance</div>
+      <div class="ui-field" style="padding:var(--ui-s2)">
+        <label for="th">Theme</label>
+        <select class="ui-input" id="th" data-ui-theme>
+          <option>vanilla</option><option selected>blueprint</option><option>halo</option>
+          <option>graphite</option><option>oxide</option><option>vellum</option>
+        </select>
+        <label for="dn" style="margin-top:var(--ui-s2)">Density</label>
+        <input type="range" id="dn" min=".75" max="1.4" step=".05" value="1" data-ui-density>
+        <div class="ui-help">Shift + wheel, or <span class="ui-kbd">Ctrl</span> <span class="ui-kbd">+</span> / <span class="ui-kbd">−</span> / <span class="ui-kbd">0</span></div>
+      </div>
+    </div>
+
+    <div class="ui-rail-foot">
+      <div class="ui-avatar">GB</div>
+      <div class="ui-list-sub" style="flex:1">Gary</div>
+      <button class="ui-mode-toggle" data-ui-mode="toggle" data-ui-tip="Switch appearance">
+        <span class="ui-mode-word" data-ui-mode-label>Night</span>◐
+      </button>
+    </div>
+  </aside>
+
+  <!-- main ------------------------------------------------------------------->
+  <main class="ui-main">
+
+    <div class="ui-toolbar">
+      <div>
+        <div class="ui-eyebrow">Layer 2</div>
+        <h1 class="ui-title ui-title-lg">Behaviour</h1>
+        <p class="ui-dim" style="margin:var(--ui-s2) 0 0;max-width:62ch">
+          Same CSS as layer 1. One script, no build step, no framework, no dependencies.
+          Press <span class="ui-kbd">Ctrl</span>&nbsp;<span class="ui-kbd">K</span>.
+        </p>
+      </div>
+      <div class="ui-toolbar-actions">
+        <button class="ui-btn-ghost" data-ui-menu="#actions">Actions ▾</button>
+        <button class="ui-btn" data-ui-open="#new">New host</button>
+      </div>
+    </div>
+
+    <!-- tabs ---------------------------------------------------------------->
+    <div data-ui-tabs>
+      <div class="ui-tablist">
+        <button class="ui-tab" aria-controls="p-data" aria-selected="true">Data</button>
+        <button class="ui-tab" aria-controls="p-form">Form</button>
+        <button class="ui-tab" aria-controls="p-misc">Feedback</button>
+        <button class="ui-tab" aria-controls="p-colour">Colour</button>
+      </div>
+
+      <!-- panel: sortable + filterable table -------------------------------->
+      <section class="ui-tabpanel" id="p-data">
+        <div class="stack">
+          <div class="strip">
+            <input class="ui-input" placeholder="Filter hosts…" style="flex:1;max-width:280px"
+                   data-ui-filter="#hosts" data-ui-filter-status="#count">
+            <span class="ui-list-meta" id="count">6 of 6</span>
+            <button class="ui-btn-ghost" data-ui-copy="#hosts" data-ui-tip="Copy the table as text">Copy</button>
+          </div>
+
+          <div class="ui-table-wrap ui-scroll">
+            <table class="ui-table" id="hosts" data-ui-sort>
+              <thead><tr>
+                <th>Host</th><th>Role</th><th class="ui-num">Latency</th>
+                <th class="ui-num">Uptime</th><th data-sort-none>State</th>
+              </tr></thead>
+              <tbody>
+                <tr><td class="ui-cell-strong ui-mono">edge-01</td><td>ingress</td><td class="ui-num">12 ms</td><td class="ui-num">99.98%</td><td><span class="ui-pill ui-pill-good">healthy</span></td></tr>
+                <tr><td class="ui-cell-strong ui-mono">edge-02</td><td>ingress</td><td class="ui-num">9 ms</td><td class="ui-num">99.99%</td><td><span class="ui-pill ui-pill-good">healthy</span></td></tr>
+                <tr><td class="ui-cell-strong ui-mono">store-a</td><td>storage</td><td class="ui-num">140 ms</td><td class="ui-num">97.40%</td><td><span class="ui-pill ui-pill-warn">degraded</span></td></tr>
+                <tr><td class="ui-cell-strong ui-mono">store-b</td><td>storage</td><td class="ui-num">61 ms</td><td class="ui-num">99.10%</td><td><span class="ui-pill ui-pill-good">healthy</span></td></tr>
+                <tr><td class="ui-cell-strong ui-mono">relay-9</td><td>queue</td><td class="ui-num">1 240 ms</td><td class="ui-num">88.20%</td><td><span class="ui-pill ui-pill-crit">down</span></td></tr>
+                <tr><td class="ui-cell-strong ui-mono">relay-10</td><td>queue</td><td class="ui-num">88 ms</td><td class="ui-num">99.60%</td><td><span class="ui-pill ui-pill-info">draining</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="ui-help">Headers sort — numeric columns compare as numbers, <code class="ui-mono">relay-10</code> sorts after <code class="ui-mono">relay-9</code>.</p>
+        </div>
+      </section>
+
+      <!-- panel: form validation -------------------------------------------->
+      <section class="ui-tabpanel" id="p-form">
+        <form class="ui-form" data-ui-validate>
+          <fieldset class="ui-fieldset">
+            <legend class="ui-legend">Add a host</legend>
+
+            <div class="ui-field">
+              <label for="name">Hostname</label>
+              <input class="ui-input ui-input-mono" id="name" name="name" required
+                     pattern="[a-z0-9\-]{3,}" data-ui-message="Lowercase letters, digits and hyphens — three or more.">
+              <div class="ui-help">Must be unique inside the cluster.</div>
+            </div>
+
+            <div class="ui-field">
+              <label for="mail">Owner email</label>
+              <input class="ui-input" id="mail" name="mail" type="email" required>
+            </div>
+
+            <div class="ui-field">
+              <label for="port">Port</label>
+              <input class="ui-input ui-num" id="port" name="port" value="8080"
+                     data-ui-rule="+value > 1023 && +value < 65536"
+                     data-ui-message="Pick a port between 1024 and 65535.">
+              <div class="ui-help">Custom rule, not a native one.</div>
+            </div>
+          </fieldset>
+
+          <div class="strip">
+            <button class="ui-btn" type="submit">Save</button>
+            <button class="ui-btn-danger" type="button" id="del">Delete cluster</button>
+          </div>
+        </form>
+        <p class="ui-help" style="margin-top:var(--ui-s3)">
+          Errors appear on blur, then live once a field has been wrong — never while you first type.
+        </p>
+      </section>
+
+      <!-- panel: toasts + accordion ----------------------------------------->
+      <section class="ui-tabpanel" id="p-misc">
+        <div class="stack">
+          <div class="strip">
+            <button class="ui-btn-ghost" onclick="UI.toast('Configuration saved',{tone:'good'})">Good</button>
+            <button class="ui-btn-ghost" onclick="UI.toast('Certificate expires in 6 days',{tone:'warn'})">Warn</button>
+            <button class="ui-btn-ghost" onclick="UI.toast('relay-9 stopped responding',{tone:'crit'})">Crit</button>
+            <button class="ui-btn-ghost" onclick="UI.palette()">Command palette</button>
+          </div>
+
+          <div class="ui-accordion" data-ui-accordion="single">
+            <details open>
+              <summary>Why native &lt;dialog&gt;</summary>
+              <div class="ui-accordion-body">The platform supplies a focus trap, an inert background,
+                Escape handling and top-layer stacking. Hand-rolled modals get one of those wrong.</div>
+            </details>
+            <details>
+              <summary>Why not the popover attribute</summary>
+              <div class="ui-accordion-body">Same class of problem as halo's backdrop-filter — WebKitGTK,
+                which Tauri uses on Linux, is unreliable here. Menus are positioned by script instead.</div>
+            </details>
+            <details>
+              <summary>Why a classic script</summary>
+              <div class="ui-accordion-body">ES modules are blocked on <code class="ui-mono">file://</code>.
+                Double-clicking a single .html file has to keep working.</div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- panel: colour roles ----------------------------------------------->
+      <section class="ui-tabpanel" id="p-colour">
+        <div class="stack">
+          <div>
+            <div class="ui-label" style="margin-bottom:var(--ui-s2)">State — reserved, four only</div>
+            <div class="strip">
+              <span class="ui-pill ui-pill-good">healthy</span>
+              <span class="ui-pill ui-pill-warn">degraded</span>
+              <span class="ui-pill ui-pill-crit">down</span>
+              <span class="ui-pill ui-pill-info">draining</span>
+            </div>
+            <p class="ui-help" style="margin-top:var(--ui-s2)">
+              These four keep their conventional hues on purpose. Rebrand them and "good" stops
+              reading as good. Each theme shifts the exact hue to suit its ground — never the role.
+            </p>
+          </div>
+
+          <div>
+            <div class="ui-label" style="margin-bottom:var(--ui-s2)">Categorical — identity, eight slots</div>
+            <div class="strip">
+              <span class="ui-tag ui-c1">ingress</span>
+              <span class="ui-tag ui-c2">storage</span>
+              <span class="ui-tag ui-c3">queue</span>
+              <span class="ui-tag ui-c4">compute</span>
+              <span class="ui-tag ui-c5">cache</span>
+              <span class="ui-tag ui-c6">registry</span>
+              <span class="ui-tag ui-c7">metrics</span>
+              <span class="ui-tag ui-c8">backup</span>
+            </div>
+            <div class="strip" style="margin-top:var(--ui-s3)">
+              <span class="ui-key ui-c1"><i class="ui-dot"></i>slot 1</span>
+              <span class="ui-key ui-c2"><i class="ui-dot"></i>slot 2</span>
+              <span class="ui-key ui-c3"><i class="ui-dot"></i>slot 3</span>
+              <span class="ui-key ui-c4"><i class="ui-dot"></i>slot 4</span>
+              <span class="ui-key ui-c5"><i class="ui-dot"></i>slot 5</span>
+              <span class="ui-key ui-c6"><i class="ui-dot"></i>slot 6</span>
+              <span class="ui-key ui-c7"><i class="ui-dot"></i>slot 7</span>
+              <span class="ui-key ui-c8"><i class="ui-dot"></i>slot 8</span>
+            </div>
+            <p class="ui-help" style="margin-top:var(--ui-s2)">
+              Colour with no meaning attached — series, tags, categories, per-user colours. Assign in
+              order, never cycle: the order is what keeps adjacent pairs apart under red-green colour
+              blindness. Same eight in every theme, stepped per mode, machine-checked against every
+              theme surface. A ninth category is "Other", not a ninth colour.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<!-- menu (moved to body on init) --------------------------------------------->
+<div class="ui-menu" id="actions" data-ui-align="end">
+  <button class="ui-menu-item">Restart selected<span class="ui-kbd">R</span></button>
+  <button class="ui-menu-item">Drain traffic</button>
+  <button class="ui-menu-item">Export CSV<span class="ui-kbd">⇧E</span></button>
+  <hr class="ui-menu-sep">
+  <button class="ui-menu-item" disabled>Rebuild image</button>
+</div>
+
+<!-- dialog ------------------------------------------------------------------->
+<dialog class="ui-dialog" id="new">
+  <div class="ui-dialog-head">
+    <h2 class="ui-title">New host</h2>
+    <button class="ui-x" data-ui-close aria-label="Close">×</button>
+  </div>
+  <div class="ui-dialog-body">
+    <div class="ui-field">
+      <label for="d-name">Hostname</label>
+      <input class="ui-input ui-input-mono" id="d-name" data-ui-autofocus placeholder="edge-03">
+    </div>
+    <div class="ui-row">
+      <div class="ui-row-text"><b>Join immediately</b><span class="ui-dim">Start taking traffic on save.</span></div>
+      <input type="checkbox" class="ui-switch" checked>
+    </div>
+  </div>
+  <div class="ui-dialog-foot">
+    <button class="ui-btn-ghost" data-ui-close>Cancel</button>
+    <button class="ui-btn" data-ui-close="save">Create</button>
+  </div>
+</dialog>
+
+<!-- command palette ---------------------------------------------------------->
+<div class="ui-scrim" data-ui-palette="mod+k" style="position:fixed" hidden>
+  <div class="ui-palette">
+    <input class="ui-palette-input" placeholder="Type a command…" aria-label="Command">
+    <div class="ui-palette-list" role="listbox">
+      <div class="ui-palette-item" data-ui-action="theme:halo">Switch theme — halo</div>
+      <div class="ui-palette-item" data-ui-action="theme:oxide">Switch theme — oxide</div>
+      <div class="ui-palette-item" data-ui-action="mode">Toggle light / dark<span class="ui-label">⌘⇧L</span></div>
+      <div class="ui-palette-item" data-ui-action="new">New host</div>
+      <div class="ui-palette-item" data-ui-action="dangerous">Delete cluster</div>
+    </div>
+  </div>
+</div>
+
+<script src="../core/ui.js"></script>
+<script>
+  /* Page code. Everything above is declarative; this is the app talking back. */
+  document.addEventListener('ui:command', function (e) {
+    var a = e.detail.action;
+    if (a.indexOf('theme:') === 0) { UI.setTheme(a.slice(6)); document.getElementById('th').value = a.slice(6); }
+    else if (a === 'mode') UI.toggleMode();
+    else if (a === 'new') UI.open('#new');
+    else if (a === 'dangerous') document.getElementById('del').click();
+  });
+
+  document.getElementById('new').addEventListener('close', function (e) {
+    if (e.target.returnValue === 'save') UI.toast('Host created', { tone: 'good' });
+  });
+
+  document.getElementById('del').addEventListener('click', function () {
+    UI.confirm({
+      title: 'Delete this cluster?',
+      body: 'Six hosts stop serving immediately. This cannot be undone.',
+      confirmText: 'Delete cluster', tone: 'danger'
+    }).then(function (ok) {
+      if (ok) UI.toast('Cluster deleted', { tone: 'crit' });
+    });
+  });
+
+  document.querySelector('form[data-ui-validate]').addEventListener('submit', function (e) {
+    e.preventDefault();
+    UI.toast('Saved', { tone: 'good' });
+  });
+</script>
+</div>
+</body>
+</html>

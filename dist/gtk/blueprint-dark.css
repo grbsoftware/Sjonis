@@ -1,0 +1,47 @@
+/* UI Suite — blueprint / dark — GTK4 */
+/* Requires GTK 4.16+, which added CSS custom properties and var().
+   Widget rules are NOT generated: GTK selectors are widget names
+   (window, headerbar, button) and its supported property set is a
+   subset of web CSS. Author those against these tokens. */
+
+:root {
+  --ui-scheme: dark;
+  --ui-radius-sm: 0px;
+  --ui-radius: 0px;
+  --ui-radius-lg: 0px;
+  --ui-radius-pill: 0px;
+  --ui-density: .92;
+  --ui-fs: 13px;
+  --ui-font: "Cascadia Mono",Consolas,ui-monospace,"SF Mono",monospace;
+  --ui-font-display: var(--ui-font);
+  --ui-weight-heading: 600;
+  --ui-tracking-label: .1em;
+  --ui-tracking-head: 0em;
+  --ui-shadow: none;
+  --ui-shadow-lg: 0 8px 24px rgba(0,0,0,.4);
+  --ui-bg: #071A24;
+  --ui-surface: #0B2431;
+  --ui-surface-2: #061620;
+  --ui-surface-3: #113040;
+  --ui-line: #14384A;
+  --ui-line-strong: #1E5169;
+  --ui-text: #D6EAF2;
+  --ui-text-dim: #7FA9BC;
+  --ui-text-faint: #4E7789;
+  --ui-accent: #35C6E8;
+  --ui-accent-hover: #5BD5F2;
+  --ui-accent-ink: #04161E;
+  --ui-accent-soft: #0B2E3D;
+  --ui-good: #4ED6A4;
+  --ui-good-soft: #082A24;
+  --ui-warn: #E8B84B;
+  --ui-warn-soft: #2A2310;
+  --ui-crit: #FF6B6B;
+  --ui-crit-soft: #2E1416;
+  --ui-info: #35C6E8;
+  --ui-info-soft: #0B2E3D;
+}
+
+/* No GTK equivalent, omitted: blur, ambient
+   Translucency/blur is compositor-dependent on Linux —
+   raise surface opacity instead of relying on blur. */
