@@ -357,6 +357,123 @@
 }
 
 /* -----------------------------------------------------------------------------
+   SITE FRAME
+   The layer above the page: the parts that repeat on EVERY page of a site and
+   say where you are within it. Archetypes had no vocabulary for this, so both
+   existing ones hand-rolled a header out of a band plus inline styles — which
+   is the tell that a primitive is missing, not that the archetype is clever.
+
+   Deliberately not the app shell's .ui-rail: a rail is for an operator moving
+   between views of one tool, and it owns the viewport. A site header is for a
+   reader moving between documents, and it yields to the content under it.
+
+   Structure:
+     <a class="ui-skip" href="#main">Skip to content</a>
+     <header class="ui-sitehead ui-sitehead-stick">
+       <div class="ui-sitebar ui-measure">
+         <a class="ui-brand" href="/">…</a>
+         <nav class="ui-sitenav">
+           <a class="ui-sitenav-item" aria-current="page" href="/work">Work</a>
+         </nav>
+         <div class="ui-sitehead-actions">…</div>
+       </div>
+     </header>
+   -------------------------------------------------------------------------- */
+
+/* Off-screen until focused. The first tab stop on a page whose header carries a
+   dozen links has to be a way past them, or keyboard users pay that toll on
+   every navigation. */
+.ui-skip{
+  position:absolute;left:var(--ui-s3);top:var(--ui-s3);z-index:70;
+  transform:translateY(-200%);
+  padding:var(--ui-s2) var(--ui-s3);border-radius:var(--ui-radius-sm);
+  background:var(--ui-accent);color:var(--ui-accent-ink);
+  font-size:var(--ui-fs-sm);font-weight:var(--ui-weight-medium);
+  text-decoration:none;
+}
+.ui-skip:focus{transform:translateY(0)}
+
+.ui-sitehead{
+  padding-inline:var(--ui-s5);
+  border-bottom:1px solid var(--ui-line);
+  background:var(--ui-bg);
+}
+/* Sticky needs an opaque ground of its own: content scrolling under a
+   transparent bar is unreadable, and halo's surfaces are translucent. */
+.ui-sitehead-stick{position:sticky;top:0;z-index:50}
+.ui-sitehead-sunk{background:var(--ui-surface-2)}
+
+.ui-sitebar{
+  display:flex;align-items:center;gap:var(--ui-s4);
+  min-height:var(--ui-s8);
+  padding-block:var(--ui-s3);
+  flex-wrap:wrap;
+}
+/* Pushes everything after it to the right edge without a spacer element. */
+.ui-sitenav{
+  display:flex;align-items:center;gap:var(--ui-s4);
+  margin-inline-start:auto;
+  flex-wrap:wrap;min-width:0;
+}
+.ui-sitehead-actions{display:flex;align-items:center;gap:var(--ui-s2);flex:none}
+/* The brand is a link on every real site, and a link is the correct element for
+   "go home" — but it must not look like body prose that happens to be blue. */
+a.ui-brand{color:inherit;text-decoration:none}
+.ui-sitenav + .ui-sitehead-actions{margin-inline-start:0}
+
+.ui-sitenav-item{
+  color:var(--ui-text-dim);text-decoration:none;
+  font-size:var(--ui-fs);font-weight:var(--ui-weight-medium);
+  padding-block:var(--ui-s1);
+  border-bottom:2px solid transparent;
+  white-space:nowrap;
+}
+.ui-sitenav-item:hover{color:var(--ui-text)}
+/* Weight and a rule carry "you are here", not hue alone — same reasoning as the
+   status pills. Greyscale, and any colour vision, still resolve it. */
+.ui-sitenav-item[aria-current="page"],.ui-sitenav-item.is-active{
+  color:var(--ui-text);
+  border-bottom-color:var(--ui-accent);
+  font-weight:var(--ui-weight-heading);
+}
+
+/* Breadcrumbs. The separator is generated, so the markup stays a clean list and
+   screen readers do not announce a slash between every step. */
+.ui-crumbs{
+  display:flex;flex-wrap:wrap;align-items:center;gap:var(--ui-s2);
+  list-style:none;margin:0;padding:0;
+  font-size:var(--ui-fs-sm);color:var(--ui-text-faint);
+}
+.ui-crumbs li{display:flex;align-items:center;gap:var(--ui-s2)}
+.ui-crumbs li + li::before{content:"/";color:var(--ui-line-strong)}
+.ui-crumbs a{color:var(--ui-text-dim);text-decoration:none}
+.ui-crumbs a:hover{color:var(--ui-text);text-decoration:underline;text-underline-offset:3px}
+.ui-crumbs [aria-current="page"]{color:var(--ui-text)}
+
+.ui-sitefoot{
+  padding-inline:var(--ui-s5);
+  padding-block:var(--ui-s7) var(--ui-s6);
+  border-top:1px solid var(--ui-line);
+  background:var(--ui-surface-2);
+  font-size:var(--ui-fs-sm);
+}
+.ui-sitefoot-cols{
+  display:grid;gap:var(--ui-s5);
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+}
+.ui-sitefoot h2,.ui-sitefoot .ui-label{margin:0 0 var(--ui-s2)}
+.ui-sitefoot ul{list-style:none;margin:0;padding:0;display:grid;gap:var(--ui-s1)}
+.ui-sitefoot a{color:var(--ui-text-dim);text-decoration:none}
+.ui-sitefoot a:hover{color:var(--ui-text);text-decoration:underline;text-underline-offset:3px}
+.ui-sitefoot-base{
+  display:flex;flex-wrap:wrap;gap:var(--ui-s3);align-items:center;
+  margin-top:var(--ui-s6);padding-top:var(--ui-s4);
+  border-top:1px solid var(--ui-line);
+  color:var(--ui-text-faint);
+}
+.ui-sitefoot-base > :last-child{margin-inline-start:auto}
+
+/* -----------------------------------------------------------------------------
    GRID
    Auto-fit, so the column COUNT is a consequence of the available width and the
    minimum tile size — not a breakpoint you maintain. min() keeps a single

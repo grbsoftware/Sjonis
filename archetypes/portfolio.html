@@ -28,28 +28,31 @@
   and prevents layout shift.
 -->
 
-<body class="ui" data-theme="vellum">
+<body class="ui" data-theme="vellum" id="top">
+<a class="ui-skip" href="#main">Skip to content</a>
 <div class="ui-page">
 
   <!-- masthead. A row, not a rail: on a content site the navigation is a line
-       of text, not a control surface. ---------------------------------------->
-  <header class="ui-band ui-band-tight">
-    <div class="ui-measure" style="display:flex;align-items:center;gap:var(--ui-s4);flex-wrap:wrap">
-      <div class="ui-brand" style="flex:1">
+       of text, not a control surface. This was five inline styles patching
+       around a missing primitive; it is now .ui-sitehead, which every page of a
+       site can repeat unchanged. ---------------------------------------------->
+  <header class="ui-sitehead ui-sitehead-stick">
+    <div class="ui-sitebar ui-measure">
+      <a class="ui-brand" href="#top">
         <div class="ui-mark">SJ</div>
         <div class="ui-brand-name">Sjonis</div>
-      </div>
-      <nav class="ui-key" style="gap:var(--ui-s4);font-size:var(--ui-fs)">
-        <a href="#work" style="color:inherit">Work</a>
-        <a href="#about" style="color:inherit">About</a>
-        <a href="#contact" style="color:inherit">Contact</a>
+      </a>
+      <nav class="ui-sitenav" aria-label="Sections">
+        <a class="ui-sitenav-item" aria-current="page" href="#work">Work</a>
+        <a class="ui-sitenav-item" href="#about">About</a>
+        <a class="ui-sitenav-item" href="#contact">Contact</a>
       </nav>
     </div>
   </header>
 
   <!-- hero. One idea, set large, with room around it. The lead is a separate
        element so it keeps a reading measure while the headline does not. ------>
-  <section class="ui-band">
+  <section class="ui-band" id="main" tabindex="-1">
     <div class="ui-measure">
       <p class="ui-eyebrow">Selected work · 2024—2026</p>
       <h1 class="ui-display">Objects that explain themselves.</h1>
@@ -257,25 +260,61 @@
     </div>
   </section>
 
-  <!-- contact + appearance -------------------------------------------------- -->
-  <footer class="ui-band ui-band-tight ui-band-line" id="contact">
-    <div class="ui-measure" style="display:flex;gap:var(--ui-s5);flex-wrap:wrap;align-items:flex-end">
-      <div style="flex:1;min-width:240px">
-        <h2 class="ui-title">Enquiries</h2>
-        <p class="ui-lead" style="font-size:var(--ui-fs)">Commissions, prints and exhibition requests.</p>
-        <a class="ui-btn" href="#" style="margin-top:var(--ui-s3)">Get in touch</a>
+  <!-- contact ---------------------------------------------------------------->
+  <section class="ui-band ui-band-tight ui-band-line" id="contact">
+    <div class="ui-measure ui-measure-text">
+      <h2 class="ui-title">Enquiries</h2>
+      <p class="ui-lead">Commissions, prints and exhibition requests.</p>
+      <p><a class="ui-btn" href="#top">Get in touch</a></p>
+    </div>
+  </section>
+
+  <!-- site footer. The other half of the site frame: the header says where you
+       are, this says what else exists. ---------------------------------------->
+  <footer class="ui-sitefoot">
+    <div class="ui-measure">
+      <div class="ui-sitefoot-cols">
+        <div>
+          <div class="ui-label">Work</div>
+          <ul>
+            <li><a href="#work">Selected</a></li>
+            <li><a href="#work">Archive</a></li>
+            <li><a href="#work">Prints</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="ui-label">Studio</div>
+          <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#about">Colophon</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="ui-label">Elsewhere</div>
+          <ul>
+            <li><a href="#top">Instagram</a></li>
+            <li><a href="#top">Are.na</a></li>
+            <li><a href="#top">Newsletter</a></li>
+          </ul>
+        </div>
+        <div class="ui-field">
+          <label for="th" class="ui-label">Appearance</label>
+          <select class="ui-input" id="th" data-ui-theme>
+            <option>vanilla</option><option>blueprint</option><option>halo</option>
+            <option>graphite</option><option>oxide</option><option selected>vellum</option>
+          </select>
+          <button class="ui-mode-toggle" data-ui-mode="toggle" style="margin-top:var(--ui-s2)">
+            <span class="ui-mode-word" data-ui-mode-label>Night</span>◐
+          </button>
+        </div>
       </div>
 
-      <div class="ui-field" style="min-width:180px">
-        <label for="th" class="ui-label">Appearance</label>
-        <select class="ui-input" id="th" data-ui-theme>
-          <option>vanilla</option><option>blueprint</option><option>halo</option>
-          <option>graphite</option><option>oxide</option><option selected>vellum</option>
-        </select>
+      <div class="ui-sitefoot-base">
+        <span>&copy; 2026 Sjonis</span>
+        <span>Placeholder drawings generated by
+          <a href="https://www.anthropic.com">Claude</a>, reviewed and approved by Gary.</span>
       </div>
-      <button class="ui-mode-toggle" data-ui-mode="toggle">
-        <span class="ui-mode-word" data-ui-mode-label>Night</span>◐
-      </button>
     </div>
   </footer>
 </div>
