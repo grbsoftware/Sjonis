@@ -315,25 +315,57 @@ The lesson worth keeping: contrast is not a thing to eyeball. `validate_palette.
 found the second one in a second, and would have found the first if the tuner's
 maths had been in a checkable place rather than inline in a page.
 
-## OPEN — palette findings, NOT yet acted on
+Three more of the same kind, from the palette work:
 
-The validator reports **126 required failures**, all in the light modes, and they
-need Gary because the categorical palette was explicitly "position held and
-agreed" — reversing that silently would be wrong.
+15. **A checker must measure what the CSS computes, not what the token says.**
+   Once `.ui-dot` gained a rim, the thing meeting the ground was a computed
+   `color-mix`, not `--ui-cat-4`. `validate_palette.py` grew OKLab conversion and
+   `mix_oklab` so it measures the rim; left alone it would have gone on reporting
+   126 failures for a problem that had been solved a different way. It still
+   prints the fill-vs-ground ratio as *advisory*, so the cost of the choice stays
+   visible rather than being quietly dropped.
+16. **Rounding to hex can undo a solved contrast value.** Up to half a step per
+   channel, which is enough to drop a solved 4.502 back under 4.5. Five tokens
+   landed at 4.49–4.50. Solve, round, then re-check the ROUNDED value, with margin.
+17. **halo's `-soft` tokens are `rgba(<the state hue>,.12)`** — so moving a hue
+   also moves the ground that hue is read against, and fixing them in sequence
+   oscillates. Hue and tint have to be solved together, recomputing the tint from
+   each candidate. It converges because the tint moves at 12% of the hue's rate.
+   Any derived token has this shape; check for it before solving one in isolation.
 
-- `--ui-cat-2/3/4/5` sit at **1.9–2.9:1** on every light ground, against a 3.0
-  bar for a `.ui-dot` mark (WCAG 1.4.11). cat-4 (ochre) is the worst at 1.91.
-- `--ui-warn` and `--ui-good` miss 4.5:1 as pill text on light grounds
-  (3.7–4.3), and `--ui-crit` misses in **oxide dark** (3.51–3.80).
+## DONE — the palette thread is CLOSED. 125 failures -> 0.
 
-The honest tension: hues chosen so eight marks stay apart from each other cannot
-also all clear a contrast bar against a white ground. Three ways out — darken the
-light-mode categorical ramp (loses "yellow"), give `.ui-dot` a rim so the mark is
-delimited regardless of hue, or accept and document. **Gary's call.**
+Both halves shipped and verified on the live site. `validate_palette.py` exits 0.
 
-One already fixed without touching a colour: `.ui-tag` printed the categorical
-hue *as text*, which asks a mark palette for 4.5:1. The label is now `--ui-text`
-and the hue moved to the border and a dot. That alone cleared 142 failures.
+**The rim (Gary's decision, implemented).** No `--ui-cat-*` value changed.
+`.ui-dot`, `.ui-tag::before` and `.ui-swatch` carry a 1px rim of their own hue
+mixed 55% toward `--ui-text`, so it darkens on light grounds and lightens on dark
+without ui.css naming a colour. Worst case 3.76:1, was 1.86:1. The rim is
+declared **on the mark, never at :root** — trap 1 would bake `--ui-series` to its
+fallback and rim every dot as cat-1. Tunable via `--ui-mark-rim-mix`, which is a
+plain percentage and therefore safe to set from any level.
+
+**State colours moved.** The remaining 33 failures were all a state hue printed
+AS TEXT (`.ui-pill-*` has no background; `.ui-banner-*` sits on its own soft
+ground), sitting at 2.72–4.49 against a 4.5 bar. Unlike the categorical set there
+was no competing constraint — four hues at conventional positions have room that
+eight mutually-separated series hues do not. 15 tokens moved by the minimum:
+hold OKLCH hue and chroma, walk lightness toward the ink, stop at the first value
+clearing every ground it meets. Most moved under 0.03 L and are invisible.
+
+**halo light is the one visible change and the one to re-check with Gary.** It
+was worst (warn 2.72), so it moved furthest; its four states now read distinctly
+deeper. `--ui-accent` moved only `#0E9C86` -> `#0C9B85`, so halo's mint is
+intact — but `--ui-good` was *the same value as the accent* and could not stay
+bright. If Gary dislikes it, the alternative is to stop printing state hues as
+text in halo and carry them on a border + dot the way `.ui-tag` already does.
+Specimen artifact showing every before/after:
+https://claude.ai/code/artifact/598ce1c1-d2b7-486a-b89f-2e507c50148b
+
+Also fixed in passing: `.ui-tag::before` had no forced-colours border (the tag's
+dot vanished under Windows High Contrast), and marks now `print-color-adjust:
+exact` — a browser drops backgrounds on paper, and a legend whose dots did not
+print is a list of labels bound to nothing.
 
 ## NEXT
 
@@ -349,17 +381,9 @@ positioned over a full-bleed image, a stat readout at display size, a ranked
 table with a highlighted "you" row, and a progress/meter element — `ui.css` has
 no meter of any kind, which is a real gap independent of the game page.
 
-### DECIDED 2026-08-04 — palette: rim the dots, do not change a hue
-
-Gary chose the rim. **Do not darken the light-mode categorical ramp.** Every
-`--ui-cat-*` value stays exactly as agreed; `.ui-dot` (and the `.ui-tag::before`
-dot, and `.ui-swatch`) gets a thin rim so the MARK clears 3:1 while the FILL
-keeps its identity. The rim must come from a token, not a literal — something
-like `box-shadow:0 0 0 1px color-mix(in oklab,var(--ui-series) 55%,var(--ui-text))`
-so it darkens on light grounds and lightens on dark ones without ui.css naming a
-colour. Re-run `validate_palette.py` after: the dot checks should be measured
-against the RIM, so `tag_checks`/`checks` need updating to reflect that, or the
-tool will keep reporting a failure that has been solved a different way.
+### DECIDED 2026-08-04 — palette: rim the dots — SHIPPED, see "palette thread is
+CLOSED" above. The 55% guess in the original decision turned out to be exactly
+right (worst 3.76:1); 65% would have been the edge at 2.99.
 
 ### NEW DIRECTION — more palettes, and Radiance
 
@@ -385,7 +409,7 @@ greys through the middle); OKLCH would be. If Radiance is HSL-only, the useful
 move may be to improve Radiance's maths (oklch interpolation) and then reuse it,
 which serves both projects.
 
-- **The palette decision** — DECIDED above; implement the rim.
+- **The palette decision** — DONE. Nothing left open except Gary's eye on halo light.
 - Layer 3 (React) still unstarted and still worth questioning, because it costs
   the no-build-step property that is currently the suite's best feature.
 - **Adapters — DONE this session.** Both now expose `--ui-cat-1..8` (shadcn's
