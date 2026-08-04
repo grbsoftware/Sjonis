@@ -302,6 +302,14 @@ and the hue moved to the border and a dot. That alone cleared 142 failures.
 - **The palette decision above** — the only thing genuinely blocked on Gary.
 - Layer 3 (React) still unstarted and still worth questioning, because it costs
   the no-build-step property that is currently the suite's best feature.
+- **Adapters — DONE this session.** Both now expose `--ui-cat-1..8` (shadcn's
+  `--chart-1..5` plus 6-8 under our names; Tailwind's `text-cat-3` etc). The
+  shadcn file had a stale note declining to map charts because "our single
+  accent cannot supply" series colours — untrue since the categorical work.
+  Boundary confirmed and now stated in both files: adapters bridge **tokens,
+  never classes**. `tools/check_adapters.py` gates it.
+- **Print / forced-colors / reduced-transparency — DONE this session.** See
+  README. `prefers-reduced-motion` was the only one previously handled.
 - `demo/gallery.html` is now largely redundant. Tuning moved to `index.html`,
   which reaches into the framed document and tunes the REAL archetype files;
   gallery still tunes four hand-built mini-layouts that duplicate the

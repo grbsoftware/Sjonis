@@ -199,12 +199,28 @@ legibility: those are judgments or measurements of the binary, and a guess
 written into a data file becomes a fact three months later. Set the font in the
 tuner and look at it.
 
+## Accessibility and print
+
+Handled in `core/ui.css`, no configuration:
+
+| Condition | What happens |
+|---|---|
+| `prefers-reduced-motion` | Transitions and animations collapse; the marquee stops and becomes a scrollable reel |
+| `prefers-reduced-transparency` | Blur is dropped (a theme wanting true opacity declares it itself — `ui.css` may contain no colours) |
+| `forced-colors` (Windows High Contrast) | Anything drawn with a background gains a `CanvasText` border, or it vanishes when the UA swaps the palette. Swatches keep their real colour |
+| `print` | Chrome and transient layers are removed, sticky becomes static, scrollers wrap, accordions open, external links print their URL in prose only, and nothing breaks mid-card |
+
+Print leaves backgrounds to the browser deliberately: it omits them by default and
+the reader can turn them on, so forcing either way overrides that choice.
+
 ## Checking a theme
 
 ```bash
 python tools/validate_palette.py        # every theme x mode, WCAG 2.1
 python tools/validate_palette.py halo   # one theme
 python tools/validate_palette.py -v     # show passes too
+python tools/check_adapters.py          # every var(--ui-*) an adapter uses resolves
+python tools/build_themes.py verify     # CSS <-> tokens round trip
 ```
 
 It measures the pairings the CSS actually produces rather than plausible-looking
