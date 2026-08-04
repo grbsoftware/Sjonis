@@ -18,6 +18,9 @@ and add features not yet discussed.
 python tools/build_themes.py verify     # round trip, MUST pass before commit
 python tools/validate_palette.py        # contrast; exit 1 on required failure
 python tools/check_adapters.py          # adapter refs resolve
+python tools/check_genres.py            # genre composition + scoped selectors
+python tools/check_theme_order.py       # every chooser lists themes in one order
+python tools/check_theme_modes.py       # each base block is a complete palette
 git add -A && git commit && git push origin main
 gh api repos/grbsoftware/Sjonis/pages/builds/latest --jq .status   # poll to "built"
 ```
@@ -87,8 +90,11 @@ skeletons/portfolio.html          banded content page — the anti-admin
 skeletons/storefront.html         catalogue — site frame + product grid
 skeletons/storefront-product.html page two of the same site
 skeletons/editorial.html          long-form — columns, drop cap, pull quotes
+skeletons/marketing.html          a page that ARGUES — sequence, plans, steps
+skeletons/player.html             docked transport, scrubber, tracklist
 tools/validate_palette.py   WCAG contrast over every theme x mode
 tools/check_adapters.py     adapter references resolve
+tools/check_theme_modes.py  each theme's base block is a complete palette
 tools/fonts.py              Google Fonts catalogue: fetch / find / show
 tokens/fonts.catalogue.json 1,942 families, generated
 LICENSE.md           PolyForm Noncommercial 1.0.0
@@ -863,6 +869,109 @@ this attribute again is to let the plates follow the DECK's chrome mode, so a
 light deck shows all five light — which also gives the side-by-side light
 comparison that does not exist today. Not built; not obviously worth it.
 
+## DONE 2026-08-04 (session 4) — SKELETONS 7 AND 8, and a silent palette hole
+
+**The layout-monoculture list is empty.** `skeletons/marketing.html` and
+`skeletons/player.html` are built, gated, registered in `index.html` and
+verified. Eight skeletons.
+
+### The bug worth reading first — every theme's base block was incomplete
+
+`themes.css` promises, in its own header, that `data-mode` is optional and the
+base block repeats the preferred mode in full. **All six base blocks omitted
+the eight state tokens** (`--ui-good/-soft`, `warn`, `crit`, `info`) — those
+lived only in the mode blocks. Five skeletons set `data-theme` with no
+`data-mode`, so all five had been rendering ui.css's *fallback* green/amber/
+red/blue, and the 15 state colours moved in the palette thread to clear 4.5:1
+reached none of them.
+
+Invisible three ways, which is the whole argument for the new gate: the
+fallbacks are perfectly legible so nothing looks broken; `validate_palette.py`
+reads the MODE blocks, so it passed throughout while measuring values the page
+never used; and no screenshot could show it. Found only because a tick mark
+came out `#15803d` where halo says `#4FD6C1`.
+
+`tools/check_theme_modes.py` is the gate. It reads the requirement out of
+themes.css — whatever both mode blocks agree on — so a theme growing a new
+mode-dependent token is covered with no edit here. Verified it fails on both
+plants: a deleted `--ui-good`, and a base block disagreeing with the mode it
+claims. **Add it to the commit cycle at the top of this file.**
+
+26. **A gate that has never failed is a gate you have not tested.** The first
+    drift plant passed — because the value I planted (`#E4685E`) was not the
+    value in the file (`#DD574C`), so nothing was ever planted. A plant that
+    does not land looks exactly like a gate that works. Always print what you
+    changed, and assert the old value was found before replacing it.
+
+### marketing — the ring that had to justify itself
+
+It reuses the site frame, so it can look like storefront with different words.
+The difference is structural: a catalogue and a gallery are BROWSING structures
+(many equivalent things, order is a sort). A marketing page is a SEQUENCE —
+each band does a different rhetorical job, and the order is the argument. There
+is no grid of equivalents on the page and nothing can be re-sorted.
+
+`.ui-plans` is the only hard layout problem on such a page, and **subgrid is
+the answer**: the plan head is four subgrid rows, so price and CTA share a line
+across cards. Measured — with subgrid the CTA rows stay locked at one offset
+with a card's blurb tripled; without it they drift 42px apart. The recommended
+card wears a RING and keeps a transparent border, so being recommended does not
+change its box and shove neighbours out of the alignment subgrid just produced
+(same reasoning as `.ui-swatch[aria-pressed]`, one component out).
+
+### player — the only chrome that outlives its content
+
+Every other skeleton's chrome sits beside, above or on the content. A transport
+is docked to the VIEWPORT and keeps describing something after you have scrolled
+past, filtered, or navigated. Three bugs came out of that, all mine:
+
+- The spacer was 72px against a 90px bar — the exact failure its own comment
+  claimed to have solved. The bar now takes `--ui-transport-h` as
+  `min-block-size`, so bar and spacer agree *by construction* rather than by a
+  constant somebody measured once.
+- `.ui-page:has(.ui-transport)` matched **nothing**, because the transport is
+  deliberately a SIBLING of the page. Scroll padding silently never applied.
+  `:has()` is only as good as the containment you assumed; it fails silent.
+- The bar tinted its ground 12% toward the ink, **inventing a ground no token
+  describes**. Every text level is validated against the four real grounds, so
+  `--ui-text-dim` landed at 4.08-4.44 on all five light themes. It is plain
+  `--ui-bg` now (worst 5.32) and the border plus upward shadow carry the
+  separation as a shape.
+
+The scrubber is a native `<input type="range">` — the OPPOSITE call to
+`.ui-meter` refusing `<progress>`, and the distinction is worth keeping: a
+scrubber is *interactive*, so the platform supplies drag, arrow keys, Home/End
+and the announced value. Three vendor spellings is cheap for that; for an inert
+meter it was not.
+
+**Dropped the accent from the playing row's title**, which every real player
+does. `--ui-accent` on `--ui-accent-soft` is a pairing no theme was tuned for:
+it fails 5 of 12 and hits 2.67 on halo light — under even the 3.0 mark bar, so
+the equaliser could not have worn it either.
+
+27. **An in-browser contrast probe must resolve colour through a CANVAS.**
+    `getComputedStyle` returns `oklab(...)` for a `color-mix()` result, and my
+    parser read its three coordinates as RGB — reporting the transport as
+    near-black and inverting every light-mode result. Trap 24 said "handle both
+    notations"; the real lesson is stronger, because no hand-written parser
+    keeps up with CSS Color 4. Paint the value into a 1x1 canvas and read the
+    bytes: it resolves hex, rgb, oklab, color-mix and alpha compositing in one
+    step. There is a working 8-line version in this session's transcript.
+28. **New components that only REUSE existing tokens need no new gate rows.**
+    Everything in the marketing section pairs `--ui-text-dim`, `--ui-text-faint`,
+    `--ui-good` or `--ui-accent` against the four known grounds, all of which
+    `checks()` already measures. The player needed a fix precisely because it
+    introduced two grounds that were not among the four. **The question to ask
+    of any new component is not "is it a new colour" but "is it a new GROUND".**
+
+Two of my own colour choices in marketing were wrong and were caught by
+measuring all 12 combinations: "not included" rows at `--ui-text-faint` scored
+3.03-3.72 against a 4.5 bar, and dimmed wordmarks at opacity .55 scored
+3.44-3.87 across every light mode. Both are `--ui-text-dim` now (worst 5.91 and
+4.92). The image path keeps opacity+grayscale, which is right for a logotype —
+WCAG 1.4.3 exempts those and they arrive carrying colours chosen against
+someone else's ground — but a text wordmark is not exempt.
+
 ## NEXT — in priority order
 2. **Skin three — the soft one.** Gary's, and he is right: "black can be
    beveled on black, I've done it before with softer shadows and or highlights."
@@ -882,9 +991,11 @@ comparison that does not exist today. Not built; not obviously worth it.
 
    This skin is also the answer to bevel's real weakness: with the face on the
    theme's ground, none of bevel's ink promotions are needed at all.
-3. `marketing` and `media player` — the last two unbuilt skeletons from the
-   original monoculture list. Neither is blocked.
+3. ~~`marketing` and `media player`~~ — BOTH BUILT, see session 4 below. The
+   monoculture list is now empty: eight skeletons.
 4. The sequential ramp / Radiance question (see NEW DIRECTION below).
+5. **The genre gallery re-rooting** (see QUEUED below) is the biggest unbuilt
+   thing left, and it is no longer blocked — three genres exist.
 
 **Gary on bevel's grey, 2026-08-04:** "that gray on black or white is fuggly...
 It might be alright in cpanel" — then "I don't mind keeping it." So bevel STAYS
