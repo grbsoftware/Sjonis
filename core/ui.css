@@ -68,9 +68,19 @@
   --ui-radius-lg:     12px;
   --ui-radius-pill:   999px;
 
-  /* density — one multiplier drives all spacing. Tune this alone to go from
-     comfortable to compact without touching a single component rule.
-     The derived --ui-s* scale is NOT declared here; see the block below. ---- */
+  /* density — one multiplier drives all SPACING, and only spacing. Tune this
+     alone to go from comfortable to compact without touching a component rule.
+     The derived --ui-s* scale is NOT declared here; see the block below.
+
+     Deliberately NOT type size. They answer different questions: density is how
+     much fits on screen, text size is whether it can be read. An operator who
+     wants tighter rows still wants legible type, and a user who needs larger
+     type does not want to lose half their rows to get it. Browser zoom already
+     scales both together for the case where that IS what you want.
+
+     If a type axis is ever added it takes its own token (--ui-type-scale) — it
+     must not be folded in here, because a stored density of 1.15 would silently
+     change meaning for everyone already using it. ------------------------- */
   --ui-density:       1;
 
   /* type — scale steps stay ≥1.2× apart; closer than that and the jump stops
