@@ -226,28 +226,30 @@ input[type="color"]{width:44px;height:28px;padding:2px;border:1px solid var(--g-
   /* Order: what you'd build first, then the tools, then the archive. */
   /* `mode` says HOW that page takes a light/dark instruction. Declared per page
      rather than sniffed, because the same attribute means two different things
-     across the suite: on an archetype `data-theme` names a suite theme
+     across the suite: on a skeleton `data-theme` names a suite theme
      ("vellum"), on a standalone demo page it names light or dark.
        "ui"     — page loads ui.js; ask it, so its own toggles stay in sync
        "mode"   — set data-mode on <html> and every element carrying data-theme
        "chrome" — page styles itself with :root[data-theme="dark"|"light"]      */
   var EXAMPLES = [
-    { id:"app-shell",  label:"App shell",  src:"archetypes/app-shell.html", mode:"mode",
-      blurb:"The admin archetype — rail, toolbar, data table." },
-    { id:"portfolio",  label:"Portfolio",  src:"archetypes/portfolio.html", mode:"ui",
+    { id:"app-shell",  label:"App shell",  src:"skeletons/app-shell.html", mode:"mode",
+      blurb:"The admin skeleton — rail, toolbar, data table." },
+    { id:"portfolio",  label:"Portfolio",  src:"skeletons/portfolio.html", mode:"ui",
       blurb:"The anti-admin — bands, justified gallery, marquee." },
-    { id:"storefront", label:"Storefront", src:"archetypes/storefront.html", mode:"ui",
+    { id:"storefront", label:"Storefront", src:"skeletons/storefront.html", mode:"ui",
       blurb:"A catalogue — site frame, product grid, prices, quick look." },
-    { id:"product",    label:"Product",    src:"archetypes/storefront-product.html", mode:"ui",
+    { id:"product",    label:"Product",    src:"skeletons/storefront-product.html", mode:"ui",
       blurb:"Page two of the same site — the frame reused, not rebuilt." },
-    { id:"editorial",  label:"Editorial",  src:"archetypes/editorial.html", mode:"ui",
+    { id:"editorial",  label:"Editorial",  src:"skeletons/editorial.html", mode:"ui",
       blurb:"Long-form — columns, drop cap, pull quote, margin notes." },
-    { id:"game",       label:"Game / HUD", src:"archetypes/game.html", mode:"ui",
+    { id:"game",       label:"Game / HUD", src:"skeletons/game.html", mode:"ui",
       blurb:"Chrome overlaid on the art — stage, HUD slots, meters, leaderboard." },
     { id:"tuner",      label:"Tuner",      src:"demo/gallery.html", mode:"chrome",
       blurb:"Layout × theme × density/radius/accent, with CSS export." },
     { id:"behaviour",  label:"Behaviour",  src:"demo/behaviour.html", mode:"ui",
       blurb:"Layer 2 — every JS behaviour, live, in all six themes." },
+    { id:"skins",      label:"Skins",      src:"demo/skins.html", mode:"chrome",
+      blurb:"One markup, two skins — flat and bevel, across every theme." },
     { id:"specimens",  label:"Specimens",  src:"specimens/directions-01.html", mode:"chrome",
       blurb:"Five directions for one interface (iteration 01)." }
   ];
@@ -338,7 +340,7 @@ input[type="color"]{width:44px;height:28px;padding:2px;border:1px solid var(--g-
   /* ---- light/dark, shell AND frame ----------------------------------------
      A dark surround with a white page inside it is worse than either alone, so
      the mode is global. The frame keeps its THEME (portfolio stays vellum) and
-     only changes mode — the theme is the pairing the archetype exists to show. */
+     only changes mode — the theme is the pairing the skeleton exists to show. */
   var modeBtn = document.getElementById("mode");
 
   function currentMode(){
@@ -396,9 +398,9 @@ input[type="color"]{width:44px;height:28px;padding:2px;border:1px solid var(--g-
 
   /* ---- tuning ---------------------------------------------------------------
      The same reach-into-the-frame trick as the mode toggle, pointed at the other
-     axis. This deliberately tunes the REAL archetype files rather than miniature
+     axis. This deliberately tunes the REAL skeleton files rather than miniature
      copies of them: demo/gallery.html has four hand-built mini-layouts that have
-     to be kept in step with the archetypes by hand, and they never are.
+     to be kept in step with the skeletons by hand, and they never are.
 
      Only offered for pages that wear a suite theme. On demo/gallery.html and the
      specimen deck, data-theme means light/dark and there is nothing to retheme. */
@@ -417,7 +419,7 @@ input[type="color"]{width:44px;height:28px;padding:2px;border:1px solid var(--g-
 
   function tunable(){ return EXAMPLES[i].mode !== "chrome"; }
 
-  /* The element a theme is written to differs by page: the archetype puts
+  /* The element a theme is written to differs by page: the skeleton puts
      data-theme on <html> or on body.ui. Find whichever one the page chose
      rather than assuming, and fall back to the .ui root. */
   function themeRoot(doc){

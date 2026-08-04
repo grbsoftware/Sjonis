@@ -55,11 +55,11 @@ index.html           EXAMPLE BROWSER — the front door. Frames every example,
                      hash-routed, global dark toggle, live tuner (T)
 demo/behaviour.html  exercises every behaviour, all 6 themes live
 demo/img/*.svg       14 placeholder drawings, transparent grounds
-archetypes/app-shell.html          rail + main — the admin pattern
-archetypes/portfolio.html          banded content page — the anti-admin
-archetypes/storefront.html         catalogue — site frame + product grid
-archetypes/storefront-product.html page two of the same site
-archetypes/editorial.html          long-form — columns, drop cap, pull quotes
+skeletons/app-shell.html          rail + main — the admin pattern
+skeletons/portfolio.html          banded content page — the anti-admin
+skeletons/storefront.html         catalogue — site frame + product grid
+skeletons/storefront-product.html page two of the same site
+skeletons/editorial.html          long-form — columns, drop cap, pull quotes
 tools/validate_palette.py   WCAG contrast over every theme x mode
 tools/check_adapters.py     adapter references resolve
 tools/fonts.py              Google Fonts catalogue: fetch / find / show
@@ -69,7 +69,7 @@ tokens/themes.tokens.json   W3C DTCG, generated from CSS
 tokens/fonts.json    15 OFL fonts, curated shortlist
 tools/css_to_tokens.py, build_themes.py   (Python — NO NODE on this machine)
 adapters/tailwind-v4.css, shadcn.css
-archetypes/app-shell.html
+skeletons/app-shell.html
 dist/gtk/, dist/xaml/    generated, 12 files each
 demo/gallery.html    live tuner: layout x theme x density/radius/accent + CSS export
 .claude/skills/ui-suite/  SKILL.md + references/palettes.md
@@ -83,8 +83,8 @@ Always run `python tools/build_themes.py verify` after touching themes
 
 ## Architecture (settled)
 
-Two independent axes. **Archetype** = structure, chosen by what it is.
-**Theme** = appearance, chosen by who it's for. Archetypes contain no colour,
+Two independent axes. **Skeleton** = structure, chosen by what it is.
+**Theme** = appearance, chosen by who it's for. Skeletons contain no colour,
 size or typeface — only `--ui-*` tokens. Vanilla CSS, no build step for consumers.
 
 Themes: vanilla (open-source default), blueprint, halo, graphite, oxide, vellum.
@@ -220,7 +220,7 @@ between versions unintentionally. Commit anything that changes appearance, with
 a message saying what moved and why. `python tools/build_themes.py verify` before
 every commit.
 
-`archetypes/portfolio.html` shares no layout code with the app shell: no rail, no
+`skeletons/portfolio.html` shares no layout code with the app shell: no rail, no
 toolbar, no table. A stack of full-width **bands**, each with a centred
 **measure**. It needed the primitives ui.css genuinely lacked, all now in:
 
@@ -273,7 +273,7 @@ back/forward walk the viewing history and `#storefront` links land. Dark by
 default and the toggle is **global** — it drives the framed document too, because
 a dark surround with a white page inside is worse than either alone. How each
 page takes that instruction is **declared per example, not sniffed**: `data-theme`
-means a suite theme on an archetype and light/dark on a standalone demo page, so
+means a suite theme on a skeleton and light/dark on a standalone demo page, so
 guessing breaks one of them. Reaching into the frame needs same origin — it works
 on the served site, and from `file://` only the chrome switches.
 
@@ -284,7 +284,7 @@ on the served site, and from `file://` only the chrome switches.
 operator moving between views of one tool and owns the viewport; a site header is
 for a reader moving between documents and yields to the content.
 
-**`archetypes/storefront.html`** — the third skeleton, and the proof the site
+**`skeletons/storefront.html`** — the third skeleton, and the proof the site
 frame generalises: it reuses the header, crumbs and footer markup unchanged.
 New COMMERCE primitives in ui.css: `.ui-price`/`-was`/`-note`, `.ui-badge`,
 `.ui-swatch`/`.ui-swatches`, `.ui-frame-muted`, `.ui-card-body`.
@@ -367,12 +367,12 @@ dot vanished under Windows High Contrast), and marks now `print-color-adjust:
 exact` — a browser drops backgrounds on paper, and a legend whose dots did not
 print is a list of labels bound to nothing.
 
-## DONE — the GAME / HUD archetype (`archetypes/game.html`)
+## DONE — the GAME / HUD skeleton (`skeletons/game.html`)
 
-The sixth skeleton, built and live. Every other archetype puts chrome BESIDE the
+The sixth skeleton, built and live. Every other skeleton puts chrome BESIDE the
 content (app-shell's rail) or ABOVE it (the site frame); a HUD does neither — it
 floats on the art and the art keeps going underneath. It is also the only
-archetype with no reading measure in its hero, and the measure deliberately
+skeleton with no reading measure in its hero, and the measure deliberately
 returns below the fold where there is prose again.
 
 New primitives, all of which were genuinely missing:
@@ -466,24 +466,24 @@ which serves both projects.
 - **Print / forced-colors / reduced-transparency — DONE this session.** See
   README. `prefers-reduced-motion` was the only one previously handled.
 - `demo/gallery.html` is now largely redundant. Tuning moved to `index.html`,
-  which reaches into the framed document and tunes the REAL archetype files;
+  which reaches into the framed document and tunes the REAL skeleton files;
   gallery still tunes four hand-built mini-layouts that duplicate the
-  archetypes and drift from them. Either retire it or repoint it — but it is
+  skeletons and drift from them. Either retire it or repoint it — but it is
   still the only place showing one layout across six themes side by side, so
   decide deliberately rather than deleting it.
 - Adapters (`adapters/tailwind-v4.css`, `shadcn.css`) predate the site frame,
   commerce and editorial primitives and only bridge tokens, not classes — check
   whether that is still the right boundary before extending them.
 
-Six archetype files now exist: app-shell, portfolio, storefront,
+Six skeleton files now exist: app-shell, portfolio, storefront,
 storefront-product, editorial, game. The layout-monoculture thread is closed —
 five genuinely different skeletons (storefront-product is page two of one of
 them), not five pages of one app.
 
 **The two axes, restated, because Gary asked directly (2026-08-04) whether each
 "template" showcases a different skeleton.** They are independent, and that is
-the whole architecture: an ARCHETYPE is structure, chosen by what the thing is;
-a THEME is appearance, chosen by who it is for. Every archetype works in all six
+the whole architecture: an SKELETON is structure, chosen by what the thing is;
+a THEME is appearance, chosen by who it is for. Every skeleton works in all six
 themes, so six skeletons x six themes is 36 combinations, not six. `game.html`
 carries `data-theme="oxide"` only because rust suits it — change that one
 attribute and the identical skeleton becomes blueprint or halo. A new skeleton

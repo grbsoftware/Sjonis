@@ -3,14 +3,37 @@
 **[See it running →](https://grbsoftware.github.io/Sjonis/)** — every example in one
 frame, arrow keys to move between them, one toggle for light and dark.
 
-A token-driven set of interface templates. Two axes that move independently:
+A token-driven set of interface templates, built as four layers. Each one wraps
+the one inside it, and each can be swapped without touching the others:
 
-- **Archetype** — structure. Chosen by what the thing *is*.
-- **Theme** — appearance. Chosen by who it is *for*.
+| layer | owns | chosen by | built |
+|---|---|---|---|
+| **skeleton** | structure — what goes where | what the thing *is* | 6 |
+| **skin** | how a surface is drawn | which visual grammar | 2 |
+| **theme** | colour, type, radius | who it is *for* | 6 |
+| **genre** | a named complete look | the point of view | — |
 
-Any archetype works with any theme, because archetypes contain no colour, size or
-typeface. They reference tokens; themes supply values. That is the whole idea, and
-every rule below exists to keep it true.
+Any skeleton works with any skin and any theme, because skeletons contain no
+colour, size or typeface and no surface treatment. They reference tokens; skins
+and themes supply values. That is the whole idea, and every rule below exists to
+keep it true.
+
+One word per layer, deliberately. "Archetype", "layout" and "template" were all
+used for `skeleton` at various points and all three are gone — three words for
+one thing is how a vocabulary rots.
+
+**skin** is the newest layer and the one that makes the others worth having. A
+theme can only change *values* — colour, radius, spacing, typeface. It can never
+change the grammar: whether a surface is raised, inset, bevelled or absent. That
+is why a design system with twenty themes still ships one look. `skin` owns the
+grammar, so `bevel` and `flat` are genuinely different interfaces rather than the
+same interface repainted.
+
+**genre** is not built yet. It is the composition layer — a named look that picks
+a skin and a theme, adds era- or audience-specific ornament, and says which
+skeletons it suits. Genres are *authored, never generated*: the moment a look
+falls out of a parameter combination it stops being a point of view, which is the
+exact failure the skin layer exists to fix.
 
 No build step, no dependencies, no framework. Two stylesheets and HTML — plus one
 optional script if you want the parts that move.
@@ -23,7 +46,7 @@ core/ui.js           optional behaviour layer — see below
 tokens/              the same themes as W3C DTCG JSON — the portable source
 tools/               token extractor + generators + contrast validator (Python, no deps)
 adapters/            bridges to Tailwind v4 and shadcn/ui
-archetypes/          copyable page scaffolds — app-shell, portfolio
+skeletons/          copyable page scaffolds — app-shell, portfolio
 dist/                generated: GTK4 CSS, WinUI/WPF XAML
 demo/gallery.html    live theme switcher + tuner + CSS export
 demo/behaviour.html  every interactive component, switchable across all themes
@@ -40,7 +63,7 @@ example runs — the whole suite is HTML, CSS and one optional classic script.
   <link rel="stylesheet" href="core/ui.css" />
   <link rel="stylesheet" href="core/themes.css" />
   <body class="ui">
-    <!-- copy an archetype from archetypes/ -->
+    <!-- copy a skeleton from skeletons/ -->
   </body>
 </html>
 ```
@@ -164,7 +187,7 @@ is a bug that surfaces as one theme looking broken.
 These are what keep the two axes independent. Break them and the suite degrades into
 six copies of the same stylesheet.
 
-- **Never hardcode a colour, radius, font or spacing value in an archetype.**
+- **Never hardcode a colour, radius, font or spacing value in a skeleton.**
 - **Semantic colour is not the accent.** `--ui-good/warn/crit` stay independent so a
   rebrand cannot silently change what "failed" means.
 - **State needs a non-colour cue.** Pills carry a dot and a border, not just a hue —
@@ -294,13 +317,13 @@ goes neon. The adapter maps `--ui-accent → --primary` and `--ui-surface-3 →
 ## Using it with Claude Code
 
 `.claude/skills/ui-suite/` makes the suite available as a skill. Ask for a dashboard,
-an admin panel, or a restyle and the agent will pick an archetype, justify a theme
+an admin panel, or a restyle and the agent will pick a skeleton, justify a theme
 against the audience, and copy it in — rather than inventing CSS from scratch each
 time.
 
 ## Status
 
-Iteration 02. One archetype (`app-shell`), six themes, live tuner.
+Iteration 02. One skeleton (`app-shell`), six themes, live tuner.
 
 Next: split view, three-pane, command palette, settings and form states, marketing
 page. Each is markup only — no new CSS, because the primitives already exist.

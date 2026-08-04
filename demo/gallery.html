@@ -1,4 +1,4 @@
-<title>UI Suite — Archetypes × Themes</title>
+<title>UI Suite — Skeletons × Themes</title>
 
 <style>
 /* ===== gallery chrome (--g-*) : quiet, so the preview dominates ============ */
@@ -425,10 +425,10 @@ input[type="color"]{width:44px;height:30px;padding:2px;border:1px solid var(--g-
 
   <header class="mast">
     <p class="eyebrow">UI Suite · Iteration 02</p>
-    <h1>One archetype, six themes, every value tunable</h1>
+    <h1>One skeleton, six themes, every value tunable</h1>
     <p>
       The screen below never changes. Structure and appearance are separate axes:
-      the archetype supplies markup that contains no colour, size or typeface, and the
+      the skeleton supplies markup that contains no colour, size or typeface, and the
       theme supplies tokens that fill them in. Change any control and watch which parts
       move — then take the generated CSS at the bottom into your own project.
     </p>
@@ -470,7 +470,7 @@ input[type="color"]{width:44px;height:30px;padding:2px;border:1px solid var(--g-
   <div class="frame">
     <div class="frame-bar">
       <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-      <span class="frame-name" id="frame-name">archetypes/app-shell.html · vanilla · light</span>
+      <span class="frame-name" id="frame-name">skeletons/app-shell.html · vanilla · light</span>
     </div>
 
     <div class="ui ui-stage-rel" id="preview" data-ui-theme="vanilla" data-ui-mode="light"></div>
@@ -936,7 +936,7 @@ input[type="color"]{width:44px;height:30px;padding:2px;border:1px solid var(--g-
     rngR.value = rad;  vR.textContent = rad + "px";
     colA.value = acc;
 
-    fname.textContent = "archetypes/" + state.layout + ".html · "
+    fname.textContent = "skeletons/" + state.layout + ".html · "
                       + state.theme + " · " + state.mode;
 
     seg(document.getElementById("seg-layout"), LAYOUTS.map(function(l){return l.label;}),

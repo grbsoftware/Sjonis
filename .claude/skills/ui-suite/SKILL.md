@@ -1,13 +1,13 @@
 ---
 name: ui-suite
-description: Build a user interface from the local UI Suite — a token-driven set of layout archetypes and swappable themes (vanilla, blueprint, halo, graphite, oxide, vellum). Use when asked to create, restyle, or scaffold any app UI, dashboard, admin panel, landing page, settings screen, or web front end, or when asked to pick a look for a project, match a brand, or theme an existing interface. Also use when the request mentions the UI suite, an archetype, or a theme by name.
+description: Build a user interface from the local UI Suite — a token-driven set of layout skeletons and swappable themes (vanilla, blueprint, halo, graphite, oxide, vellum). Use when asked to create, restyle, or scaffold any app UI, dashboard, admin panel, landing page, settings screen, or web front end, or when asked to pick a look for a project, match a brand, or theme an existing interface. Also use when the request mentions the UI suite, a skeleton, or a theme by name.
 ---
 
 # UI Suite
 
-A two-axis system. **Archetype** decides structure and is chosen by what the thing
-*is*. **Theme** decides appearance and is chosen by who it is *for*. Any archetype
-works with any theme, because archetypes contain no colour, size or typeface — only
+A two-axis system. **Skeleton** decides structure and is chosen by what the thing
+*is*. **Theme** decides appearance and is chosen by who it is *for*. Any skeleton
+works with any theme, because skeletons contain no colour, size or typeface — only
 tokens the theme fills in.
 
 Suite root: `C:\Users\grben\Design`
@@ -19,9 +19,9 @@ core/ui.js             behaviour: dialogs, menus, tabs, sort, validation (option
 tokens/                same themes as W3C DTCG JSON — portable source
 tools/                 build_themes.py: verify | css | gtk | xaml | all
 adapters/              tailwind-v4.css, shadcn.css
-archetypes/*.html      copyable page scaffolds
+skeletons/*.html      copyable page scaffolds
 dist/                  generated GTK4 CSS and WinUI/WPF XAML
-demo/gallery.html      live archetype × theme switcher
+demo/gallery.html      live skeleton × theme switcher
 ```
 
 ## Non-web targets
@@ -46,11 +46,11 @@ the core. shadcn's `--accent` is its hover surface, **not** the brand colour
 
 ## Using it
 
-1. **Pick the archetype** by what is being built.
+1. **Pick the skeleton** by what is being built.
 2. **Pick the theme** by audience — see `references/palettes.md`. Say why in one
    sentence, and offer an alternative. Do not silently decide taste on the user's
    behalf.
-3. **Copy the archetype file**, link both stylesheets, set `data-theme` and
+3. **Copy the skeleton file**, link both stylesheets, set `data-theme` and
    optionally `data-mode` on `<html>`.
 4. **Tune with token overrides**, never by editing `ui.css`.
 
@@ -110,7 +110,7 @@ warns, and keeps enforcing the rule under the `u` flag.
 Every theme defines both modes. `data-mode` is optional — omit it and the theme's
 preferred mode applies.
 
-## Archetypes
+## Skeletons
 
 | File | Structure |
 |---|---|
@@ -127,7 +127,7 @@ default is what produces six sites that look identical.
 ## Site frame — the layer above the page
 
 Anything with more than one page needs the parts that repeat on all of them. Use
-these rather than building a header out of a band, which is what both archetypes
+these rather than building a header out of a band, which is what both skeletons
 did before they existed.
 
 | Class | Does |
@@ -177,12 +177,12 @@ pages are byte-identical apart from `href`s, deliberately.
 Cached images skip the fade deliberately; a flicker on every scroll-back is worse
 than no animation.
 
-More archetypes land in `archetypes/`. If the one you need does not exist, build it
+More skeletons land in `skeletons/`. If the one you need does not exist, build it
 from `ui.css` primitives and save it there rather than writing one-off CSS.
 
 ## Rules
 
-- **Never hardcode a colour, radius, font or spacing value in an archetype.** If a
+- **Never hardcode a colour, radius, font or spacing value in a skeleton.** If a
   value is needed that no token supplies, add the token to the contract in `ui.css`
   and give every theme a value for it. A hardcoded value is a bug — it silently
   breaks the other five themes.

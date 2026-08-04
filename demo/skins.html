@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Skins — flat and bevel, same markup</title>
+
+<link rel="stylesheet" href="../core/ui.css">
+<link rel="stylesheet" href="../core/themes.css">
+<link rel="stylesheet" href="../skins/bevel.css">
+
+<!--
+  THE SKIN LAYER, DEMONSTRATED
+
+  Both panels below contain BYTE-IDENTICAL markup. It is written once in a
+  <template> and stamped into each panel by the script at the bottom, so the two
+  columns cannot drift and the comparison cannot be fudged.
+
+  The only difference between them is data-skin on the wrapper.
+
+  A theme could not produce the right-hand column at any setting. It can change
+  colour, radius, spacing and typeface — it cannot say "a raised surface is drawn
+  with a light edge on two sides and a dark edge on the other two", because that
+  is the shape of the rule rather than a value the rule reads. That distinction
+  is the whole reason this layer exists.
+-->
+
+<style>
+  /* Page chrome only — deliberately not themed, so the specimens own the eye.
+     Same reasoning as index.html and demo/gallery.html. */
+  :root{
+    --g-bg:#0E1011; --g-raise:#15181A; --g-ink:#E8EAE9; --g-dim:#8A9296;
+    --g-faint:#666E71; --g-line:#24282A; --g-accent:#7FB8A4;
+    --g-sans:"Segoe UI Variable Text","Segoe UI",-apple-system,system-ui,sans-serif;
+    --g-mono:"Cascadia Mono",Consolas,ui-monospace,"SF Mono",monospace;
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--g-bg);color:var(--g-ink);
+       font-family:var(--g-sans);font-size:15px;line-height:1.55}
+  .wrap{max-width:1180px;margin:0 auto;padding:22px 20px 64px}
+  header h1{margin:0 0 6px;font-size:18px;font-weight:650;letter-spacing:-.01em}
+  header p{margin:0;color:var(--g-dim);font-size:13px;max-width:76ch}
+  header code{font-family:var(--g-mono);font-size:12px;color:var(--g-ink)}
+
+  .bar{display:flex;gap:14px;flex-wrap:wrap;align-items:center;
+       margin:18px 0 20px;padding:11px 14px;
+       background:var(--g-raise);border:1px solid var(--g-line);border-radius:9px}
+  .bar label{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
+             color:var(--g-faint);font-weight:600}
+  .bar select{font:inherit;font-size:13px;background:var(--g-bg);color:var(--g-ink);
+              border:1px solid var(--g-line);border-radius:6px;padding:5px 8px}
+
+  .pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr));
+        gap:20px;align-items:start}
+  .col{min-width:0}
+  .col > h2{margin:0 0 3px;font-size:13px;font-weight:600;letter-spacing:.01em}
+  .col > p{margin:0 0 11px;font-size:11.5px;color:var(--g-faint);
+           font-family:var(--g-mono)}
+  .mount{border:1px solid var(--g-line);border-radius:10px;overflow:hidden}
+  /* .ui carries the theme; the mount is just a window onto it. */
+  .mount > .ui{padding:20px;display:flex;flex-direction:column;gap:18px;
+               background:var(--ui-bg);color:var(--ui-text)}
+  .grp{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .note{margin:26px 0 0;padding-top:16px;border-top:1px solid var(--g-line);
+        color:var(--g-dim);font-size:13px;max-width:78ch}
+  .note b{color:var(--g-ink);font-weight:600}
+</style>
+
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>One markup, two skins</h1>
+    <p>Both columns are stamped from the same <code>&lt;template&gt;</code>. The only
+      difference is <code>data-skin="bevel"</code> on the right-hand wrapper — no
+      skeleton, theme or component rule differs. Change the theme below and both
+      re-derive: the bevel's light and dark edges are mixed from whatever surface
+      the theme supplies, so it is a grammar, not a picture of Windows 95.</p>
+  </header>
+
+  <div class="bar">
+    <label for="theme">Theme</label>
+    <select id="theme">
+      <option>vanilla</option><option>blueprint</option><option>halo</option>
+      <option>graphite</option><option>oxide</option><option>vellum</option>
+    </select>
+    <label for="mode">Mode</label>
+    <select id="mode"><option>light</option><option>dark</option></select>
+  </div>
+
+  <div class="pair">
+    <section class="col">
+      <h2>flat</h2>
+      <p>the default, built into ui.css</p>
+      <div class="mount">
+        <div class="ui" data-theme="vanilla" data-mode="light" data-mount></div>
+      </div>
+    </section>
+
+    <section class="col">
+      <h2>bevel</h2>
+      <p>skins/bevel.css</p>
+      <div class="mount">
+        <div class="ui" data-theme="vanilla" data-mode="light" data-skin="bevel" data-mount></div>
+      </div>
+    </section>
+  </div>
+
+  <p class="note"><b>What to look at.</b> Corners are square and no surface casts a
+    soft shadow — depth is drawn with a light edge on two sides and a dark edge on
+    the other two. Press a button and it goes down rather than changing colour.
+    The input is cut <em>into</em> the page: its edges are the raised ones
+    reversed. Focus is a dotted rectangle inside the control, not a ring around
+    it. None of that is reachable from a theme at any setting.</p>
+
+</div>
+
+<template id="spec">
+  <div class="ui-card">
+    <div class="ui-toolbar" style="margin-bottom:var(--ui-s4)">
+      <div>
+        <p class="ui-eyebrow">Raised surface</p>
+        <h3 class="ui-title">Dispatch queue</h3>
+      </div>
+      <span class="ui-pill ui-pill-good">Live</span>
+    </div>
+
+    <div class="grp">
+      <button class="ui-btn" type="button">Primary</button>
+      <button class="ui-btn-ghost" type="button">Secondary</button>
+      <button class="ui-btn-danger" type="button">Delete</button>
+    </div>
+
+    <div class="grp" style="margin-top:var(--ui-s4)">
+      <input class="ui-input" type="text" value="north-04" aria-label="Unit" size="12">
+      <input class="ui-input" type="text" placeholder="Search units" aria-label="Search" size="16">
+    </div>
+
+    <div class="ui-meter-row" style="margin-top:var(--ui-s4);max-width:16rem">
+      <div class="ui-meter-head"><span>Capacity</span><b>68%</b></div>
+      <div class="ui-meter ui-meter-lg" style="--ui-meter:.68"
+           role="meter" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100"
+           aria-label="Capacity"></div>
+    </div>
+  </div>
+
+  <div class="ui-table-wrap ui-scroll">
+    <table class="ui-table">
+      <thead><tr>
+        <th scope="col">Unit</th><th scope="col">Status</th><th scope="col">Load</th>
+      </tr></thead>
+      <tbody>
+        <tr><td class="ui-cell-strong">north-04</td>
+            <td><span class="ui-pill ui-pill-good">Ready</span></td><td>68%</td></tr>
+        <tr><td class="ui-cell-strong">south-11</td>
+            <td><span class="ui-pill ui-pill-warn">Backed up</span></td><td>94%</td></tr>
+        <tr><td class="ui-cell-strong">depot-02</td>
+            <td><span class="ui-pill ui-pill-quiet">Offline</span></td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ui-banner ui-banner-info">
+    <span><strong>Inset and raised are different roles.</strong>
+      A field is a hole in the page; a card sits on top of it.</span>
+  </div>
+</template>
+
+<script>
+  var spec = document.getElementById('spec');
+  var mounts = document.querySelectorAll('[data-mount]');
+
+  // Stamp the SAME nodes into both panels. Cloning one template is what makes
+  // this a fair test — hand-written twins drift on the first edit.
+  mounts.forEach(function (m) { m.appendChild(spec.content.cloneNode(true)); });
+
+  function apply() {
+    var t = document.getElementById('theme').value;
+    var m = document.getElementById('mode').value;
+    mounts.forEach(function (el) {
+      el.setAttribute('data-theme', t);
+      el.setAttribute('data-mode', m);
+    });
+  }
+  document.getElementById('theme').addEventListener('change', apply);
+  document.getElementById('mode').addEventListener('change', apply);
+</script>
+</body>
+</html>

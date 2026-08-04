@@ -150,6 +150,55 @@
      to be declared wherever a theme can set it, not only on :root. Clamped so a
      hero is fluid between phone and desktop without a media query. */
   --ui-fs-display: clamp(var(--ui-fs-xl), 7.5vw, calc(var(--ui-fs-xl) * var(--ui-display-mult)));
+
+  /* ---------------------------------------------------------------------------
+     SKIN — the GRAMMAR of a surface, as opposed to its values.
+
+     This is the layer a theme could never reach. A theme sets colour, radius,
+     spacing and typeface; it can never say whether a surface is raised, inset,
+     bevelled or absent, because that lives in the shape of the rule rather than
+     in the values the rule reads. Which is why a system with twenty themes still
+     ships one look: they are all the same sentence with different adjectives.
+
+     Four roles cover every surface in the suite. Components name a ROLE, never a
+     treatment, so a skin restyles all of them at once by redefining four things:
+
+       raise    sits on the page          cards, table wrap
+       float    sits above everything     dialogs, menus, toasts
+       inset    sits below the page       inputs
+       control  can be pressed            buttons
+
+     The values below ARE the default skin ("flat"), so a page with no skin
+     applied looks exactly as it always has. A skin file overrides them under
+     [data-skin="…"] and may also add rules — that is the difference between a
+     skin and a theme, and it is deliberate: some grammars (a bevel needs four
+     different border colours) cannot be expressed as values alone.
+
+     Declared here, in the derived block, for the usual reason — these read
+     --ui-surface and --ui-line, so they must be substituted wherever a theme can
+     land, not baked once at :root. Put data-skin on the SAME element as
+     class="ui" and data-theme; on an ancestor, this block would re-declare over
+     it at the .ui level and the skin would silently do nothing.
+     ------------------------------------------------------------------------ */
+  --ui-raise-fill:     var(--ui-surface);
+  --ui-raise-border:   1px solid var(--ui-line);
+  --ui-raise-radius:   var(--ui-radius);
+  --ui-raise-shadow:   var(--ui-shadow);
+
+  --ui-float-fill:     var(--ui-surface);
+  --ui-float-border:   1px solid var(--ui-line-strong);
+  --ui-float-radius:   var(--ui-radius);
+  --ui-float-shadow:   var(--ui-shadow-lg);
+
+  --ui-inset-fill:     var(--ui-surface);
+  --ui-inset-border:   1px solid var(--ui-line-strong);
+  --ui-inset-radius:   var(--ui-radius-sm);
+  --ui-inset-shadow:   none;
+
+  --ui-control-fill:   var(--ui-accent);
+  --ui-control-border: 1px solid var(--ui-accent);
+  --ui-control-radius: var(--ui-radius-sm);
+  --ui-control-shadow: var(--ui-shadow);
 }
 
 /* -----------------------------------------------------------------------------
@@ -571,9 +620,9 @@
 /* -----------------------------------------------------------------------------
    SITE FRAME
    The layer above the page: the parts that repeat on EVERY page of a site and
-   say where you are within it. Archetypes had no vocabulary for this, so both
+   say where you are within it. Skeletons had no vocabulary for this, so both
    existing ones hand-rolled a header out of a band plus inline styles — which
-   is the tell that a primitive is missing, not that the archetype is clever.
+   is the tell that a primitive is missing, not that the skeleton is clever.
 
    Deliberately not the app shell's .ui-rail: a rail is for an operator moving
    between views of one tool, and it owns the viewport. A site header is for a
@@ -890,7 +939,7 @@ a.ui-brand{color:inherit;text-decoration:none}
 
 /* -----------------------------------------------------------------------------
    STAGE + HUD
-   The one arrangement the other five archetypes have no vocabulary for: chrome
+   The one arrangement the other five skeletons have no vocabulary for: chrome
    laid OVER the content rather than beside it or above it. A rail owns the
    viewport edge, a site header yields to the page — a HUD does neither. It
    floats on the art, and the art keeps going underneath it.
@@ -1071,15 +1120,15 @@ a.ui-brand{color:inherit;text-decoration:none}
 .ui-btn,.ui-btn-ghost,.ui-btn-danger{
   display:inline-flex;align-items:center;gap:var(--ui-s2);
   padding:calc(var(--ui-s2) - 1px) var(--ui-s3);
-  border-radius:var(--ui-radius-sm);
+  border-radius:var(--ui-control-radius);
   font:inherit;font-size:var(--ui-fs);font-weight:var(--ui-weight-medium);
   cursor:pointer;white-space:nowrap;
   transition:filter var(--ui-dur) var(--ui-ease),background var(--ui-dur) var(--ui-ease),
              color var(--ui-dur) var(--ui-ease);
 }
 .ui-btn{
-  background:var(--ui-accent);color:var(--ui-accent-ink);
-  border:1px solid var(--ui-accent);box-shadow:var(--ui-shadow);
+  background:var(--ui-control-fill);color:var(--ui-accent-ink);
+  border:var(--ui-control-border);box-shadow:var(--ui-control-shadow);
 }
 .ui-btn:hover{background:var(--ui-accent-hover);border-color:var(--ui-accent-hover)}
 .ui-btn-ghost{
@@ -1097,7 +1146,7 @@ a.ui-brand{color:inherit;text-decoration:none}
    same density scale, so this stays in step with a compact theme. */
 .ui-btn-lg{
   padding:var(--ui-s3) var(--ui-s5);
-  font-size:var(--ui-fs-md);border-radius:var(--ui-radius);
+  font-size:var(--ui-fs-md);border-radius:var(--ui-raise-radius);
 }
 
 /* Appearance toggle. The word names where the click GOES, not where you are,
@@ -1120,8 +1169,9 @@ a.ui-brand{color:inherit;text-decoration:none}
 .ui-mode-toggle:hover .ui-mode-word{color:var(--ui-text-dim)}
 
 .ui-input{
-  background:var(--ui-surface);border:1px solid var(--ui-line-strong);
-  color:var(--ui-text);border-radius:var(--ui-radius-sm);
+  background:var(--ui-inset-fill);border:var(--ui-inset-border);
+  color:var(--ui-text);border-radius:var(--ui-inset-radius);
+  box-shadow:var(--ui-inset-shadow);
   padding:calc(var(--ui-s2) - 1px) var(--ui-s3);
   font:inherit;font-size:var(--ui-fs);backdrop-filter:var(--ui-blur);
 }
@@ -1132,15 +1182,15 @@ a.ui-brand{color:inherit;text-decoration:none}
    SURFACES
    -------------------------------------------------------------------------- */
 .ui-card{
-  background:var(--ui-surface);border:1px solid var(--ui-line);
-  border-radius:var(--ui-radius);box-shadow:var(--ui-shadow);
+  background:var(--ui-raise-fill);border:var(--ui-raise-border);
+  border-radius:var(--ui-raise-radius);box-shadow:var(--ui-raise-shadow);
   backdrop-filter:var(--ui-blur);
   padding:var(--ui-s4);min-width:0;
 }
 .ui-card-flush{padding:0;overflow:hidden}
 /* The other half of -flush: an image goes edge to edge, then the words below it
    need the padding back. Without this every card in a catalogue carries an
-   inline style, which is how an archetype starts hardcoding values again. */
+   inline style, which is how a skeleton starts hardcoding values again. */
 .ui-card-body{padding:var(--ui-s4);display:flex;flex-direction:column;gap:var(--ui-s2);min-width:0}
 
 .ui-grid{display:grid;gap:var(--ui-s3)}
@@ -1330,8 +1380,8 @@ a.ui-brand{color:inherit;text-decoration:none}
    TABLE
    -------------------------------------------------------------------------- */
 .ui-table-wrap{
-  border:1px solid var(--ui-line);border-radius:var(--ui-radius);
-  background:var(--ui-surface);box-shadow:var(--ui-shadow);
+  border:var(--ui-raise-border);border-radius:var(--ui-raise-radius);
+  background:var(--ui-raise-fill);box-shadow:var(--ui-raise-shadow);
   backdrop-filter:var(--ui-blur);overflow:hidden;
 }
 .ui-scroll{overflow-x:auto}          /* wide content scrolls itself, never the page */
@@ -1515,11 +1565,15 @@ a.ui-brand{color:inherit;text-decoration:none}
    inert background, Escape-to-close and top-layer stacking. Reimplementing any
    of that in JS is how suites end up with focus bugs.
    -------------------------------------------------------------------------- */
+/* A dialog is a float that wants the larger corner. Re-declaring the role token
+   ON the element keeps it in the skin's vocabulary — a skin that sets square
+   corners still gets square corners here, because --ui-radius-lg is its own. */
 .ui-dialog{
-  padding:0;border:1px solid var(--ui-line-strong);
-  border-radius:var(--ui-radius-lg);background:var(--ui-surface);
+  --ui-float-radius:var(--ui-radius-lg);
+  padding:0;border:var(--ui-float-border);
+  border-radius:var(--ui-float-radius);background:var(--ui-float-fill);
   color:var(--ui-text);font-family:var(--ui-font);font-size:var(--ui-fs);
-  box-shadow:var(--ui-shadow-lg);backdrop-filter:var(--ui-blur);
+  box-shadow:var(--ui-float-shadow);backdrop-filter:var(--ui-blur);
   width:min(480px,92vw);max-height:82vh;overflow:hidden;
 }
 .ui-dialog-wide{width:min(760px,94vw)}
@@ -1552,9 +1606,9 @@ a.ui-brand{color:inherit;text-decoration:none}
    -------------------------------------------------------------------------- */
 .ui-menu{
   position:absolute;z-index:60;min-width:180px;display:none;
-  padding:var(--ui-s1);background:var(--ui-surface);
-  border:1px solid var(--ui-line-strong);border-radius:var(--ui-radius);
-  box-shadow:var(--ui-shadow-lg);backdrop-filter:var(--ui-blur);
+  padding:var(--ui-s1);background:var(--ui-float-fill);
+  border:var(--ui-float-border);border-radius:var(--ui-float-radius);
+  box-shadow:var(--ui-float-shadow);backdrop-filter:var(--ui-blur);
 }
 .ui-menu.is-open{display:block}
 .ui-menu-item{
@@ -1620,9 +1674,9 @@ a.ui-brand{color:inherit;text-decoration:none}
 }
 .ui-toast{
   display:flex;align-items:flex-start;gap:var(--ui-s2);pointer-events:auto;
-  padding:var(--ui-s3);border-radius:var(--ui-radius);
-  background:var(--ui-surface);border:1px solid var(--ui-line-strong);
-  box-shadow:var(--ui-shadow-lg);backdrop-filter:var(--ui-blur);
+  padding:var(--ui-s3);border-radius:var(--ui-float-radius);
+  background:var(--ui-float-fill);border:var(--ui-float-border);
+  box-shadow:var(--ui-float-shadow);backdrop-filter:var(--ui-blur);
   font-size:var(--ui-fs);color:var(--ui-text);
   animation:ui-toast-in var(--ui-dur) var(--ui-ease);
 }

@@ -1,0 +1,187 @@
+/* =============================================================================
+   SKIN — BEVEL
+   Raised and inset edges drawn with light and dark borders, square corners, no
+   soft shadow. The visual grammar of Win95/98, Motif, and every desktop toolkit
+   before compositors made drop shadows cheap.
+
+   This file exists to prove the skin layer is real. It is deliberately the
+   FURTHEST thing from the default: if the architecture can express a bevel, the
+   space between flat and bevel is free. Nothing in ui.css changed to allow it,
+   and no skeleton knows it exists.
+
+   Usage — data-skin goes on the SAME element as class="ui" and data-theme:
+
+     <body class="ui" data-theme="vanilla" data-mode="light" data-skin="bevel">
+
+   On an ancestor instead, ui.css's derived block re-declares the role tokens at
+   the .ui level and the skin silently does nothing. Same substitution rule that
+   caught the density scale (trap 1) — a var() in a custom property resolves
+   where it is DECLARED.
+
+   Load after core/ui.css and core/themes.css:
+
+     <link rel="stylesheet" href="core/ui.css">
+     <link rel="stylesheet" href="core/themes.css">
+     <link rel="stylesheet" href="skins/bevel.css">
+
+   ---------------------------------------------------------------------------
+   ON THE LITERALS BELOW. ui.css contains no colours and that rule still holds —
+   it is a rule about ui.css, not about every file in the suite. A bevel is
+   defined by an edge LIGHTER than its face and an edge DARKER than it, which
+   cannot be a fixed value or it would only work on one theme's surface. So the
+   edges are mixed FROM the theme's own surface toward white and black. white and
+   black are not part of any palette here; they are the two ends of lightness,
+   the same way .ui-frame-label's scrim is black because it shades a photograph.
+   Change the theme and every bevel re-derives.
+   ========================================================================== */
+
+[data-skin="bevel"]{
+  /* Square, everywhere. A bevel with rounded corners is neither thing. */
+  --ui-radius-sm:0px; --ui-radius:0px; --ui-radius-lg:0px; --ui-radius-pill:0px;
+
+  /* The two edges, derived from whatever ground the theme supplies. Declared
+     here rather than in ui.css so the default skin carries no bevel vocabulary
+     at all — a skin may ADD tokens, not just override them. */
+  --ui-bevel-lit:  color-mix(in srgb,var(--ui-surface) 62%,#fff);
+  --ui-bevel-shade:color-mix(in srgb,var(--ui-surface) 55%,#000);
+  --ui-bevel-face: var(--ui-surface-2);
+
+  /* Depth was drawn, not cast. No theme's soft shadow survives here. */
+  --ui-shadow:none;
+  --ui-shadow-lg:none;
+  /* Translucency is a compositor idea and predates nothing in this grammar.
+     halo without this is a bevel you can see through, which reads as a bug. */
+  --ui-blur:none;
+
+  /* The four roles. This is the whole skin contract — everything below is
+     detail that values alone could not express. */
+  --ui-raise-fill:   var(--ui-bevel-face);
+  --ui-raise-border: 2px solid;
+  --ui-raise-radius: 0px;
+  --ui-raise-shadow: none;
+
+  --ui-float-fill:   var(--ui-bevel-face);
+  --ui-float-border: 2px solid;
+  --ui-float-radius: 0px;
+  --ui-float-shadow: 2px 2px 0 rgba(0,0,0,.34);   /* hard, offset, not blurred */
+
+  --ui-inset-fill:   var(--ui-surface);
+  --ui-inset-border: 2px solid;
+  --ui-inset-radius: 0px;
+  --ui-inset-shadow: none;
+
+  --ui-control-fill: var(--ui-bevel-face);
+  --ui-control-border: 2px solid;
+  --ui-control-radius: 0px;
+  --ui-control-shadow: none;
+}
+
+/* -----------------------------------------------------------------------------
+   THE PART A THEME COULD NEVER DO
+
+   border-color takes four values, one per edge, and no single token can carry
+   that. This is exactly why a skin is allowed rules and a theme is not: the
+   grammar of a bevel is not a value, it is a shape.
+
+   Raised — lit on top and left, shaded on bottom and right.
+   -------------------------------------------------------------------------- */
+[data-skin="bevel"] .ui-card,
+[data-skin="bevel"] .ui-table-wrap,
+[data-skin="bevel"] .ui-menu,
+[data-skin="bevel"] .ui-dialog,
+[data-skin="bevel"] .ui-toast,
+[data-skin="bevel"] .ui-hud-panel,
+[data-skin="bevel"] .ui-btn,
+[data-skin="bevel"] .ui-btn-ghost,
+[data-skin="bevel"] .ui-btn-danger{
+  border-color:var(--ui-bevel-lit) var(--ui-bevel-shade)
+               var(--ui-bevel-shade) var(--ui-bevel-lit);
+}
+
+/* Inset — the same edges, reversed. A field is a hole, not a tile. */
+[data-skin="bevel"] .ui-input,
+[data-skin="bevel"] .ui-meter{
+  border-color:var(--ui-bevel-shade) var(--ui-bevel-lit)
+               var(--ui-bevel-lit) var(--ui-bevel-shade);
+}
+
+/* A pressed control inverts. This is the whole reason the grammar reads as
+   physical: the button is not tinted on click, it goes DOWN. The 1px nudge is
+   the other half — without it the bevel flips and nothing appears to move. */
+[data-skin="bevel"] .ui-btn:active,
+[data-skin="bevel"] .ui-btn-ghost:active,
+[data-skin="bevel"] .ui-btn-danger:active{
+  border-color:var(--ui-bevel-shade) var(--ui-bevel-lit)
+               var(--ui-bevel-lit) var(--ui-bevel-shade);
+  padding-block:calc(var(--ui-s2) - 1px + 1px) calc(var(--ui-s2) - 1px - 1px);
+  padding-inline:calc(var(--ui-s3) + 1px) calc(var(--ui-s3) - 1px);
+}
+
+/* The filled button keeps the accent as its FACE, so a primary action still
+   reads as primary — the bevel is depth, not colour, and the two are separate
+   jobs. Its edges mix from the accent instead of the surface. */
+[data-skin="bevel"] .ui-btn{
+  background:var(--ui-accent);
+  --ui-bevel-lit:  color-mix(in srgb,var(--ui-accent) 62%,#fff);
+  --ui-bevel-shade:color-mix(in srgb,var(--ui-accent) 55%,#000);
+}
+
+/* Ghost and danger sit on the raised face rather than on nothing — in this
+   grammar there is no such thing as a borderless control. */
+[data-skin="bevel"] .ui-btn-ghost,
+[data-skin="bevel"] .ui-btn-danger{background:var(--ui-bevel-face)}
+
+/* Focus was a dotted rectangle INSIDE the control, not a ring around it. Kept
+   because it is correct as well as period-accurate: an inset marker cannot be
+   clipped by a neighbouring element the way an outset ring can. */
+[data-skin="bevel"] .ui-btn:focus-visible,
+[data-skin="bevel"] .ui-btn-ghost:focus-visible,
+[data-skin="bevel"] .ui-btn-danger:focus-visible{
+  outline:1px dotted var(--ui-text);
+  outline-offset:-4px;
+}
+
+/* A rail is a panel, and panels have edges. */
+[data-skin="bevel"] .ui-rail{
+  background:var(--ui-bevel-face);
+  border-right:2px solid var(--ui-bevel-shade);
+}
+
+/* Tabs are folder tabs: lit on three sides, and the selected one has no bottom
+   so it joins the panel below it. */
+[data-skin="bevel"] .ui-tab{
+  background:var(--ui-bevel-face);
+  border:2px solid;
+  border-color:var(--ui-bevel-lit) var(--ui-bevel-shade) transparent var(--ui-bevel-lit);
+  margin-bottom:-2px;
+}
+[data-skin="bevel"] .ui-tab[aria-selected="true"]{
+  background:var(--ui-surface);
+}
+
+/* The table head is a row of buttons, because in this grammar anything you can
+   click is raised. */
+[data-skin="bevel"] .ui-table th{
+  background:var(--ui-bevel-face);
+  border:2px solid;
+  border-color:var(--ui-bevel-lit) var(--ui-bevel-shade)
+               var(--ui-bevel-shade) var(--ui-bevel-lit);
+}
+
+/* Forced colours replaces the palette outright, which erases the light and dark
+   edges the whole grammar depends on — so the bevel collapses to a plain border
+   rather than pretending. Better an honest box than an invisible one. */
+@media (forced-colors:active){
+  [data-skin="bevel"] .ui-card,
+  [data-skin="bevel"] .ui-table-wrap,
+  [data-skin="bevel"] .ui-menu,
+  [data-skin="bevel"] .ui-dialog,
+  [data-skin="bevel"] .ui-toast,
+  [data-skin="bevel"] .ui-input,
+  [data-skin="bevel"] .ui-btn,
+  [data-skin="bevel"] .ui-btn-ghost,
+  [data-skin="bevel"] .ui-btn-danger,
+  [data-skin="bevel"] .ui-table th{
+    border-color:CanvasText;
+  }
+}
