@@ -710,3 +710,11 @@ therefore never needs a new theme, and a new theme never needs a new page.
   Anthropic. He also asked for the artist link to point at anthropic.com.
 - He asks good structural questions (density vs text size) — answer the contract
   question even when deferring the feature.
+- **His first word for a thing is usually the right one.** He had "family"
+  before "genre" and talked himself out of it, afraid of adding a layer — the
+  four-ring vocabulary was his too. The fear was miscalibrated in an instructive
+  way: he was guarding against a fifth RING, and family is a string in a genre's
+  metadata with no CSS, no token and no load order. Complexity in a vocabulary
+  comes from COLLISION (three words for one thing, which is what rotted
+  archetype/layout/template), not from count. When he floats a word and
+  retracts it, ask what the word would have to *do* before agreeing.
