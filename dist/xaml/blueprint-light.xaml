@@ -28,11 +28,11 @@
     <Color x:Key="UiCat8Color">#FFE34948</Color>
     <Color x:Key="UiGoodColor">#FF0E7C5A</Color>
     <Color x:Key="UiGoodSoftColor">#FFDFF1EA</Color>
-    <Color x:Key="UiWarnColor">#FF96701B</Color>
+    <Color x:Key="UiWarnColor">#FF8C6609</Color>
     <Color x:Key="UiWarnSoftColor">#FFF7EEDA</Color>
-    <Color x:Key="UiCritColor">#FFC2453F</Color>
+    <Color x:Key="UiCritColor">#FFBA3D38</Color>
     <Color x:Key="UiCritSoftColor">#FFF8E4E3</Color>
-    <Color x:Key="UiInfoColor">#FF0B7FA0</Color>
+    <Color x:Key="UiInfoColor">#FF007394</Color>
     <Color x:Key="UiInfoSoftColor">#FFDCEEF4</Color>
 
     <SolidColorBrush x:Key="UiBg" Color="{StaticResource UiBgColor}" />

@@ -30,7 +30,7 @@
     <Color x:Key="UiGoodSoftColor">#FF1C2413</Color>
     <Color x:Key="UiWarnColor">#FFE0A03A</Color>
     <Color x:Key="UiWarnSoftColor">#FF2A2110</Color>
-    <Color x:Key="UiCritColor">#FFC8433A</Color>
+    <Color x:Key="UiCritColor">#FFDD574C</Color>
     <Color x:Key="UiCritSoftColor">#FF2A1310</Color>
     <Color x:Key="UiInfoColor">#FF5E9AA8</Color>
     <Color x:Key="UiInfoSoftColor">#FF132123</Color>

@@ -28,7 +28,7 @@
     <Color x:Key="UiCat8Color">#FFE34948</Color>
     <Color x:Key="UiGoodColor">#FF3F7A52</Color>
     <Color x:Key="UiGoodSoftColor">#FFE6EFE7</Color>
-    <Color x:Key="UiWarnColor">#FF97742A</Color>
+    <Color x:Key="UiWarnColor">#FF896719</Color>
     <Color x:Key="UiWarnSoftColor">#FFF3EEDD</Color>
     <Color x:Key="UiCritColor">#FFA6453B</Color>
     <Color x:Key="UiCritSoftColor">#FFF3E4E1</Color>

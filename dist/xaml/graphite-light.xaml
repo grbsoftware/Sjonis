@@ -26,11 +26,11 @@
     <Color x:Key="UiCat6Color">#FF008300</Color>
     <Color x:Key="UiCat7Color">#FF4A3AA7</Color>
     <Color x:Key="UiCat8Color">#FFE34948</Color>
-    <Color x:Key="UiGoodColor">#FF1F8A5F</Color>
+    <Color x:Key="UiGoodColor">#FF0E8157</Color>
     <Color x:Key="UiGoodSoftColor">#FFE3F2EB</Color>
-    <Color x:Key="UiWarnColor">#FFA9741A</Color>
+    <Color x:Key="UiWarnColor">#FF956200</Color>
     <Color x:Key="UiWarnSoftColor">#FFF7EFDD</Color>
-    <Color x:Key="UiCritColor">#FFC0453C</Color>
+    <Color x:Key="UiCritColor">#FFB93F37</Color>
     <Color x:Key="UiCritSoftColor">#FFF8E5E3</Color>
     <Color x:Key="UiInfoColor">#FF3C63A8</Color>
     <Color x:Key="UiInfoSoftColor">#FFE7EDF7</Color>

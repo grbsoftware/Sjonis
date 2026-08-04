@@ -236,7 +236,7 @@
         },
         "warn": {
           "$type": "color",
-          "$value": "#A16207"
+          "$value": "#A06106"
         },
         "warn-soft": {
           "$type": "color",
@@ -827,7 +827,7 @@
         },
         "warn": {
           "$type": "color",
-          "$value": "#96701B"
+          "$value": "#8C6609"
         },
         "warn-soft": {
           "$type": "color",
@@ -835,7 +835,7 @@
         },
         "crit": {
           "$type": "color",
-          "$value": "#C2453F"
+          "$value": "#BA3D38"
         },
         "crit-soft": {
           "$type": "color",
@@ -843,7 +843,7 @@
         },
         "info": {
           "$type": "color",
-          "$value": "#0B7FA0"
+          "$value": "#007394"
         },
         "info-soft": {
           "$type": "color",
@@ -1260,7 +1260,7 @@
         },
         "accent": {
           "$type": "color",
-          "$value": "#0E9C86"
+          "$value": "#0C9B85"
         },
         "accent-hover": {
           "$type": "color",
@@ -1272,39 +1272,39 @@
         },
         "accent-soft": {
           "$type": "color",
-          "$value": "rgba(14,156,134,.12)"
+          "$value": "rgba(12,155,133,.12)"
         },
         "good": {
           "$type": "color",
-          "$value": "#0E9C86"
+          "$value": "#007B66"
         },
         "good-soft": {
           "$type": "color",
-          "$value": "rgba(14,156,134,.12)"
+          "$value": "rgba(0,123,102,.12)"
         },
         "warn": {
           "$type": "color",
-          "$value": "#B37A15"
+          "$value": "#8C5500"
         },
         "warn-soft": {
           "$type": "color",
-          "$value": "rgba(179,122,21,.12)"
+          "$value": "rgba(140,85,0,.12)"
         },
         "crit": {
           "$type": "color",
-          "$value": "#CC4759"
+          "$value": "#B22E46"
         },
         "crit-soft": {
           "$type": "color",
-          "$value": "rgba(204,71,89,.12)"
+          "$value": "rgba(178,46,70,.12)"
         },
         "info": {
           "$type": "color",
-          "$value": "#3A6FD8"
+          "$value": "#295CC3"
         },
         "info-soft": {
           "$type": "color",
-          "$value": "rgba(58,111,216,.12)"
+          "$value": "rgba(41,92,195,.12)"
         },
         "shadow": {
           "$value": "0 6px 22px rgba(30,32,70,.10)",
@@ -1709,7 +1709,7 @@
         },
         "good": {
           "$type": "color",
-          "$value": "#1F8A5F"
+          "$value": "#0E8157"
         },
         "good-soft": {
           "$type": "color",
@@ -1717,7 +1717,7 @@
         },
         "warn": {
           "$type": "color",
-          "$value": "#A9741A"
+          "$value": "#956200"
         },
         "warn-soft": {
           "$type": "color",
@@ -1725,7 +1725,7 @@
         },
         "crit": {
           "$type": "color",
-          "$value": "#C0453C"
+          "$value": "#B93F37"
         },
         "crit-soft": {
           "$type": "color",
@@ -2020,7 +2020,7 @@
         },
         "crit": {
           "$type": "color",
-          "$value": "#C8433A"
+          "$value": "#DD574C"
         },
         "crit-soft": {
           "$type": "color",
@@ -2138,7 +2138,7 @@
         },
         "good": {
           "$type": "color",
-          "$value": "#5C7A2A"
+          "$value": "#597727"
         },
         "good-soft": {
           "$type": "color",
@@ -2146,7 +2146,7 @@
         },
         "warn": {
           "$type": "color",
-          "$value": "#9A6C14"
+          "$value": "#916301"
         },
         "warn-soft": {
           "$type": "color",
@@ -2441,7 +2441,7 @@
         },
         "warn": {
           "$type": "color",
-          "$value": "#97742A"
+          "$value": "#896719"
         },
         "warn-soft": {
           "$type": "color",
