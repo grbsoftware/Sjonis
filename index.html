@@ -164,16 +164,23 @@ iframe{flex:1;min-height:0;width:100%;border:0;background:var(--g-raise);display
 <script>
 (function () {
   /* Order: what you'd build first, then the tools, then the archive. */
+  /* `mode` says HOW that page takes a light/dark instruction. Declared per page
+     rather than sniffed, because the same attribute means two different things
+     across the suite: on an archetype `data-theme` names a suite theme
+     ("vellum"), on a standalone demo page it names light or dark.
+       "ui"     — page loads ui.js; ask it, so its own toggles stay in sync
+       "mode"   — set data-mode on <html> and every element carrying data-theme
+       "chrome" — page styles itself with :root[data-theme="dark"|"light"]      */
   var EXAMPLES = [
-    { id:"app-shell",  label:"App shell",  src:"archetypes/app-shell.html",
+    { id:"app-shell",  label:"App shell",  src:"archetypes/app-shell.html", mode:"mode",
       blurb:"The admin archetype — rail, toolbar, data table." },
-    { id:"portfolio",  label:"Portfolio",  src:"archetypes/portfolio.html",
+    { id:"portfolio",  label:"Portfolio",  src:"archetypes/portfolio.html", mode:"ui",
       blurb:"The anti-admin — bands, justified gallery, marquee." },
-    { id:"tuner",      label:"Tuner",      src:"demo/gallery.html",
+    { id:"tuner",      label:"Tuner",      src:"demo/gallery.html", mode:"chrome",
       blurb:"Layout × theme × density/radius/accent, with CSS export." },
-    { id:"behaviour",  label:"Behaviour",  src:"demo/behaviour.html",
+    { id:"behaviour",  label:"Behaviour",  src:"demo/behaviour.html", mode:"ui",
       blurb:"Layer 2 — every JS behaviour, live, in all six themes." },
-    { id:"specimens",  label:"Specimens",  src:"specimens/directions-01.html",
+    { id:"specimens",  label:"Specimens",  src:"specimens/directions-01.html", mode:"chrome",
       blurb:"Five directions for one interface (iteration 01)." }
   ];
 
@@ -259,28 +266,62 @@ iframe{flex:1;min-height:0;width:100%;border:0;background:var(--g-raise);display
     show(n);
   }
 
-  /* ---- shell light/dark ---------------------------------------------------
-     Only the chrome. The framed page keeps whatever theme it was designed in —
-     that pairing is the point of the archetype, and overriding it would hide it. */
+  /* ---- light/dark, shell AND frame ----------------------------------------
+     A dark surround with a white page inside it is worse than either alone, so
+     the mode is global. The frame keeps its THEME (portfolio stays vellum) and
+     only changes mode — the theme is the pairing the archetype exists to show. */
   var modeBtn = document.getElementById("mode");
 
+  function currentMode(){
+    return document.documentElement.getAttribute("data-theme") === "light"
+         ? "light" : "dark";
+  }
+
   function paintMode(){
-    var light = document.documentElement.getAttribute("data-theme") === "light";
-    var to = light ? "dark" : "light";
-    modeBtn.setAttribute("aria-pressed", String(light));
+    var to = currentMode() === "light" ? "dark" : "light";
+    modeBtn.setAttribute("aria-pressed", String(currentMode() === "light"));
     modeBtn.setAttribute("title", "Switch to " + to + " (D)");
     modeBtn.setAttribute("aria-label", "Switch to " + to);
   }
 
+  /* Reaching into the frame needs same origin. On a server that holds; opened
+     from disk every file:// document is its own opaque origin and this throws,
+     so the shell still switches and the frame simply doesn't. Silent by design —
+     there is no fix available from out here, and a warning per toggle is noise. */
+  function applyModeToFrame(){
+    var m = currentMode(), strat = EXAMPLES[i].mode, doc, win;
+    try {
+      win = frame.contentWindow;
+      doc = win && win.document;
+      if (!doc || !doc.documentElement) return;
+
+      if (strat === "ui" && win.UI && typeof win.UI.setTheme === "function"){
+        win.UI.setTheme(null, m);          /* keeps the page's own toggles honest */
+        return;
+      }
+      if (strat === "chrome"){
+        doc.documentElement.setAttribute("data-theme", m);
+        return;
+      }
+      /* "mode", and the fallback when ui.js hasn't parsed yet */
+      doc.documentElement.setAttribute("data-mode", m);
+      var els = doc.querySelectorAll("[data-theme], .ui");
+      for (var n = 0; n < els.length; n++) els[n].setAttribute("data-mode", m);
+    } catch (e) { /* cross-origin: chrome-only, as above */ }
+  }
+
   function toggleMode(){
-    var next = document.documentElement.getAttribute("data-theme") === "light"
-             ? "dark" : "light";
+    var next = currentMode() === "light" ? "dark" : "light";
     document.documentElement.setAttribute("data-theme", next);
     try { localStorage.setItem("sjonis-shell-mode", next); } catch (e) {}
     paintMode();
+    applyModeToFrame();
   }
 
   modeBtn.addEventListener("click", toggleMode);
+
+  /* Every navigation loads a fresh document in its designed mode, so re-apply. */
+  frame.addEventListener("load", applyModeToFrame);
 
   document.getElementById("prev").addEventListener("click", function(){ go(i-1); });
   document.getElementById("next").addEventListener("click", function(){ go(i+1); });
