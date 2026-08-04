@@ -1,0 +1,62 @@
+{
+  "$comment": [
+    "GENRES — the composition ring. A genre is a named complete look: it picks",
+    "one skin and one theme, adds ornament, and says which skeletons it suits.",
+    "",
+    "AUTHORED, NEVER COMPUTED. Nothing generates entries in this file. The moment",
+    "a look falls out of a parameter combination it stops being a point of view,",
+    "which is the exact failure the skin ring was added to fix. If you find",
+    "yourself writing a loop over skins x themes, stop.",
+    "",
+    "ONE SKIN, ONE THEME. A genre carries no alternatives. Two looks that differ",
+    "only in skin, where choosing between them is itself a stance, are SIBLINGS",
+    "in a FAMILY — two genres, not one with options. `family` below is a finding",
+    "aid exactly like `facets`; it groups genres and never composes one.",
+    "",
+    "`why` is not documentation, it is the genre. A named look with no stated",
+    "point of view is a preset."
+  ],
+
+  "version": 1,
+
+  "genres": [
+    {
+      "id": "control-panel",
+      "name": "Control Panel",
+      "family": "relief",
+      "skin": "bevel",
+      "theme": "graphite",
+      "mode": "dark",
+      "skeletons": ["app-shell"],
+      "facets": {
+        "era": "1996",
+        "industry": "infrastructure, industrial, scientific",
+        "mood": "sober, dense, unhurried",
+        "ideology": "the operator knows what they are doing"
+      },
+      "why": [
+        "This one was Gary's, and it arrived as a complaint. Looking at bevel on",
+        "the theme demos he said the mid grey was 'fuggly' on black or white —",
+        "then, immediately: 'It might be alright in cpanel.' Both halves are",
+        "right, and together they are the definition of a genre. A look is not",
+        "good or bad on its own; it is good FOR something. bevel's grey is dead",
+        "on a portfolio and correct on a machine you operate.",
+        "",
+        "graphite because it is the one theme with no editorial opinion — the",
+        "others each carry a mood (blueprint's cyan, oxide's rust, vellum's",
+        "paper) that would compete with the chrome. bevel's face is derived from",
+        "the theme's ground, so a theme that is already neutral produces the",
+        "least surprising panel.",
+        "",
+        "dark because the panel separates more from the page there — 2.46",
+        "against the page in dark, 1.92 in light, measured. In this genre that",
+        "separation is the point: the chrome should read as apparatus, not as",
+        "the document.",
+        "",
+        "app-shell alone because a rail plus a dense table IS this genre's",
+        "argument. Portfolio and editorial would fight it; the storefront is a",
+        "shop, not an instrument."
+      ]
+    }
+  ]
+}

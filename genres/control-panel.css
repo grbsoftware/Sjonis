@@ -1,0 +1,161 @@
+/* =============================================================================
+   GENRE — CONTROL PANEL
+   skin: bevel   theme: graphite dark   skeleton: app-shell
+
+   THE FIRST GENRE, so this file is also the worked example of what the ring is.
+   A genre is the composition layer: it picks one skin and one theme, adds
+   ornament, and says which skeletons it suits. It is the only ring allowed to
+   do all three, which is exactly why it is the only ring that must be AUTHORED
+   rather than derived — see tokens/genres.json.
+
+   Usage. The composition is declared in the markup, not conjured by this file:
+
+     <html class="ui" data-theme="graphite" data-mode="dark"
+                      data-skin="bevel" data-genre="control-panel">
+       <link rel="stylesheet" href="core/ui.css">
+       <link rel="stylesheet" href="core/themes.css">
+       <link rel="stylesheet" href="skins/bevel.css">
+       <link rel="stylesheet" href="genres/control-panel.css">
+
+   Four attributes and four links, all of which the author has to keep in step.
+   That is deliberate. The alternative was to have data-genre imply the rest --
+   either by generating alias selectors into themes.css, or by having ui.js read
+   a manifest and set the attributes. The first makes every theme know about
+   every genre; the second means the page does not resolve without JavaScript,
+   and everything in this suite has to survive being double-clicked off a disk.
+   So the genre is spelled out, and tools/check_genres.py gates the spelling
+   against tokens/genres.json. Say it twice, check it once.
+
+   ---------------------------------------------------------------------------
+   WHY THIS GENRE EXISTS. It was Gary's, and it arrived as a complaint: bevel's
+   mid grey is "fuggly" on black or white -- then, in the same breath, "it might
+   be alright in cpanel." Both halves are true, and together they are the whole
+   argument for this ring. A look is not good or bad on its own. It is good FOR
+   something. bevel's grey is dead on a portfolio and correct on a machine you
+   operate, and no amount of tuning the skin changes that, because the thing
+   that changed is what it is being asked to do.
+
+   ---------------------------------------------------------------------------
+   WHAT THIS FILE MAY AND MAY NOT DO. A genre may add rules AND set values --
+   it is above both the skin and the theme. That freedom is the reason for the
+   restraint below: with ONE exception this file changes only type, case,
+   spacing and density. It introduces no colour pairing that the palette gate
+   has not already measured, because the gate cannot yet see genres -- the same
+   blindness that skins had until this session, one ring up. Until it can,
+   ornament stays where contrast cannot follow it.
+   ========================================================================== */
+
+[data-genre="control-panel"]{
+  /* Denser than the theme ships. An operator's screen is read at a fixed
+     distance by someone who already knows the layout, so the air that helps a
+     first-time reader is just fewer rows on screen. */
+  --ui-density:.92;
+
+  /* Uppercase needs more air than ui.css's default, because every label in
+     this genre is uppercase and the default was tuned for occasional use. */
+  --ui-tracking-label:.11em;
+}
+
+/* -----------------------------------------------------------------------------
+   THE CAPTION BAR
+
+   The rail's brand block becomes a window title bar: solid accent, square, with
+   the skin's own shade edge beneath it so it sits in the bevel grammar rather
+   than on top of it.
+
+   IT IS SOLID, AND THAT COST A GRADIENT. A caption bar wants to be a gradient
+   -- that is the 1996 detail everyone remembers. Measured across all twelve
+   theme x mode combinations, it cannot be: --ui-accent-ink has to clear 4.5:1
+   at BOTH ends, and no single direction works, because the themes whose ink is
+   light fail when the bar darkens and the themes whose ink is dark fail when it
+   lightens. Mixing toward --ui-bg (which darkens in dark themes and lightens in
+   light ones) tops out at 3.94; mixing toward black at 95% -- by then not a
+   gradient -- reaches 4.34. Solid accent is 4.61 everywhere.
+
+   Worth writing down because the failure is structural, not a bad value: any
+   ornament that puts a one-directional ramp under themed ink has this shape.
+   -------------------------------------------------------------------------- */
+[data-genre="control-panel"] .ui-brand{
+  background:var(--ui-accent);
+  color:var(--ui-accent-ink);
+  padding:var(--ui-s2) var(--ui-s3);
+  margin:calc(var(--ui-s3) * -1) calc(var(--ui-s3) * -1) var(--ui-s3);
+  border-bottom:2px solid var(--ui-bevel-shade,transparent);
+}
+[data-genre="control-panel"] .ui-brand-name{
+  font-family:var(--ui-font-mono);
+  font-size:var(--ui-fs-sm);
+  text-transform:uppercase;
+  letter-spacing:var(--ui-tracking-label);
+  font-weight:var(--ui-weight-medium);
+}
+/* The mark already paints itself accent-on-accent-ink, which inside the caption
+   bar is the bar's own colours inverted -- invisible. Flip it back. */
+[data-genre="control-panel"] .ui-brand .ui-mark{
+  background:var(--ui-accent-ink);
+  color:var(--ui-accent);
+  border-radius:0;
+}
+
+/* -----------------------------------------------------------------------------
+   EVERY LABEL IS A LABEL
+
+   Section headings, eyebrows and column heads all become the same tracked
+   uppercase mono. In an instrument the label is not prose -- it names a
+   readout, and naming things the same way is what makes a panel scannable.
+   -------------------------------------------------------------------------- */
+[data-genre="control-panel"] .ui-label,
+[data-genre="control-panel"] .ui-eyebrow,
+[data-genre="control-panel"] .ui-table th,
+[data-genre="control-panel"] .ui-readout-label,
+[data-genre="control-panel"] .ui-meter-head{
+  font-family:var(--ui-font-mono);
+  font-size:var(--ui-fs-sm);
+  text-transform:uppercase;
+  letter-spacing:var(--ui-tracking-label);
+}
+
+/* -----------------------------------------------------------------------------
+   NUMBERS ARE MEASUREMENTS, NOT TEXT
+
+   Tabular mono figures everywhere a number appears. This is the single change
+   that most makes a screen read as an instrument, and it is not decoration:
+   digits on a fixed advance align down a column, so a value that has changed is
+   visible without reading any of them. ui.css already does this for
+   .ui-nav-count; the genre's contribution is doing it consistently.
+   -------------------------------------------------------------------------- */
+[data-genre="control-panel"] .ui-stat-value,
+[data-genre="control-panel"] .ui-readout-value,
+[data-genre="control-panel"] .ui-num,
+[data-genre="control-panel"] .ui-delta,
+[data-genre="control-panel"] .ui-price,
+[data-genre="control-panel"] .ui-table td{
+  font-variant-numeric:tabular-nums;
+}
+[data-genre="control-panel"] .ui-stat-value,
+[data-genre="control-panel"] .ui-readout-value,
+[data-genre="control-panel"] .ui-num{
+  font-family:var(--ui-font-mono);
+  letter-spacing:0;
+}
+
+/* -----------------------------------------------------------------------------
+   NO HERO
+
+   A control panel has no headline. The page title is a caption for what is
+   below it, at the size of a label rather than the size of an announcement --
+   ui.css's .ui-title-lg is right for a document and wrong for an instrument.
+   -------------------------------------------------------------------------- */
+[data-genre="control-panel"] .ui-title,
+[data-genre="control-panel"] .ui-title-lg{
+  font-size:calc(var(--ui-fs) * 1.35);
+  letter-spacing:var(--ui-tracking-head);
+  font-weight:var(--ui-weight-heading);
+}
+
+/* Nav items are commands, so they read at command size and stop pretending to
+   be prose. The count stays tabular -- ui.css already had that right. */
+[data-genre="control-panel"] .ui-nav-item{
+  font-size:var(--ui-fs-sm);
+  letter-spacing:.01em;
+}

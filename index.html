@@ -251,8 +251,60 @@ input[type="color"]{width:44px;height:28px;padding:2px;border:1px solid var(--g-
     { id:"skins",      label:"Skins",      src:"demo/skins.html", mode:"chrome",
       blurb:"One markup, two skins — flat and bevel, across every theme." },
     { id:"specimens",  label:"Specimens",  src:"specimens/directions-01.html", mode:"chrome",
-      blurb:"Five directions for one interface (iteration 01)." }
+      blurb:"Five directions for one interface (iteration 01)." },
+    /* A GENRE entry frames the REAL skeleton file and dresses it, rather than
+       being a page of its own — a copy of app-shell.html wearing the genre
+       would drift from app-shell.html within a session. `genre` is only an id;
+       the composition it names is read from tokens/genres.json so it is stated
+       in exactly one place. */
+    { id:"control-panel", label:"Control panel", src:"skeletons/app-shell.html",
+      mode:"mode", genre:"control-panel",
+      blurb:"Genre one — the app shell as an instrument, not a document." }
   ];
+
+  /* ---- genres -------------------------------------------------------------
+     Loaded, not hardcoded. index.html holding its own copy of "bevel on
+     graphite dark" is the same duplication the genre entry above avoids, one
+     level up. fetch() fails on file:// (opaque origin), and that is the
+     designed degradation: the entry then frames the undressed skeleton, which
+     is a real thing to look at rather than an error. */
+  var GENRES = {};
+  function loadGenres(){
+    try {
+      return fetch("tokens/genres.json")
+        .then(function(r){ return r.ok ? r.json() : null; })
+        .then(function(d){
+          (d && d.genres || []).forEach(function(g){ GENRES[g.id] = g; });
+        })
+        .catch(function(){});
+    } catch (e) { return null; }
+  }
+
+  /* Dressing is four attributes and two stylesheets, applied to the framed
+     document — the same four and two an author would write by hand, because
+     there is no mechanism here that a hand-written page does not have. */
+  function applyGenreToFrame(){
+    var ex = EXAMPLES[i], g = ex.genre && GENRES[ex.genre];
+    if (!g) return;
+    try {
+      var doc = frame.contentWindow && frame.contentWindow.document;
+      if (!doc || !doc.documentElement) return;
+      var root = doc.documentElement;
+      root.setAttribute("data-theme", g.theme);
+      root.setAttribute("data-mode",  g.mode);
+      root.setAttribute("data-skin",  g.skin);
+      root.setAttribute("data-genre", g.id);
+      [["skin", "../skins/" + g.skin + ".css"],
+       ["genre", "../genres/" + g.id + ".css"]].forEach(function(pair){
+        if (doc.querySelector('link[data-injected="' + pair[0] + '"]')) return;
+        var l = doc.createElement("link");
+        l.rel = "stylesheet";
+        l.href = pair[1];
+        l.setAttribute("data-injected", pair[0]);
+        doc.head.appendChild(l);
+      });
+    } catch (e) { /* file:// — see loadGenres */ }
+  }
 
   var WIDTHS = [
     { id:"fit",     label:"fit",  px:null },
@@ -619,8 +671,13 @@ input[type="color"]{width:44px;height:28px;padding:2px;border:1px solid var(--g-
   }
   tuneBtn.addEventListener("click", toggleTune);
 
-  /* Every navigation loads a fresh document in its designed mode, so re-apply. */
+  /* Every navigation loads a fresh document in its designed mode, so re-apply.
+     Genre first, then mode: the genre states a mode and the shell's global
+     toggle is allowed to override it. That is not the genre carrying
+     alternatives — it is exploration away from a stated position, and the
+     surround being dark while the frame is light is the worse failure. */
   frame.addEventListener("load", function(){
+    applyGenreToFrame();
     applyModeToFrame();
     if (tune.theme || tune.density !== null || tune.radius !== null || tune.accent !== null)
       applyTuneToFrame();
@@ -650,5 +707,14 @@ input[type="color"]{width:44px;height:28px;padding:2px;border:1px solid var(--g-
   paintWidths();
   applyWidth();
   fromHash();
+
+  /* The manifest lands after the first frame has already loaded, so dress
+     whatever is on screen once it arrives. Landing directly on
+     #control-panel is the case this exists for. */
+  var pending = loadGenres();
+  if (pending && pending.then) pending.then(function(){
+    applyGenreToFrame();
+    applyModeToFrame();
+  });
 })();
 </script>
