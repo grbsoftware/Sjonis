@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Game / HUD — UI Suite archetype</title>
+
+<link rel="stylesheet" href="../core/ui.css">
+<link rel="stylesheet" href="../core/themes.css">
+
+<!--
+  GAME / HUD ARCHETYPE
+
+  The sixth skeleton, and the one that shares least with the other five. Every
+  other archetype puts its chrome BESIDE the content (app-shell's rail) or ABOVE
+  it (the site frame). A HUD does neither: it floats ON the art, and the art
+  keeps going underneath it.
+
+  Structure:
+    .ui-stage               every child stacked into one grid cell
+      <svg>                 the art, cover-fitted
+      .ui-stage-scrim       two gradients, so the corners are readable
+      .ui-hud               a 3x3 grid of slots pinned to the edges
+        .ui-hud-tl … -br    nine placements, no media query needed
+        .ui-hud-panel       chrome with its OWN ground, for when art is bright
+        .ui-hud-ink         chrome laid straight on the scrim
+
+  Note what is absent: no .ui-measure anywhere in the hero. This is the one
+  archetype with no reading measure at all — nothing here is read in lines, it
+  is scanned in corners. The measure comes back below the fold, where there is
+  prose again.
+
+  The art is one inline SVG drawn from the categorical tokens, so the file has
+  no binary assets and the scene restyles with the theme. Replace it with an
+  <img> and keep it as a direct child of .ui-stage — that is what gets the
+  cover fit.
+-->
+
+<body class="ui" data-theme="oxide" data-mode="dark" id="top">
+<a class="ui-skip" href="#standing">Skip to content</a>
+<div class="ui-page">
+
+  <!-- ==========================================================================
+       THE STAGE. Full viewport, chrome overlaid. There is deliberately no
+       .ui-sitehead above this — on a page like this the navigation IS part of
+       the HUD, and a header strip above the art would break the one thing this
+       archetype exists to demonstrate.
+       ====================================================================== -->
+  <section class="ui-stage ui-stage-full" aria-labelledby="hero-title">
+
+    <!-- Dusk over the ridge. Drawn in --ui-cat-* so it takes the theme; the
+         slice fit means it crops rather than letterboxes at any aspect. -->
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"
+         role="img" aria-label="A low sun setting behind three ridgelines above a lake">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0"   stop-color="var(--ui-cat-7)"/>
+          <stop offset=".55" stop-color="var(--ui-cat-2)" stop-opacity=".75"/>
+          <stop offset="1"   stop-color="var(--ui-cat-4)" stop-opacity=".55"/>
+        </linearGradient>
+        <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="var(--ui-cat-4)" stop-opacity=".42"/>
+          <stop offset="1" stop-color="var(--ui-cat-7)" stop-opacity=".85"/>
+        </linearGradient>
+      </defs>
+
+      <rect width="1600" height="900" fill="url(#sky)"/>
+      <circle cx="1080" cy="470" r="118" fill="var(--ui-cat-4)" opacity=".92"/>
+
+      <!-- three ridges, each darker and lower-contrast than the last -->
+      <path d="M0 560 L250 452 L430 520 L640 398 L860 505 L1080 430 L1320 512 L1600 440 L1600 900 L0 900 Z"
+            fill="var(--ui-cat-7)" opacity=".38"/>
+      <path d="M0 640 L210 560 L470 626 L700 540 L960 620 L1210 556 L1600 628 L1600 900 L0 900 Z"
+            fill="var(--ui-cat-7)" opacity=".62"/>
+      <path d="M0 706 L300 664 L560 712 L840 660 L1140 714 L1420 668 L1600 706 L1600 900 L0 900 Z"
+            fill="var(--ui-cat-7)" opacity=".88"/>
+
+      <rect y="706" width="1600" height="194" fill="url(#water)"/>
+      <!-- the sun's reflection, broken into bands so it reads as water -->
+      <g fill="var(--ui-cat-4)" opacity=".5">
+        <rect x="1042" y="722" width="76" height="7" rx="3"/>
+        <rect x="1030" y="746" width="100" height="6" rx="3"/>
+        <rect x="1050" y="770" width="60" height="5" rx="2"/>
+        <rect x="1024" y="794" width="112" height="5" rx="2"/>
+        <rect x="1056" y="820" width="48" height="4" rx="2"/>
+      </g>
+    </svg>
+
+    <div class="ui-stage-scrim"></div>
+
+    <div class="ui-hud">
+
+      <!-- Navigation lives in the HUD. A panel, not bare ink, because this
+           corner sits over the brightest part of the sky. -->
+      <div class="ui-hud-tl ui-hud-panel">
+        <div class="ui-hud-row" style="gap:var(--ui-s5)">
+          <a class="ui-brand" href="#top">
+            <div class="ui-mark">AF</div>
+            <div class="ui-brand-name">Ashfall</div>
+          </a>
+          <nav class="ui-sitenav" aria-label="Sections">
+            <a class="ui-sitenav-item" aria-current="page" href="#top">Play</a>
+            <a class="ui-sitenav-item" href="#standing">Standing</a>
+            <a class="ui-sitenav-item" href="#loadout">Loadout</a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Session state. Readouts, not stat tiles: label under the number,
+           because the number is what gets glanced at. -->
+      <div class="ui-hud-tr ui-hud-panel">
+        <div class="ui-hud-row">
+          <div class="ui-readout">
+            <div class="ui-readout-value">14,208</div>
+            <div class="ui-readout-label">Online</div>
+          </div>
+          <div class="ui-readout">
+            <div class="ui-readout-value">28<small>ms</small></div>
+            <div class="ui-readout-label">Ping</div>
+          </div>
+          <div class="ui-readout">
+            <div class="ui-readout-value">S4</div>
+            <div class="ui-readout-label">Season</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- The thesis. Bottom-left is where the scrim is heaviest (.74), which
+           is why the one piece of bare-ink chrome is placed here rather than
+           in the middle where the art shows through. -->
+      <div class="ui-hud-bl ui-hud-ink ui-hud-stack" style="max-width:min(46ch,100%)">
+        <p class="ui-eyebrow">Season 4 &middot; The Long Dusk</p>
+        <h1 class="ui-display" id="hero-title">The lake remembers every crossing.</h1>
+        <p class="ui-lead">Twelve players. One ridge. The water rises on a timer nobody
+          can see, and the last team standing on dry ground takes the season.</p>
+        <div class="ui-hud-row">
+          <a class="ui-btn ui-btn-lg" href="#standing">Find a match</a>
+          <a class="ui-btn-ghost ui-btn-lg" href="#loadout">Edit loadout</a>
+        </div>
+      </div>
+
+      <!-- Vitals. The meter primitive doing the job it was built for: three
+           quantities that must be readable in a glance and never read aloud.
+           Each carries its number in text, because a bar alone says nothing. -->
+      <div class="ui-hud-br ui-hud-panel ui-hud-stack" style="min-width:min(15rem,60vw)">
+        <p class="ui-eyebrow" style="margin:0">Vitals</p>
+
+        <div class="ui-meter-row">
+          <div class="ui-meter-head"><span>Health</span><b>72 / 100</b></div>
+          <div class="ui-meter ui-meter-lg ui-meter-good" style="--ui-meter:.72"
+               role="meter" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"
+               aria-label="Health"></div>
+        </div>
+
+        <div class="ui-meter-row">
+          <div class="ui-meter-head"><span>Shield</span><b>34 / 100</b></div>
+          <div class="ui-meter ui-meter-lg ui-meter-warn" style="--ui-meter:.34"
+               role="meter" aria-valuenow="34" aria-valuemin="0" aria-valuemax="100"
+               aria-label="Shield"></div>
+        </div>
+
+        <!-- Segmented: discrete charges, so pips rather than a continuous bar.
+             The mask cuts track and fill together — the gaps are the page. -->
+        <div class="ui-meter-row">
+          <div class="ui-meter-head"><span>Flares</span><b>3 / 5</b></div>
+          <div class="ui-meter ui-meter-lg ui-meter-seg" style="--ui-meter:.6;--ui-seg:5"
+               role="meter" aria-valuenow="3" aria-valuemin="0" aria-valuemax="5"
+               aria-label="Flares remaining"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Below the fold the page becomes ordinary again — bands and a measure.
+       That contrast is the point: a HUD is for the moment of play, not for
+       reading, and pretending otherwise is how game sites become unusable.
+       ====================================================================== -->
+  <section class="ui-band" id="standing" tabindex="-1">
+    <div class="ui-measure">
+      <div class="ui-toolbar" style="margin-bottom:var(--ui-s5)">
+        <div>
+          <p class="ui-eyebrow">Season 4 &middot; closes in 11 days</p>
+          <h2 class="ui-title">Ridge standing</h2>
+        </div>
+        <div class="ui-hud-row" data-ui-choice role="group" aria-label="Standing scope">
+          <button class="ui-btn-ghost" aria-pressed="true">Friends</button>
+          <button class="ui-btn-ghost" aria-pressed="false">Global</button>
+        </div>
+      </div>
+
+      <div class="ui-table-wrap ui-scroll">
+        <table class="ui-table ui-rank">
+          <caption class="ui-sr">Season 4 standing, friends only. Your position is row six.</caption>
+          <thead>
+            <tr>
+              <th scope="col" class="ui-rank-pos">#</th>
+              <th scope="col">Player</th>
+              <th scope="col">Crossings</th>
+              <th scope="col">Best time</th>
+              <th scope="col">Rating</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="ui-rank-pos">1</td>
+              <td class="ui-cell-strong">kestrel_vane</td>
+              <td>412</td><td>2:08</td>
+              <td><span class="ui-tag ui-c3">Ashbound</span></td>
+            </tr>
+            <tr>
+              <td class="ui-rank-pos">2</td>
+              <td class="ui-cell-strong">nine_of_swords</td>
+              <td>388</td><td>2:11</td>
+              <td><span class="ui-tag ui-c3">Ashbound</span></td>
+            </tr>
+            <tr>
+              <td class="ui-rank-pos">3</td>
+              <td class="ui-cell-strong">brackwater</td>
+              <td>355</td><td>2:14</td>
+              <td><span class="ui-tag ui-c1">Tidewalker</span></td>
+            </tr>
+            <tr>
+              <td class="ui-rank-pos">4</td>
+              <td class="ui-cell-strong">low_tide_lily</td>
+              <td>340</td><td>2:19</td>
+              <td><span class="ui-tag ui-c1">Tidewalker</span></td>
+            </tr>
+            <tr>
+              <td class="ui-rank-pos">5</td>
+              <td class="ui-cell-strong">quiet_ferry</td>
+              <td>318</td><td>2:22</td>
+              <td><span class="ui-tag ui-c1">Tidewalker</span></td>
+            </tr>
+            <!-- The row that matters. Three signals: tinted ground, an inset
+                 edge that is a shape, and a visible word — never hue alone. -->
+            <tr aria-current="true">
+              <td class="ui-rank-pos">6</td>
+              <td class="ui-cell-strong">
+                grb <span class="ui-pill ui-pill-info">You</span>
+              </td>
+              <td>297</td><td>2:26</td>
+              <td><span class="ui-tag ui-c4">Driftline</span></td>
+            </tr>
+            <tr>
+              <td class="ui-rank-pos">7</td>
+              <td class="ui-cell-strong">saltcedar</td>
+              <td>281</td><td>2:31</td>
+              <td><span class="ui-tag ui-c4">Driftline</span></td>
+            </tr>
+            <tr>
+              <td class="ui-rank-pos">8</td>
+              <td class="ui-cell-strong">mornings_after</td>
+              <td>264</td><td>2:35</td>
+              <td><span class="ui-tag ui-c4">Driftline</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="ui-caption" style="margin-top:var(--ui-s3)">
+        <b>Note</b> Position colour is never the only signal — the top three are marked by
+        weight, and your own row carries the word "You" as well as its tint.
+      </p>
+    </div>
+  </section>
+
+  <!-- Loadout. Cards, each with segmented meters — the same primitive as the
+       HUD vitals, at a different size and doing a different job. -->
+  <section class="ui-band ui-band-sunk" id="loadout" tabindex="-1">
+    <div class="ui-measure">
+      <div class="ui-toolbar" style="margin-bottom:var(--ui-s5)">
+        <div>
+          <p class="ui-eyebrow">Three slots &middot; two equipped</p>
+          <h2 class="ui-title">Loadout</h2>
+        </div>
+      </div>
+
+      <div class="ui-cols" style="--ui-tile:17rem">
+
+        <article class="ui-card ui-c1">
+          <div class="ui-frame ui-ratio-wide ui-frame-muted">
+            <svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <rect width="400" height="225" fill="var(--ui-surface-2)"/>
+              <path d="M40 170 L200 60 L360 170" fill="none" stroke="var(--ui-cat-1)"
+                    stroke-width="6" stroke-linecap="round"/>
+              <circle cx="200" cy="60" r="14" fill="var(--ui-cat-1)"/>
+            </svg>
+          </div>
+          <div class="ui-card-body ui-hud-stack">
+            <div class="ui-hud-row" style="justify-content:space-between">
+              <b>Ferryman's Line</b>
+              <span class="ui-pill ui-pill-good">Equipped</span>
+            </div>
+            <div class="ui-meter-row">
+              <div class="ui-meter-head"><span>Reach</span><b>8 / 10</b></div>
+              <div class="ui-meter ui-meter-seg" style="--ui-meter:.8;--ui-seg:10"
+                   role="meter" aria-valuenow="8" aria-valuemin="0" aria-valuemax="10"
+                   aria-label="Ferryman's Line reach"></div>
+            </div>
+            <div class="ui-meter-row">
+              <div class="ui-meter-head"><span>Weight</span><b>3 / 10</b></div>
+              <div class="ui-meter ui-meter-seg" style="--ui-meter:.3;--ui-seg:10"
+                   role="meter" aria-valuenow="3" aria-valuemin="0" aria-valuemax="10"
+                   aria-label="Ferryman's Line weight"></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="ui-card ui-c3">
+          <div class="ui-frame ui-ratio-wide ui-frame-muted">
+            <svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <rect width="400" height="225" fill="var(--ui-surface-2)"/>
+              <rect x="120" y="60" width="160" height="105" rx="10" fill="none"
+                    stroke="var(--ui-cat-3)" stroke-width="6"/>
+              <path d="M155 112 h90" stroke="var(--ui-cat-3)" stroke-width="6" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="ui-card-body ui-hud-stack">
+            <div class="ui-hud-row" style="justify-content:space-between">
+              <b>Tallow Lantern</b>
+              <span class="ui-pill ui-pill-good">Equipped</span>
+            </div>
+            <div class="ui-meter-row">
+              <div class="ui-meter-head"><span>Burn</span><b>6 / 10</b></div>
+              <div class="ui-meter ui-meter-seg" style="--ui-meter:.6;--ui-seg:10"
+                   role="meter" aria-valuenow="6" aria-valuemin="0" aria-valuemax="10"
+                   aria-label="Tallow Lantern burn"></div>
+            </div>
+            <div class="ui-meter-row">
+              <div class="ui-meter-head"><span>Weight</span><b>5 / 10</b></div>
+              <div class="ui-meter ui-meter-seg" style="--ui-meter:.5;--ui-seg:10"
+                   role="meter" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"
+                   aria-label="Tallow Lantern weight"></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="ui-card">
+          <div class="ui-frame ui-ratio-wide ui-frame-muted">
+            <svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <rect width="400" height="225" fill="var(--ui-surface-2)"/>
+              <path d="M200 70 v85 M158 112 h84" stroke="var(--ui-line-strong)"
+                    stroke-width="6" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="ui-card-body ui-hud-stack">
+            <div class="ui-hud-row" style="justify-content:space-between">
+              <b>Third slot</b>
+              <span class="ui-pill ui-pill-quiet">Locked</span>
+            </div>
+            <p class="ui-caption" style="margin:0">Unlocks at Driftline rating.
+              You are 23 crossings away.</p>
+            <div class="ui-meter-row">
+              <div class="ui-meter-head"><span>Progress</span><b>297 / 320</b></div>
+              <div class="ui-meter" style="--ui-meter:.928"
+                   role="progressbar" aria-valuenow="297" aria-valuemin="0" aria-valuemax="320"
+                   aria-label="Crossings toward the third slot"></div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="ui-sitefoot">
+    <div class="ui-measure ui-sitefoot-base">
+      <span>Ashfall is a fictional game, built to exercise the HUD archetype.</span>
+      <span>Art generated by Claude, reviewed and approved by Gary.</span>
+    </div>
+  </footer>
+
+</div>
+<script src="../core/ui.js"></script>
+</body>
+</html>

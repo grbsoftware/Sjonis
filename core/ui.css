@@ -605,6 +605,21 @@
 }
 .ui-skip:focus{transform:translateY(0)}
 
+/* Available to assistive tech, invisible on screen. Needed wherever a control
+   is legible only by position or by an icon — a HUD reads "1,204" beside a
+   picture of a coin and says nothing at all to a screen reader.
+
+   Not display:none and not visibility:hidden: both remove the element from the
+   accessibility tree, which is the opposite of the intent. The 1px clipped box
+   is the technique that survives every engine. white-space:nowrap matters —
+   without it the text wraps inside a 1px box and some engines report it as
+   several lines of one character. */
+.ui-sr{
+  position:absolute!important;width:1px;height:1px;
+  padding:0;margin:-1px;overflow:hidden;
+  clip-path:inset(50%);white-space:nowrap;border:0;
+}
+
 .ui-sitehead{
   padding-inline:var(--ui-s5);
   border-bottom:1px solid var(--ui-line);
@@ -874,6 +889,137 @@ a.ui-brand{color:inherit;text-decoration:none}
 .ui-frame-label-fixed{opacity:1}
 
 /* -----------------------------------------------------------------------------
+   STAGE + HUD
+   The one arrangement the other five archetypes have no vocabulary for: chrome
+   laid OVER the content rather than beside it or above it. A rail owns the
+   viewport edge, a site header yields to the page — a HUD does neither. It
+   floats on the art, and the art keeps going underneath it.
+
+   .ui-stage stacks every child into the same grid cell, so the art, the scrim
+   and the HUD occupy one box with no absolute positioning in the markup:
+
+     <div class="ui-stage">
+       <img …>                        the art, cover-fitted
+       <div class="ui-stage-scrim"></div>
+       <div class="ui-hud"> … </div>
+     </div>
+   -------------------------------------------------------------------------- */
+.ui-stage{
+  position:relative;display:grid;overflow:hidden;isolation:isolate;
+  block-size:var(--ui-stage-h,clamp(420px,72vh,760px));
+  background:var(--ui-surface-2);
+  border-radius:var(--ui-radius-lg);
+}
+/* svh, not vh: on a phone vh is the tallest the viewport ever gets, so a
+   "full screen" stage sits partly under the browser's own chrome until the
+   user scrolls. svh is the height actually visible right now. */
+.ui-stage-full{border-radius:0;--ui-stage-h:100svh}
+.ui-stage > img,.ui-stage > video,.ui-stage > svg,
+.ui-stage > canvas,.ui-stage > picture{
+  grid-area:1/1;inline-size:100%;block-size:100%;
+  object-fit:var(--ui-fit,cover);object-position:var(--ui-fit-pos,center);
+}
+
+/* The one place ui.css is allowed a literal colour, for the same reason
+   .ui-frame-label already is: this darkens ARBITRARY artwork, not a theme
+   surface. There is no token for "whatever photograph the author supplied", and
+   a themed wash would tint the picture instead of shading it. Two gradients,
+   not one flat wash — a flat scrim greys the entire image to protect the few
+   words sitting in the corners. */
+.ui-stage-scrim{
+  grid-area:1/1;z-index:1;pointer-events:none;
+  background:
+    linear-gradient(to top,rgba(0,0,0,.74),rgba(0,0,0,.30) 34%,rgba(0,0,0,0) 62%),
+    linear-gradient(to bottom,rgba(0,0,0,.58),rgba(0,0,0,0) 40%);
+}
+.ui-stage-scrim-soft{
+  background:linear-gradient(to top,rgba(0,0,0,.55),rgba(0,0,0,0) 55%);
+}
+
+/* Nine slots on a 3x3 grid. The centre track takes the slack, so the corners
+   stay pinned to the corners at every size without a media query. */
+.ui-hud{
+  grid-area:1/1;z-index:2;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  grid-template-rows:auto 1fr auto;
+  grid-template-areas:
+    "tl t  tr"
+    "l  c  r"
+    "bl b  br";
+  gap:var(--ui-s4);
+  padding:var(--ui-s5);
+  /* The art underneath stays hoverable and clickable between the chrome; each
+     actual HUD element takes its own events back. */
+  pointer-events:none;
+}
+.ui-hud > *{pointer-events:auto;min-width:0}
+.ui-hud-tl{grid-area:tl;justify-self:start;align-self:start}
+.ui-hud-t {grid-area:t; justify-self:center;align-self:start}
+.ui-hud-tr{grid-area:tr;justify-self:end;  align-self:start}
+.ui-hud-l {grid-area:l; justify-self:start; align-self:center}
+.ui-hud-c {grid-area:c; justify-self:center;align-self:center;text-align:center}
+.ui-hud-r {grid-area:r; justify-self:end;   align-self:center}
+.ui-hud-bl{grid-area:bl;justify-self:start;align-self:end}
+.ui-hud-b {grid-area:b; justify-self:center;align-self:end}
+.ui-hud-br{grid-area:br;justify-self:end;  align-self:end}
+
+/* Chrome over artwork has NO guaranteed contrast — that is the honest hard
+   problem with every HUD, and a scrim alone does not solve it because the
+   author can always supply a bright picture. So panelled chrome gets its own
+   ground, mixed from --ui-bg: the one token that is opaque in all six themes
+   (halo's surfaces are rgba, and a translucent surface over an unknown image
+   composites against the image, not against the page — see the <select> bug).
+   At 86% the page ground dominates whatever is behind it, and the blur is what
+   sells the glass rather than the transparency doing it. */
+.ui-hud-panel{
+  background:color-mix(in srgb,var(--ui-bg) 86%,transparent);
+  backdrop-filter:var(--ui-blur,blur(10px));
+  border:1px solid var(--ui-line-strong);
+  border-radius:var(--ui-radius);
+  padding:var(--ui-s3) var(--ui-s4);
+  box-shadow:var(--ui-shadow-lg);
+  color:var(--ui-text);
+}
+.ui-hud-stack{display:flex;flex-direction:column;gap:var(--ui-s3);min-width:0}
+.ui-hud-row{display:flex;align-items:center;gap:var(--ui-s4);flex-wrap:wrap;min-width:0}
+
+/* Text laid straight on the scrim rather than in a panel. Its ink is a literal
+   for a reason worth stating: the scrim is ALWAYS a black wash, in every theme
+   and both modes, because it exists to shade a photograph. Ink of --ui-text
+   would therefore go dark under any light theme and disappear into the very
+   wash that was supposed to be protecting it — the failure would appear only on
+   half the themes, which is the worst way for it to appear. Same literal and
+   same reasoning as .ui-frame-label. */
+.ui-hud-ink{color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.ui-hud-ink .ui-lead,
+.ui-hud-ink .ui-readout-label,
+.ui-hud-ink .ui-eyebrow{color:rgba(255,255,255,.80)}
+.ui-hud-ink .ui-meter{background:rgba(255,255,255,.20);border-color:rgba(255,255,255,.28)}
+.ui-hud-ink .ui-meter-head{color:rgba(255,255,255,.80)}
+.ui-hud-ink .ui-meter-head b{color:#fff}
+
+/* A readout is a stat tile pitched for glanceability rather than for reading:
+   bigger, tighter, tabular, and label BELOW the number. Fluid between phone and
+   desktop on its own, so a HUD needs no breakpoints. */
+.ui-readout{display:flex;flex-direction:column;gap:1px;min-width:0}
+.ui-readout-value{
+  font-family:var(--ui-font-display);
+  font-size:clamp(var(--ui-fs-lg),3.4vw,var(--ui-fs-xl));
+  font-weight:var(--ui-weight-heading);
+  letter-spacing:-.03em;line-height:1;
+  font-variant-numeric:tabular-nums;
+}
+.ui-readout-value small{
+  font-size:.44em;font-weight:var(--ui-weight-body);
+  color:var(--ui-text-faint);letter-spacing:0;margin-left:2px;
+}
+.ui-readout-label{
+  font-size:var(--ui-fs-xs);letter-spacing:var(--ui-tracking-label);
+  text-transform:uppercase;color:var(--ui-text-faint);
+}
+
+/* -----------------------------------------------------------------------------
    DISPLAY TYPE
    Bigger than .ui-title, and behaves differently: tighter tracking, balanced
    wrapping, and a measure that stops a hero from running to 30 words a line.
@@ -943,6 +1089,13 @@ a.ui-brand{color:inherit;text-decoration:none}
 }
 .ui-btn-danger:hover{background:var(--ui-crit-soft)}
 .ui-btn[disabled],.ui-btn-ghost[disabled]{opacity:.45;cursor:not-allowed}
+/* One size up, for a page whose primary action is the reason the page exists —
+   a hero call to action rather than a toolbar control. Padding scales off the
+   same density scale, so this stays in step with a compact theme. */
+.ui-btn-lg{
+  padding:var(--ui-s3) var(--ui-s5);
+  font-size:var(--ui-fs-md);border-radius:var(--ui-radius);
+}
 
 /* Appearance toggle. The word names where the click GOES, not where you are,
    and stays faint: it is a hint attached to the glyph, not a second control.
@@ -1011,6 +1164,87 @@ a.ui-brand{color:inherit;text-decoration:none}
 .ui-delta{font-size:var(--ui-fs-sm);font-weight:var(--ui-weight-medium)}
 .ui-delta-up{color:var(--ui-good)}
 .ui-delta-down{color:var(--ui-crit)}
+
+/* -----------------------------------------------------------------------------
+   METER
+   A quantity drawn as a bar: health, storage, capacity, a rating, progress.
+   The suite had no meter of any kind, which is a real gap well outside the game
+   page — every dashboard wants one.
+
+   ONE custom property drives it. --ui-meter is a 0-1 fraction, not a percentage
+   and not a width, so the author never does arithmetic against a container they
+   cannot measure:
+
+     <div class="ui-meter" style="--ui-meter:.62"
+          role="meter" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100"
+          aria-label="Shield"></div>
+
+   The role is the AUTHOR's to choose and is deliberately not baked in: `meter`
+   is a static measurement (health, disk usage, a score), `progressbar` is a task
+   advancing toward completion. They read differently to a screen reader and only
+   the author knows which this is. Whichever is used, the bar is decoration on
+   top of that — always put the value in text nearby, because a bare bar cannot
+   be read aloud and cannot be seen by someone who cannot see it.
+
+   Not <progress>: it cannot be segmented, it cannot be reliably styled across
+   engines, and its bar/value pseudo-elements are still three vendor spellings.
+   -------------------------------------------------------------------------- */
+.ui-meter{
+  --ui-meter:0;
+  position:relative;display:block;inline-size:100%;
+  block-size:var(--ui-meter-size,8px);
+  background:var(--ui-surface-3);
+  border:1px solid var(--ui-line);
+  border-radius:var(--ui-radius-pill);
+  overflow:hidden;
+}
+/* clamp() guards the fraction at both ends: a value over 1 would otherwise
+   overhang the track and a negative one would invert it. */
+.ui-meter::before{
+  content:"";position:absolute;inset-block:0;inset-inline-start:0;
+  inline-size:clamp(0%,calc(var(--ui-meter) * 100%),100%);
+  background:var(--ui-meter-fill,var(--ui-series,var(--ui-accent)));
+  border-radius:inherit;
+  transition:inline-size calc(var(--ui-dur) * 3) var(--ui-ease);
+}
+.ui-meter-sm{--ui-meter-size:4px}
+.ui-meter-lg{--ui-meter-size:14px}
+
+/* State, when the QUANTITY is the state — a health bar going red, a disk
+   filling up. Not for identity; drop the meter inside a .ui-c1…8 instead and
+   --ui-series carries the hue in on its own. */
+.ui-meter-good{--ui-meter-fill:var(--ui-good)}
+.ui-meter-warn{--ui-meter-fill:var(--ui-warn)}
+.ui-meter-crit{--ui-meter-fill:var(--ui-crit)}
+
+/* Pips. The mask cuts track and fill together, so the gaps show the page
+   through rather than a second colour we would have to name. --ui-seg is the
+   number of segments; the last one needs no trailing gap, which is why the
+   period is inset rather than repeated to the edge. */
+.ui-meter-seg{
+  --ui-seg:10;
+  border-radius:var(--ui-radius-sm);
+  -webkit-mask:var(--ui-seg-mask);
+  mask:var(--ui-seg-mask);
+  --ui-seg-mask:repeating-linear-gradient(to right,
+    #000 0,
+    #000 calc(100% / var(--ui-seg) - var(--ui-seg-gap,3px)),
+    #0000 calc(100% / var(--ui-seg) - var(--ui-seg-gap,3px)),
+    #0000 calc(100% / var(--ui-seg)));
+}
+.ui-meter-seg::before{border-radius:0}
+
+/* Label / value / bar as one block, since a meter without a printed value is
+   half a component. */
+.ui-meter-row{display:flex;flex-direction:column;gap:var(--ui-s1);min-width:0}
+.ui-meter-head{
+  display:flex;justify-content:space-between;align-items:baseline;gap:var(--ui-s3);
+  font-size:var(--ui-fs-sm);color:var(--ui-text-dim);
+}
+.ui-meter-head b{
+  color:var(--ui-text);font-weight:var(--ui-weight-medium);
+  font-variant-numeric:tabular-nums;
+}
 
 /* -----------------------------------------------------------------------------
    PILL — state carried by shape and a dot, not by hue alone. Colour-blind
@@ -1114,6 +1348,39 @@ a.ui-brand{color:inherit;text-decoration:none}
 .ui-table tbody tr:hover td{background:var(--ui-surface-2)}
 .ui-table .ui-cell-strong{color:var(--ui-text)}
 .ui-table .ui-cell-clip{max-width:280px;overflow:hidden;text-overflow:ellipsis}
+
+/* RANKED TABLE — a leaderboard is an ordered table with two extra jobs: make
+   the position read as a position, and make ONE row findable at a glance.
+
+   Note what is deliberately absent: gold, silver and bronze. ui.css names no
+   colours, and inventing three medal hues would put decoration where the theme
+   should decide — so the top three are marked by WEIGHT and size instead, which
+   also survives greyscale, colour blindness and a forced-colours palette. */
+.ui-rank td{color:var(--ui-text)}
+.ui-rank-pos{
+  inline-size:1%;text-align:end;padding-inline-end:var(--ui-s3)!important;
+  font-family:var(--ui-font-display);font-variant-numeric:tabular-nums;
+  color:var(--ui-text-faint);letter-spacing:-.02em;
+}
+.ui-rank tbody tr:nth-child(-n+3) .ui-rank-pos{
+  color:var(--ui-text);font-weight:var(--ui-weight-heading);
+  font-size:var(--ui-fs-md);
+}
+
+/* The "you" row. aria-current is the state, so the styling hangs off the same
+   attribute the screen reader announces rather than off a parallel class that
+   could drift out of step with it. Three signals, not one: a tinted ground, an
+   inset edge that is a SHAPE, and (in the markup) a visible label — because a
+   row identified by hue alone is exactly the row a colour-blind player cannot
+   find in their own leaderboard. */
+.ui-rank tbody tr[aria-current]{background:var(--ui-accent-soft)}
+.ui-rank tbody tr[aria-current] td{
+  color:var(--ui-text);font-weight:var(--ui-weight-medium);
+}
+.ui-rank tbody tr[aria-current] td:first-child{
+  box-shadow:inset 3px 0 0 0 var(--ui-accent);
+}
+.ui-rank tbody tr[aria-current]:hover td{background:transparent}
 
 /* -----------------------------------------------------------------------------
    EMPTY / ERROR — the states most suites omit and every real app reaches.
@@ -1423,9 +1690,21 @@ a.ui-brand{color:inherit;text-decoration:none}
   .ui-dot,.ui-tag::before,.ui-badge,.ui-avatar,.ui-mark{forced-color-adjust:auto}
 
   /* Buttons and fields are distinguished from the page by fill in normal use. */
-  .ui-btn,.ui-input,.ui-card,.ui-frame,.ui-menu,.ui-dialog,.ui-toast{
+  .ui-btn,.ui-input,.ui-card,.ui-frame,.ui-menu,.ui-dialog,.ui-toast,
+  .ui-stage,.ui-hud-panel{
     border:1px solid CanvasText;
   }
+  /* A meter is a background inside a background: both collapse to Canvas and
+     the reading disappears entirely. The fill takes Highlight, which is the
+     user's own chosen emphasis colour and the only honest choice here. */
+  .ui-meter{border:1px solid CanvasText;forced-color-adjust:none;background:Canvas}
+  .ui-meter::before{background:Highlight}
+  /* The scrim shades a photograph. With forced colours there is no photograph
+     worth protecting and a black wash just hides the HUD behind it. */
+  .ui-stage-scrim{display:none}
+  .ui-hud-panel{background:Canvas;backdrop-filter:none}
+  /* Tinted ground is gone, so the "you" row needs its edge to carry the state. */
+  .ui-rank tbody tr[aria-current] td:first-child{box-shadow:inset 3px 0 0 0 Highlight}
   /* Selected state reads as a colour swap normally — give it a shape too. */
   .ui-tab[aria-selected="true"],.ui-nav-item[aria-current],
   .ui-sitenav-item[aria-current="page"]{
@@ -1449,6 +1728,10 @@ a.ui-brand{color:inherit;text-decoration:none}
 @media (prefers-reduced-transparency:reduce){
   .ui,.ui *{backdrop-filter:none}
   .ui{--ui-blur:none}
+  /* The HUD panel is the one place ui.css CAN honour this fully, because its
+     ground is mixed from --ui-bg rather than from a theme's rgba surface —
+     so there is an opaque value to fall back to without naming a colour. */
+  .ui-hud-panel{background:var(--ui-bg)}
 }
 
 /* -----------------------------------------------------------------------------
@@ -1487,8 +1770,19 @@ a.ui-brand{color:inherit;text-decoration:none}
 
   /* Do not cut these in half across a page boundary. */
   .ui-card,.ui-figure,.ui-frame,.ui-pullquote,.ui-quote,.ui-stat,
-  .ui-banner,.ui-list-item,.ui-table tr{break-inside:avoid}
+  .ui-banner,.ui-list-item,.ui-table tr,.ui-readout,.ui-meter-row{break-inside:avoid}
   h1,h2,h3,.ui-title,.ui-display{break-after:avoid}
+
+  /* A stage is sized to the VIEWPORT, which on paper means a sheet and a half
+     of photograph with the HUD stranded on the second one. Let it collapse to
+     its content and put the overlay back in flow underneath. */
+  .ui-stage{--ui-stage-h:auto;block-size:auto;overflow:visible;display:block}
+  .ui-stage-scrim{display:none}
+  .ui-hud{
+    position:static;display:flex;flex-direction:column;gap:var(--ui-s3);
+    padding:var(--ui-s3) 0;
+  }
+  .ui-hud-panel{box-shadow:none;backdrop-filter:none}
 
   /* A URL the reader cannot click is a URL they cannot follow. Print it —
      but only in prose, never in navigation, where it would double the words
@@ -1513,7 +1807,8 @@ a.ui-brand{color:inherit;text-decoration:none}
      dots did not print is a list of labels bound to nothing. These few elements
      ask for their colour back. The rim goes with them -- a box-shadow is not
      printed either, so without this the dot loses both fill and edge. */
-  .ui-dot,.ui-tag::before,.ui-swatch,.ui-badge,.ui-spark,.ui-avatar,.ui-mark{
+  .ui-dot,.ui-tag::before,.ui-swatch,.ui-badge,.ui-spark,.ui-avatar,.ui-mark,
+  .ui-meter,.ui-meter::before{
     print-color-adjust:exact;-webkit-print-color-adjust:exact;
   }
 }
