@@ -200,13 +200,82 @@ held and agreed: the four state colours keep their conventional hues; themes var
 the hue, never the role. Node is NOT installed — use `validate_palette.py`, and
 set `PYTHONIOENCODING=utf-8` or it dies on cp1252.
 
+## DONE — published, licensed, and the site frame
+
+**Sjonis is public and live: https://grbsoftware.github.io/Sjonis/**
+Repo `grbsoftware/Sjonis`, Pages from `main` at root. Local `master` was renamed
+`main`. Git identity was set repo-local (it had been global and was lost).
+After every push, Pages takes 30–90s to rebuild — poll
+`gh api repos/grbsoftware/Sjonis/pages/builds/latest --jq .status`.
+
+**Licence: PolyForm Noncommercial 1.0.0** (`LICENSE.md`), verbatim. Noncommercial
+use fully granted; **commercial use requires a separate licence from Gary**, so a
+commercial user has to make contact. Gary considered cutting the free-use grant
+for government and decided against it — do not re-open unprompted. Contact is
+routed through GitHub, not his email, deliberately: a plain-text address on a
+public repo is scraped within days. GitHub shows no licence badge because
+PolyForm is not OSI — that is expected, not a misconfiguration.
+
+**`index.html` — the example browser.** Every example in one frame: prev/next,
+tab strip, arrow keys, width presets. The hash is the state, so the browser's own
+back/forward walk the viewing history and `#storefront` links land. Dark by
+default and the toggle is **global** — it drives the framed document too, because
+a dark surround with a white page inside is worse than either alone. How each
+page takes that instruction is **declared per example, not sniffed**: `data-theme`
+means a suite theme on an archetype and light/dark on a standalone demo page, so
+guessing breaks one of them. Reaching into the frame needs same origin — it works
+on the served site, and from `file://` only the chrome switches.
+
+**The site frame** — the layer above the page, which the suite genuinely lacked.
+`.ui-skip`, `.ui-sitehead` (+`-stick`, `-sunk`), `.ui-sitebar`, `.ui-sitenav`
+(+`-item`, `aria-current`), `.ui-sitehead-actions`, `.ui-crumbs`, `.ui-sitefoot`
+(+`-cols`, `-base`). Deliberately not the app shell's rail: a rail is for an
+operator moving between views of one tool and owns the viewport; a site header is
+for a reader moving between documents and yields to the content.
+
+**`archetypes/storefront.html`** — the third skeleton, and the proof the site
+frame generalises: it reuses the header, crumbs and footer markup unchanged.
+New COMMERCE primitives in ui.css: `.ui-price`/`-was`/`-note`, `.ui-badge`,
+`.ui-swatch`/`.ui-swatches`, `.ui-frame-muted`, `.ui-card-body`.
+
+**New in ui.js**: `data-ui-choice` (single-select button group, `aria-pressed`,
+arrow keys) and the live filter now honours `data-ui-item`, so a card grid can be
+filtered — it only understood list items and table rows before.
+
+**`tools/validate_palette.py` now exists.** RESUME used to reference one that was
+never in the repo. It models the pairings ui.css actually produces (`.ui-pill`
+has no background, so its hue meets the page, never `--ui-*-soft`), composites
+rgba tokens over their ground first, and prints ASCII only so cp1252 cannot kill
+it. `python tools/validate_palette.py`, exit 1 on failure.
+
+## OPEN — palette findings, NOT yet acted on
+
+The validator reports **126 required failures**, all in the light modes, and they
+need Gary because the categorical palette was explicitly "position held and
+agreed" — reversing that silently would be wrong.
+
+- `--ui-cat-2/3/4/5` sit at **1.9–2.9:1** on every light ground, against a 3.0
+  bar for a `.ui-dot` mark (WCAG 1.4.11). cat-4 (ochre) is the worst at 1.91.
+- `--ui-warn` and `--ui-good` miss 4.5:1 as pill text on light grounds
+  (3.7–4.3), and `--ui-crit` misses in **oxide dark** (3.51–3.80).
+
+The honest tension: hues chosen so eight marks stay apart from each other cannot
+also all clear a contrast bar against a white ground. Three ways out — darken the
+light-mode categorical ramp (loses "yellow"), give `.ui-dot` a rim so the mark is
+delimited regardless of hue, or accept and document. **Gary's call.**
+
+One already fixed without touching a colour: `.ui-tag` printed the categorical
+hue *as text*, which asks a mark palette for 4.5:1. The label is now `--ui-text`
+and the hue moved to the border and a dot. That alone cleared 142 failures.
+
 ## NEXT
 
-A second non-admin archetype, to prove the new primitives generalise past one
-page — **editorial/zine** or **storefront**. Gary was offered these and picked
-portfolio first; the other two are still open. After that: layer 3 (React) is
-still unstarted and still worth questioning, because it costs the no-build-step
-property that is currently the suite's best feature.
+- The palette decision above.
+- **Editorial/zine** is the one named archetype still unbuilt.
+- A **second page** of the storefront (product detail) would prove the site frame
+  across pages rather than within one, which is the thing Gary actually described.
+- Layer 3 (React) still unstarted and still worth questioning, because it costs
+  the no-build-step property that is currently the suite's best feature.
 
 ## Working with Gary — what came up this session
 
