@@ -823,6 +823,34 @@ presentation order and has no vanilla, because vanilla came later. It is a
 dated deck, not a picker — nothing in it is clickable. Reordering it would
 falsify a record. The rule is about pickers.
 
+### OPEN — halo renders LIGHT in specimens, by default. Gary, 2026-08-04.
+
+`specimens/directions-01.html`: the halo plate always loads day while the other
+four load night. **Not a label mismatch — he checked, and so did I.**
+
+RULED OUT already, do not redo:
+- `data-mode` is touched in exactly 3 places: line 640 sets it from the entry
+  (halo's `DIRECTIONS` entry says `mode:"dark"`), and 664-665 are the per-plate
+  click toggle. The attribute is correct.
+- The light values live at `.plate[data-spec="halo"][data-mode="light"]`
+  (line 234), which should not match. The dark values are the base rule
+  (line 221).
+
+So the block being selected is right and the plate renders light anyway —
+the cause is in how halo's VALUES resolve, not in which rule wins.
+
+**Best lead: trap 11 again.** halo is the only one of the five whose panels are
+`rgba(255,255,255,.055/.028)` over `--s-bg:#0F1018`, with `--s-blur:blur(18px)`
+and two radial glows. If those white-alpha panels composite over anything other
+than `--s-bg` — a page-chrome ground, or an ancestor that is not painting
+`--s-bg` at all — the plate goes pale while the four OPAQUE directions look
+correct. That matches the symptom exactly: only halo, and only halo has
+translucent surfaces.
+
+START HERE: check what `.plate[data-spec="halo"]` actually paints as its own
+background, and whether any ancestor between it and the page supplies the
+ground the alpha is landing on.
+
 ## NEXT — in priority order
 2. **Skin three — the soft one.** Gary's, and he is right: "black can be
    beveled on black, I've done it before with softer shadows and or highlights."
