@@ -16,7 +16,7 @@
     <Color x:Key="UiTextFaintColor">#FF83849B</Color>
     <Color x:Key="UiAccentColor">#FF0E9C86</Color>
     <Color x:Key="UiAccentHoverColor">#FF0B7E6C</Color>
-    <Color x:Key="UiAccentInkColor">#FFFFFFFF</Color>
+    <Color x:Key="UiAccentInkColor">#FF06231F</Color>
     <Color x:Key="UiAccentSoftColor">#1F0E9C86</Color>
     <Color x:Key="UiCat1Color">#FF2A78D6</Color>
     <Color x:Key="UiCat2Color">#FFEB6834</Color>

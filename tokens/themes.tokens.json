@@ -1268,7 +1268,7 @@
         },
         "accent-ink": {
           "$type": "color",
-          "$value": "#FFFFFF"
+          "$value": "#06231F"
         },
         "accent-soft": {
           "$type": "color",
