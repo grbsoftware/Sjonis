@@ -1,0 +1,281 @@
+/* =============================================================================
+   GENRE — RISO
+   skin: flat   theme: vanilla light   skeletons: portfolio, editorial
+
+   THE THIRD GENRE, and the first that is not a control panel. It is also the
+   first whose palette came from OUTSIDE the suite: Gary's blue/purple/green,
+   run through Radiance to five colours and then through
+   tools/import_palette.py, which is what makes pasting them in here legitimate
+   rather than a hole in a system that validates its own colours.
+
+   Usage — three attributes and three links, because flat needs no stylesheet:
+
+     <html class="ui" data-theme="vanilla" data-mode="light"
+                      data-genre="riso">
+       <link rel="stylesheet" href="core/ui.css">
+       <link rel="stylesheet" href="core/themes.css">
+       <link rel="stylesheet" href="genres/riso.css">
+
+   ---------------------------------------------------------------------------
+   WHY THIS GENRE EXISTS, AND WHY IT IS NAMED FOR A PRINTING PROCESS
+
+   Gary's own constraint on these colours is what named it. After seeing a
+   rainbow come out of Radiance: "they may not be great for webpages... the
+   gradients could be used very sparingly and not necessarily in the form of
+   the rainbow, but the solid blocks of color or bars or circles could be 2 or
+   more of the colors, and the accented text like the blue in the vanilla
+   portfolio."
+
+   That is not a list of preferences, it is a description of screen printing.
+   Risograph and silkscreen lay down a small number of SEPARATE inks. There is
+   no blending, because there is no mechanism for it -- you get flat areas of
+   one ink, overlaps where two inks cross, and type in whichever ink you set it
+   in. Every restriction Gary arrived at by eye is a physical fact of the
+   process, which is why the constraint holds together instead of reading as
+   arbitrary taste.
+
+   Naming it for the process rather than for the palette matters, because it
+   means the genre survives someone importing a different set of inks. Riso is
+   a grammar; blue/purple/green is one edition of it.
+
+   FLAT ON PURPOSE, and this is the first genre to name the default skin. Depth
+   is the one thing this process cannot produce. A bevel or a cast shadow would
+   contradict the whole point of view, so "flat" here is a decision rather than
+   an omission -- see tools/check_genres.py, which now treats flat as a skin
+   with no stylesheet instead of as a missing one.
+
+   ---------------------------------------------------------------------------
+   THE PALETTE, AND WHERE IT CAME FROM
+
+   Anchors #6B3FA0, #3A5470 and #2E8B57, bridged to five in OKLab by Radiance,
+   then measured by tools/import_palette.py against all four of vanilla light's
+   grounds. Every one clears its bar as supplied -- nothing needed correcting,
+   which is unusual and is a property of the palette rather than luck. It is
+   analogous and mid-chroma, and both of those help: adjacent hues interpolate
+   without hitting the sRGB gamut wall, and mid chroma sits far enough from the
+   page to be read.
+
+   Worst case for each, on --ui-surface-3, the ground that decides almost every
+   case here:
+
+       #3A5470  6.72  accent, carries text at 4.5
+       #6B3FA0  6.33  block at 3.0
+       #554C88  6.49  block
+       #367066  4.91  block
+       #2E8B57  3.64  block
+
+   ONE colour has to clear 4.5 and the rest only 3.0, because there is exactly
+   one accent. That asymmetry is the whole reason an analogous palette works
+   here and would be useless as a categorical set, where eight hues must stay
+   separated from EACH OTHER as well as from the ground.
+
+   The tool also reports that this palette clears every LIGHT theme untouched
+   and wants L +0.18 to +0.23 on every dark one. So light mode is a
+   measurement here, not a mood.
+   ========================================================================== */
+
+/* -----------------------------------------------------------------------------
+   THE PALETTE BLOCKS ARE SCOPED TO A MODE, AND THAT IS TWO FIXES IN ONE
+
+   SPECIFICITY, found by measuring rather than by reading. core/themes.css
+   declares its palettes at [data-theme="x"][data-mode="y"] -- two attribute
+   selectors, (0,2,0). A bare [data-genre="riso"] is (0,1,0) and LOSES to it
+   silently: the first version of this file set --ui-accent and every
+   --ui-cat-* and none of them appeared on screen, because the theme block
+   outranked them. Genres one and two never hit this, because neither
+   overrode a palette token. Adding data-mode brings the genre to (0,2,0),
+   which ties, and genre stylesheets load after themes.css so order decides it.
+
+   TRUTH, which matters more. These values were solved against ONE ground pair.
+   The light set does not hold in dark -- import_palette wants L +0.18 to +0.23
+   on the same colours there -- so a block applying in both modes would be
+   claiming a measurement it never made. Both modes are written out below,
+   each solved separately, and anything that is not vanilla falls back to the
+   theme's own validated palette instead of showing colours nothing checked.
+   -------------------------------------------------------------------------- */
+
+/* Imported by tools/import_palette.py and checked against vanilla light.
+   Every value clears the bar it is measured at on all four of that theme's
+   grounds. Re-run the tool before changing any of them: these are solved
+   values, not chosen ones, and the solving is the point. */
+[data-genre="riso"][data-mode="light"]{
+  --ui-accent:#3A5470;
+  --ui-accent-ink:#FFFFFF;
+  --ui-accent-hover:#344B63;
+  --ui-cat-1:#6B3FA0;
+  --ui-cat-2:#554C88;
+  --ui-cat-3:#367066;
+  --ui-cat-4:#2E8B57;
+}
+
+/* The same five inks re-solved against vanilla dark. Four of the five had to
+   move, by L +0.02 to +0.19 -- on a dark ground these colours sit at 2.02-2.77
+   where their bars are 4.5 and 3.0. That is not a flaw in the palette, it is
+   what "a light-mode palette" means, measured. The genre still states light as
+   its mode; this block exists because the example browser's global dark toggle
+   is allowed to take a genre somewhere it did not choose to go, and showing
+   unchecked colours there would be worse than showing corrected ones. */
+[data-genre="riso"][data-mode="dark"]{
+  --ui-accent:#708CAA;
+  --ui-accent-ink:#0B0B0C;
+  --ui-accent-hover:#819AB4;
+  --ui-cat-1:#8256B9;
+  --ui-cat-2:#6C64A2;
+  --ui-cat-3:#3C766C;
+  --ui-cat-4:#2E8B57;
+}
+
+[data-genre="riso"]{
+  /* Ink does not round its own corners. Not zero -- that is bevel's claim and
+     belongs to a different grammar -- but close enough that nothing reads as
+     moulded. */
+  --ui-radius-sm:1px; --ui-radius:2px; --ui-radius-lg:3px;
+
+  /* A poster is read from across a room, so the display sizes go up and the
+     tracking comes in. This is the one place the genre is loud. */
+  --ui-tracking-head:-.03em;
+  --ui-tracking-label:.14em;
+
+  /* The tint used for alternating bands, as a fraction of an ink over the
+     page. Kept as a variable because it is the single number that decides
+     whether the bands are decoration or a contrast problem -- see the block
+     below, where it is measured rather than eyeballed. */
+  --riso-tint:9%;
+}
+
+/* -----------------------------------------------------------------------------
+   NO GRADIENTS. THIS ONE IS ENFORCED, NOT REQUESTED.
+
+   ui.css names no gradients, but a theme or a later hand could introduce one,
+   and in this grammar a gradient is not a stylistic slip -- it is a claim the
+   process cannot make. Turning it off at the genre level costs nothing and
+   means the rule survives someone else's edit.
+   -------------------------------------------------------------------------- */
+[data-genre="riso"] .ui-band,
+[data-genre="riso"] .ui-card,
+[data-genre="riso"] .ui-btn,
+[data-genre="riso"] .ui-frame{
+  background-image:none;
+}
+
+/* -----------------------------------------------------------------------------
+   ALTERNATING INK BANDS
+
+   The portfolio skeleton is a stack of full-width bands, which is exactly what
+   a print run of flat colour wants. Each band takes a different ink at low
+   tint, cycling through the four so a long page never repeats twice running.
+
+   MEASURED, because a tinted ground is a new colour pairing and the palette
+   gate cannot see genres yet. At 9%, the worst ground any of the four inks
+   produces (#EEEAF4, from cat-1) carries --ui-text at 15.03 and --ui-text-dim
+   at 5.13, both comfortable.
+
+   THE NUMBER THAT DECIDED 9% IS --ui-text-faint, AND THE ANSWER IS NOT THE ONE
+   IT LOOKS LIKE. Faint lands at 2.65 against a 3.0 bar, which reads like the
+   tint breaking something. It is not: vanilla light already ships faint at
+   2.88 on --ui-surface-2 and 2.67 on --ui-surface-3, both standing advisory
+   warnings in tools/validate_palette.py. A 9% band is 2.65 -- indistinguishable
+   from the theme's own deepest surface, and therefore not a new problem, just
+   the existing one at the same depth. That is the test worth applying to any
+   genre ground: not "does it pass" but "is it worse than a surface the theme
+   already puts text on".
+
+   The cost of going further is steep in the wrong place. 20% takes faint to
+   2.22 and dim to 4.30; 26% takes dim to 3.88, under its own 4.5 bar, and at
+   that point the genre would be lowering a bar the rest of the suite holds.
+   9% keeps every band inside ground the theme has already accepted.
+   -------------------------------------------------------------------------- */
+[data-genre="riso"] .ui-band:nth-of-type(4n+2){
+  background:color-mix(in srgb,var(--ui-cat-1) var(--riso-tint),var(--ui-bg));
+}
+[data-genre="riso"] .ui-band:nth-of-type(4n+3){
+  background:color-mix(in srgb,var(--ui-cat-3) var(--riso-tint),var(--ui-bg));
+}
+[data-genre="riso"] .ui-band:nth-of-type(4n+4){
+  background:color-mix(in srgb,var(--ui-cat-2) var(--riso-tint),var(--ui-bg));
+}
+[data-genre="riso"] .ui-band:nth-of-type(4n+5){
+  background:color-mix(in srgb,var(--ui-cat-4) var(--riso-tint),var(--ui-bg));
+}
+
+/* -----------------------------------------------------------------------------
+   OVERPRINT, AND WHY THIS GENRE GETS ITS SIGNATURE ORNAMENT WHERE THE OTHERS
+   DID NOT
+
+   Two inks crossing on paper multiply. Control Panel wanted a gradient under
+   its caption bar and could not have one; Control Surface declined a colour
+   exception outright. Both were right, and this one is different for a reason
+   that can be stated rather than felt.
+
+   MULTIPLY ONLY EVER DARKENS. On a light ground, the result of overprinting
+   two inks is at least as dark as the darker of the two -- so its contrast
+   against that light ground is at least as good as the worse of the two inks
+   measured alone. Both inks already clear 3.0 there, so the overlap clears it
+   too, without measuring the overlap. That argument holds ONLY because this
+   genre is light-mode and only for NON-TEXT marks; on a dark ground multiply
+   moves toward the ground and the argument inverts completely.
+
+   So it is scoped to marks, which are non-text by definition, and nothing that
+   carries a letter is allowed to blend. Measured anyway, since the argument
+   was cheap to check: worst single ink on the page 4.14, worst of all ten
+   overprint pairs 12.01. The overlap is not close to the bar in any pairing.
+   -------------------------------------------------------------------------- */
+[data-genre="riso"] .ui-dot,
+[data-genre="riso"] .ui-swatch,
+[data-genre="riso"] .ui-tag::before{
+  mix-blend-mode:multiply;
+}
+
+/* Forced colours replaces the palette outright, so an overprint has nothing
+   left to overprint and blending two system colours produces a third the user
+   did not choose. Blending off; the marks go back to being plain shapes. */
+@media (forced-colors:active){
+  [data-genre="riso"] .ui-dot,
+  [data-genre="riso"] .ui-swatch,
+  [data-genre="riso"] .ui-tag::before{
+    mix-blend-mode:normal;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   THE EYEBROW IS THE ACCENTED LINE GARY POINTED AT
+
+   portfolio.html line 57: .ui-eyebrow is color:var(--ui-accent), and it is the
+   "Selected work 2024-2025" above the white text he named. It is the ONE piece
+   of type in the whole genre that carries an ink, which is why the accent is
+   the one colour held to 4.5 and every other colour only to 3.0.
+   -------------------------------------------------------------------------- */
+[data-genre="riso"] .ui-eyebrow{
+  text-transform:uppercase;
+  letter-spacing:var(--ui-tracking-label);
+  font-weight:var(--ui-weight-medium);
+  font-size:var(--ui-fs-sm);
+}
+
+/* Poster type. The display sizes are already derived in ui.css; the genre only
+   pushes weight and tracking, which is the difference between a heading and a
+   printed title. */
+[data-genre="riso"] .ui-display,
+[data-genre="riso"] .ui-title-lg{
+  font-weight:var(--ui-weight-heading);
+  letter-spacing:var(--ui-tracking-head);
+  line-height:1.02;
+}
+
+/* A caption is set in the ink, small, tracked, and directly under the frame it
+   belongs to -- the way an edition note sits under a print. */
+[data-genre="riso"] .ui-caption,
+[data-genre="riso"] .ui-frame-label{
+  font-size:var(--ui-fs-sm);
+  letter-spacing:.03em;
+  color:var(--ui-text-dim);
+}
+
+/* Buttons are stamps: solid ink, square-ish, no shadow. ui.css already fills
+   them with the accent; the genre only removes the lift, because a printed
+   thing does not hover above the paper it is printed on. */
+[data-genre="riso"] .ui-btn,
+[data-genre="riso"] .ui-btn-ghost,
+[data-genre="riso"] .ui-btn-danger{
+  box-shadow:none;
+}

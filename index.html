@@ -264,7 +264,10 @@ input[type="color"]{width:44px;height:28px;padding:2px;border:1px solid var(--g-
        each other in the strip on purpose, because the pair is the argument. */
     { id:"control-surface", label:"Control surface", src:"skeletons/app-shell.html",
       mode:"mode", genre:"control-surface",
-      blurb:"Genre two — the same instrument in the present tense." }
+      blurb:"Genre two — the same instrument in the present tense." },
+    { id:"riso", label:"Riso", src:"skeletons/portfolio.html",
+      mode:"mode", genre:"riso",
+      blurb:"Genre three — flat inks, no blending. The first imported palette." }
   ];
 
   /* ---- genres -------------------------------------------------------------
@@ -362,10 +365,18 @@ input[type="color"]{width:44px;height:28px;padding:2px;border:1px solid var(--g-
 
       root.setAttribute("data-theme", g.theme);
       root.setAttribute("data-mode",  g.mode);
-      root.setAttribute("data-skin",  g.skin);
       root.setAttribute("data-genre", g.id);
-      [["skin", "../skins/" + g.skin + ".css"],
-       ["genre", "../genres/" + g.id + ".css"]].forEach(function(pair){
+      /* "flat" is a skin — the default role tokens, which live in ui.css
+         because something has to define them before any skin loads. It ships
+         no stylesheet and sets no data-skin, because there is no rule for the
+         attribute to match. A genre whose point of view is "no depth at all"
+         has to be able to name that, and naming it must not 404. */
+      var dressings = [["genre", "../genres/" + g.id + ".css"]];
+      if (g.skin && g.skin !== "flat"){
+        root.setAttribute("data-skin", g.skin);
+        dressings.unshift(["skin", "../skins/" + g.skin + ".css"]);
+      }
+      dressings.forEach(function(pair){
         var l = doc.createElement("link");
         l.rel = "stylesheet";
         l.href = pair[1];

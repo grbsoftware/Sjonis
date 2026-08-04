@@ -99,6 +99,59 @@
         "chosen again. Varying more than one ring would make the pair a",
         "comparison of two looks rather than a demonstration of what a skin is."
       ]
+    },
+    {
+      "id": "riso",
+      "name": "Riso",
+      "family": "print",
+      "skin": "flat",
+      "theme": "vanilla",
+      "mode": "light",
+      "skeletons": ["portfolio", "editorial"],
+      "facets": {
+        "era": "present tense, borrowing a 20th-century process",
+        "industry": "arts, publishing, small press, exhibitions",
+        "mood": "flat, printed, unhurried, physical",
+        "ideology": "few inks, no blending, the work is the content"
+      },
+      "why": [
+        "The first genre that is not a control panel, and the first whose",
+        "palette came from outside the suite — Gary's blue/purple/green,",
+        "bridged to five by Radiance and then measured in by",
+        "tools/import_palette.py.",
+        "",
+        "Gary's own constraint on those colours is what named it. He said the",
+        "gradients should be used very sparingly and not as a rainbow, that",
+        "solid blocks or bars or circles could be two or more of the colours,",
+        "and that the accented text should work like the blue eyebrow in the",
+        "vanilla portfolio. That is not a list of preferences — it is a",
+        "description of screen printing. Riso and silkscreen lay down a few",
+        "SEPARATE inks with no mechanism for blending: flat areas of one ink,",
+        "overlaps where two cross, and type set in whichever ink you chose.",
+        "Every restriction he arrived at by eye is a physical fact of the",
+        "process, which is why the set holds together instead of reading as",
+        "arbitrary taste.",
+        "",
+        "Named for the process and not for the palette, deliberately, so the",
+        "genre survives someone importing different inks. Riso is the grammar;",
+        "blue/purple/green is one edition of it.",
+        "",
+        "flat because depth is the one thing this process cannot produce. This",
+        "is the first genre to name the default skin, and naming it is the",
+        "point: 'no depth at all' is a position, not an omission.",
+        "",
+        "vanilla light because the palette measured that way. import_palette",
+        "reports it clears every light theme untouched and wants L +0.18 to",
+        "+0.23 on every dark one, so light is a measurement here rather than a",
+        "mood. vanilla specifically because it is the theme with the least",
+        "opinion of its own — the inks are the identity and a theme with its",
+        "own accent would be arguing with them.",
+        "",
+        "portfolio and editorial because both are stacks of full-width bands",
+        "with a reading measure inside, which is what a print run of flat",
+        "colour wants. The app shell would fight it: a rail is apparatus, and",
+        "this genre has no apparatus."
+      ]
     }
   ]
 }

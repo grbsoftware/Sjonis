@@ -222,7 +222,24 @@ def emit(colours, fixed, accent_index, genre, theme, mode, blocks):
     lines.append("   Every value clears the bar it is measured at on all four of that")
     lines.append("   theme's grounds. Re-run the tool before changing any of them: these")
     lines.append("   are solved values, not chosen ones, and the solving is the point. */")
-    lines.append('[data-genre="%s"]{' % genre)
+    # SCOPED TO THE MODE, and this is a correctness fix rather than a detail.
+    # Two reasons, and either alone would be enough.
+    #
+    # SPECIFICITY. core/themes.css declares palettes at
+    # [data-theme="x"][data-mode="y"] -- two attribute selectors, (0,2,0). A
+    # bare [data-genre="x"] is (0,1,0) and LOSES to it, silently, so a genre's
+    # imported colours simply do not appear. The first two genres never hit
+    # this because neither overrode a palette token. Adding the mode brings the
+    # genre to (0,2,0), which ties, and genre stylesheets load after themes.css
+    # so order decides it.
+    #
+    # TRUTH. These values were solved against ONE ground pair. The same palette
+    # measured in the other mode produces different numbers -- often very
+    # different; this one wants L +0.18 to +0.23 in dark. A block that applied
+    # in both modes would be claiming a measurement it never made. Scoping it
+    # means the untuned mode falls back to the theme's own validated palette
+    # rather than showing colours nothing has checked.
+    lines.append('[data-genre="%s"][data-mode="%s"]{' % (genre, mode))
     lines.append("  --ui-accent:%s;" % accent)
     lines.append("  --ui-accent-ink:%s;" % accent_ink)
     lines.append("  --ui-accent-hover:%s;" % hexof(mix_oklab(ac, ink, 0.85)))
