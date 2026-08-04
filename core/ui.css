@@ -715,14 +715,26 @@
 /* Identity always needs a name next to it — colour alone is not a label. */
 .ui-key{display:inline-flex;align-items:center;gap:var(--ui-s2);font-size:var(--ui-fs-sm);color:var(--ui-text-dim)}
 
+/* The LABEL is --ui-text, not the series hue. A categorical palette is picked so
+   eight marks stay apart from each other at 3:1 (1.4.11, non-text); printing
+   those same hues as prose asks them for 4.5:1 as well, which no eight-hue set
+   satisfies on a light ground — cat-4 read 1.9:1 against every light theme.
+   The hue stays, carried by the border, the tint and the dot, where 3:1 is the
+   right bar and identity is what it is doing anyway. */
 .ui-tag{
   display:inline-flex;align-items:center;gap:6px;
   padding:2px var(--ui-s2);border-radius:var(--ui-radius-sm);
   font-size:var(--ui-fs-sm);font-weight:var(--ui-weight-medium);
-  color:var(--ui-series,var(--ui-cat-1));
+  color:var(--ui-text);
   border:1px solid color-mix(in oklab,var(--ui-series,var(--ui-cat-1)) 40%,transparent);
   background:color-mix(in oklab,var(--ui-series,var(--ui-cat-1)) 12%,transparent);
   white-space:nowrap;
+}
+/* Carries the hue at mark size, so a tag still reads as its series at a glance. */
+.ui-tag::before{
+  content:"";flex:0 0 auto;width:7px;height:7px;
+  border-radius:var(--ui-radius-pill);
+  background:var(--ui-series,var(--ui-cat-1));
 }
 
 /* -----------------------------------------------------------------------------
