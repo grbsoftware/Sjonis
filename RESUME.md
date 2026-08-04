@@ -751,6 +751,78 @@ Cloned to `C:\Users\grben\code\Radiance` (stable, so launch.json can serve it).
 **Still open on Radiance:** the GitHub repo DESCRIPTION still says "smooth
 HSL-interpolated bridges" — Gary's to change, it is a repo setting.
 
+## DONE 2026-08-04 (session 3) — GENRE THREE, THE PALETTE IMPORTER, credits
+
+**`tools/import_palette.py` — the way IN for outside palettes, which the suite
+had no path for at all.** N hex in; one hue promoted to `--ui-accent` (4.5),
+the rest to the categorical block slots (3.0); every one measured against all
+four grounds of a theme x mode. Misses are fixed by holding OKLCH hue and
+chroma and walking lightness toward the ink. **The accent is chosen by
+measurement**, not position — whichever colour is already closest to 4.5, since
+any other choice moves a colour further than it had to. `--all` shows
+portability. Gary's blue/purple/green clears every LIGHT theme untouched and
+wants L +0.18 to +0.23 on every dark one.
+
+**Position taken: an imported palette becomes a GENRE, not a theme.** A theme
+is chosen by who the interface is for; a palette somebody likes is a point of
+view, and that is the genre ring.
+
+**`genres/riso.css` — genre three.** flat + vanilla light + portfolio/editorial.
+Named for the printing process, not the palette, so it survives different inks.
+Gary's own constraint (no gradients, blocks of 2+ colours, one accented line of
+type) is a *description of screen printing*, which is why it holds together.
+
+23. **A GENRE CANNOT OVERRIDE A THEME'S PALETTE WITH ONE ATTRIBUTE SELECTOR.**
+   `themes.css` declares palettes at `[data-theme][data-mode]` = (0,2,0). A bare
+   `[data-genre="x"]` is (0,1,0) and **loses silently** — riso set every colour
+   and none appeared. Genres one and two never hit it because neither overrode
+   a palette token. Fix: scope genre palette blocks per mode, which ties the
+   specificity AND is more truthful, since the values were solved against one
+   ground pair. `import_palette.py` now emits it that way.
+24. **`color-mix()` output is `color(srgb 0.91 …)` in 0-1, not 0-255.** A probe
+   that assumed rgb() read a pale band as near-black and reported a phantom
+   1.18 failure **three times running**, sending me hunting a bug that did not
+   exist. Any in-browser contrast probe must handle both notations.
+25. **The genre gate could not see inside `@media`.** The old regex refused to
+   start a selector with `@`, skipping the prelude AND everything nested in it;
+   a planted `.ui-card{border:1px solid red}` inside `@media(forced-colors)`
+   passed silently. Replaced with a brace scanner in `check_genres.py`.
+   Verified it now fails on that exact plant.
+
+**`flat` is a skin and a genre may name it.** `check_genres.py` and
+`index.html` treat it as a skin with no stylesheet: no `data-skin` (no rule to
+match) and no link (no file).
+
+**Ornament that survived, for once.** Riso overprints marks with
+`mix-blend-mode:multiply`. The argument: multiply only DARKENS, so on a light
+ground an overlap is at least as dark as the darker ink, and both inks already
+clear 3.0. Holds only because the genre is light-mode and only for non-text
+marks. Measured: worst single ink 4.14, worst of ten pairs 12.01.
+
+**Band tints are 9%, and the number was set by `--ui-text-faint`** — not
+because it passes (2.65) but because vanilla light already ships faint at 2.67
+on `--ui-surface-3`. **The test for a genre ground is not "does it pass" but
+"is it worse than a surface the theme already puts text on".**
+
+**`.ui-credit` — attribution is not decoration.** The artist credit printed in
+`--ui-text-faint` and measured 2.94 (vellum) / 2.66 (riso). It now uses
+`--ui-text-dim`, which clears 4.5 on every surface in every theme. Applied in
+all five skeletons that carry a credit.
+
+### RESOLVED — theme ordering. `tools/check_theme_order.py` is the new gate.
+Gary asked whether consistent theme order "should be a class". **No** — a class
+is for styling; this is single-source-of-truth. The canonical order is read
+from `core/themes.css` itself (first appearance wins), never written down a
+second time, because the second list is the thing that drifts. All 8 choosers
+(6 `<select>`s plus the two JS `THEMES` arrays) already agreed; the gate keeps
+it that way. Verified it FAILS on a deliberately reordered list.
+
+**`specimens/` is deliberately excluded, and Gary agreed.** He first pointed at
+skins-vs-specimens; `directions-01.html` numbers five plates 01-05 in
+presentation order and has no vanilla, because vanilla came later. It is a
+dated deck, not a picker — nothing in it is clickable. Reordering it would
+falsify a record. The rule is about pickers.
+
 ## NEXT — in priority order
 2. **Skin three — the soft one.** Gary's, and he is right: "black can be
    beveled on black, I've done it before with softer shadows and or highlights."
