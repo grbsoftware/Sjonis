@@ -140,13 +140,16 @@ player**, **storefront**.
 Honest gap: `ui.css` has **no grid system, no image handling, no hero primitives**.
 The "just add markup" claim stops being true here. This needs real new CSS.
 
-### 2. Font DB scale
-Gary asked why only 15 fonts, not hundreds. He's right — cataloguing is nearly
-free, bundling is what costs bytes. Those are different questions and I conflated
-them. Plan: pull the real Google Fonts catalogue (~1,900 OFL families), keep
-honest metadata (license, category, variable, weights = real; x-height and
-distinctiveness = my judgment, so compute from font files or leave blank at scale).
-The valuable part is **filtering**, not the list.
+### 2. Font DB scale — DONE
+`tools/fonts.py` + `tokens/fonts.catalogue.json`. 1,942 families, 555 variable,
+828 kB, from the public Google Fonts metadata endpoint (no API key, stdlib only).
+Records only what is checkable; records no x-height or personality rating on
+purpose. `fonts.py find --category mono --variable --max-kb 200`, `fonts.py show
+Inter`. `tokens/fonts.json` stays the curated shortlist with reasoning.
+
+Still open here: nothing blocking. A "try this font" hook in the tuner would be
+the natural next step — pick from the catalogue, inject the `@font-face`, look
+at it — but that needs network at runtime, which the suite currently never does.
 
 ## DONE since last handoff — layer 2
 
@@ -280,12 +283,19 @@ and the hue moved to the border and a dot. That alone cleared 142 failures.
 
 ## NEXT
 
-- The palette decision above.
-- **Editorial/zine** is the one named archetype still unbuilt.
-- A **second page** of the storefront (product detail) would prove the site frame
-  across pages rather than within one, which is the thing Gary actually described.
+- **The palette decision above** — the only thing genuinely blocked on Gary.
 - Layer 3 (React) still unstarted and still worth questioning, because it costs
   the no-build-step property that is currently the suite's best feature.
+- The tuner still only offers the four original layouts; it has not been taught
+  about storefront, product or editorial.
+- Adapters (`adapters/tailwind-v4.css`, `shadcn.css`) predate the site frame,
+  commerce and editorial primitives and only bridge tokens, not classes — check
+  whether that is still the right boundary before extending them.
+
+Five archetype files now exist: app-shell, portfolio, storefront,
+storefront-product, editorial. The layout-monoculture thread is closed — four
+genuinely different skeletons (the fifth is page two of one of them), not four
+pages of one app.
 
 ## Working with Gary — what came up this session
 
