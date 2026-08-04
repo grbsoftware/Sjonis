@@ -22,10 +22,29 @@ git add -A && git commit && git push origin main
 gh api repos/grbsoftware/Sjonis/pages/builds/latest --jq .status   # poll to "built"
 ```
 
-Then verify **on the live site**, not locally — the preview pane cannot open
-`file://` here, and `file://` cannot do the cross-frame work anyway. Screenshots
-often fail ("pane not displayed"); `mcp__Claude_Browser__javascript_tool` against
-the served URL works reliably and is the tool of choice for verification.
+Then verify **on a served URL**, not `file://` — `file://` cannot do the
+cross-frame work. Screenshots often fail ("pane not displayed");
+`mcp__Claude_Browser__javascript_tool` is the tool of choice for verification.
+
+**SERVE IT ON LOCALHOST — do not round-trip through Pages to look at a change.**
+As of 2026-08-04 the Browser pane blocks non-localhost URLs outright ("Link to
+grbsoftware.github.io was blocked. The Browser pane only supports localhost
+URLs"), and each Pages verification costs a commit plus a 45-90s build. So:
+
+```bash
+python -m http.server 8000    # from C:\Users\grben\Design, run in background
+```
+
+then point the pane at `http://localhost:8000/`. Same origin, cross-frame works,
+no cache lag, no commit needed to look at something. Push when it is right, not
+to find out whether it is.
+
+Two escape hatches worth knowing when a tab is already open on a blocked origin:
+a tab loaded BEFORE the block still runs `javascript_tool` fine, and from such a
+tab `fetch()` reaches anything same-origin — which is how the deployed Radiance
+fix was verified (pull the functions out of the served file with a brace matcher
+and run them via `new Function`, so it tests what actually shipped rather than a
+local copy).
 
 If a theme colour changes: `python tools/css_to_tokens.py` then
 `python tools/build_themes.py all` to regenerate `tokens/` and `dist/`, or the
@@ -698,6 +717,54 @@ palettes are gorgeous and are the wrong tool for categorical identity. Where the
 genuinely fit: a **sequential/continuous** ramp (one variable, low to high), a
 theme's accent family, or a decorative gradient. So the right move is probably a
 NEW token family — a sequential ramp — rather than editing `--ui-cat-*`.
+
+### RADIANCE — READ, FIXED, SHIPPED (2026-08-04). Answers the question below.
+
+Gary said to fix it at source. Done, pushed, verified on the live deployed file:
+`grbsoftware/Radiance` commit "Interpolate bridges in OKLab...".
+
+It was **HSL-only**, confirmed: `midpointColor` averaged H (shortest path), S
+and L. The damning number — averaging green `#00FF00` and blue `#0000FF` in HSL
+gives cyan `#00FFFF`, which is **lighter than both colours it sits between**. It
+does not bridge, it spikes. Perceptual lightness: anchors 0.866 and 0.452, so
+the midpoint should read 0.659; HSL put it at 0.905, **off by 0.246**. Evenly
+spaced HSL hues range over **0.41** in perceived lightness.
+
+Now OKLab: same pair gives `#00AABF` at 0.676, **off by 0.017**, and that
+residual is gamut clipping rather than the interpolation. The matrices were
+diffed programmatically against `tools/validate_palette.py` rather than retyped.
+`hexToHsl` stays — the picker still edits in HSL, which is a fine thing to TYPE
+in and not a thing to average in.
+
+Two more things fixed while in there:
+
+- **`+` and `-` ate your anchors.** Both called `generateEvenHues()`, which
+  replaces the whole array, so either button discarded every colour you had
+  picked. You could not build a 4-anchor palette at all — getting there wiped
+  the 3 you had. They extend and trim now.
+- **The service worker is cache-first on a fixed name.** Bumped to
+  `radiance-v2`. Without it every installed copy serves its cached index.html
+  forever and never sees a fix. **Bump `CACHE_NAME` on every Radiance release.**
+
+**ANSWER TO "more strategies or more palettes?" — neither, and that was the
+point.** The bug was one layer below both. Stacking methodologies or presets on
+HSL midpointing multiplies output that is all perceptually lumpy; fixing the
+space improved all 42 existing presets for free. THEN strategies, not palettes,
+because a strategy generates palettes and palettes do not generate strategies —
+and because in HSL "triadic = +120 degrees" is simply a lie, since HSL hue is
+not perceptually even. Those classical methodologies only do what they claim
+once you are in a perceptual space. Fixing the space is what makes them worth
+adding.
+
+**Still open:** the GitHub repo DESCRIPTION still says "smooth HSL-interpolated
+bridges". That is a repo settings change, so it was left for Gary.
+
+**For Sjonis specifically:** Radiance's raw output is not usable as-is —
+`S=100 L=50` hues fail our bars badly (yellow 1.01, green 1.20, blue 1.84
+against a 3.0 bar on the theme grounds; only red clears at 3.49). Anything
+feeding Sjonis has to pass through `validate_palette.py`. That is the
+integration point, and it is the same lesson as every other thread here: the
+palette is not done until it is measured against the ground it lands on.
 
 **Radiance** is Gary's own public repo (`grbsoftware/Radiance`): a PWA that
 generates palettes by HSL interpolation between anchor colours. Not yet read.
