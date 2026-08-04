@@ -42,11 +42,22 @@ def read(path):
 
 
 def attrs(html):
-    """data-* attributes on the first <html> tag."""
-    m = re.search(r"<html\b([^>]*)>", html, re.I)
+    """data-* attributes on the tag that carries data-genre.
+
+    Deliberately NOT "the <html> tag". A genre's four attributes have to sit on
+    the element that carries class="ui", because ui.css's derived block is
+    `:root,.ui` and re-declares the skin's four role tokens at the .ui level --
+    a skin on an ancestor is overwritten and does nothing, silently. So a page
+    may legitimately put them on <body>, and a checker that only reads <html>
+    would pass a page whose skin is inert.
+    """
+    m = re.search(r"<(\w+)\b([^>]*\bdata-genre\s*=[^>]*)>", html, re.I)
     if not m:
         return {}
-    return dict(re.findall(r'(data-[\w-]+)\s*=\s*"([^"]*)"', m.group(1)))
+    found = dict(re.findall(r'(data-[\w-]+)\s*=\s*"([^"]*)"', m.group(2)))
+    found["_tag"] = m.group(1).lower()
+    found["_has_ui"] = bool(re.search(r'class\s*=\s*"[^"]*\bui\b', m.group(2)))
+    return found
 
 
 def main():
@@ -130,6 +141,11 @@ def main():
             if a.get(attr) != g.get(key):
                 fails.append("%s: %s is '%s', manifest says '%s'"
                              % (rel, attr, a.get(attr), g.get(key)))
+        # The four have to be on the .ui element or the skin is inert. See attrs().
+        if not a.get("_has_ui"):
+            fails.append("%s: data-genre is on <%s>, which has no class=\"ui\" -- "
+                         "ui.css re-declares the role tokens at .ui, so the skin "
+                         "will silently do nothing" % (rel, a.get("_tag")))
         for needed in ("core/ui.css", "core/themes.css",
                        "skins/%s.css" % g.get("skin"), "genres/%s.css" % gid):
             if needed not in html:

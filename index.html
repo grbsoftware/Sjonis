@@ -289,7 +289,15 @@ input[type="color"]{width:44px;height:28px;padding:2px;border:1px solid var(--g-
     try {
       var doc = frame.contentWindow && frame.contentWindow.document;
       if (!doc || !doc.documentElement) return;
-      var root = doc.documentElement;
+      /* ON THE .ui ELEMENT, NOT <html> — this is trap 1 wearing a new hat, and
+         it cost a round trip here. ui.css's derived block is `:root,.ui`, so it
+         RE-DECLARES the four role tokens at the .ui level; a skin sitting on an
+         ancestor is overwritten by it and does nothing at all, silently. The
+         skeletons carry data-theme on <html> and class="ui" on <body>, which is
+         fine for a theme (nothing re-declares palette tokens) and fatal for a
+         skin. Measured on the live site before the fix: .ui-card was a 1px
+         near-black box instead of a 2px bevel on the mid face. */
+      var root = doc.querySelector(".ui") || doc.documentElement;
       root.setAttribute("data-theme", g.theme);
       root.setAttribute("data-mode",  g.mode);
       root.setAttribute("data-skin",  g.skin);
