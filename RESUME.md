@@ -161,20 +161,49 @@ was recalling Java-applet physics toys — circles, springs, gravity). Agreed an
 worth designing for: a "toy" genre and a "clinical" genre differ in how things
 *move*, not only how they look. Deferred, but do not architect it out.
 
-## OPEN — the gate gap that skins just opened
+## DONE — the skin gate gap is CLOSED. 3576 pairs, 0 failures.
 
-**`validate_palette.py` cannot see skins.** It models ui.css's pairings against
-theme tokens, so a skin can introduce a contrast failure while every gate reports
-green. This is not hypothetical — building bevel produced exactly that, and it
-was caught only by measuring by hand:
+`validate_palette.py` now checks every skin in `skins/` against every theme x
+mode, and gates on it by default (`--no-skins` for the old behaviour, `--skin
+PATH` for one). Turned on, it found **four** more failures on bevel beyond the
+two that were caught by hand — all twelve theme x mode combinations each:
 
-- `--ui-text-dim` on the bevel face failed 4.5:1 in **all twelve** theme x mode
-  combinations (2.7–3.3), and `.ui-table td` uses it.
-- Both bevel edges were invisible on half the palette each, because an edge
-  mixed toward white off a near-white face has nowhere to go.
+    --ui-accent      1.58 against 3.0    every link on a panel
+    the four states  2.02 against 4.5    every .ui-pill on a card
+    the mark rims    2.53 against 3.0    every .ui-dot on a card
+    --ui-text-dim    2.66 against 4.5    on four faces the old block missed
 
-Close this before a second skin lands. The tool already has the machinery — it
-needs to load a skin file, resolve its role tokens, and re-run the pairings.
+How it works, and the three decisions that matter:
+
+- It **evaluates `var()` and `color-mix()`** rather than reading token text. A
+  skin's surfaces are derived — bevel's face is a mix of the theme's own bg and
+  ink — so there is no literal to look up. This is trap 15 one ring out.
+- It **reads the component -> role map out of `ui.css`** (which selectors paint
+  with `var(--ui-<role>-fill)`, and what `color` they set alongside). Writing
+  that down a second time is how a checker starts describing an older design.
+- It tags `raise` and `float` as **containers** and everything else as chrome.
+  Asserting `--ui-crit` must be readable on a tab is measuring a design nobody
+  wrote — the same mistake `checks()` exists to avoid.
+- An **edge is measured against both of its sides** and keeps the better score.
+  A sunken field's light edge is *meant* to be invisible against its own pale
+  interior and visible against the panel outside it; that is how Win95 drew a
+  list box. Measuring against the fill alone called bevel's inset edge broken
+  at 1.10 when it is doing its job.
+
+**Softening the mid face does not fix any of it.** Swept 60→100% of `--ui-bg`:
+the state hues first clear 4.5 at 100%, where the lit edge is 1.02 and there is
+no bevel left. The mid face and the tuned hues are mutually exclusive, so each
+ink is answered on its own terms — accent and the two lower text levels promoted
+toward the ink, rims via `--ui-mark-rim-mix` (40%), and the four state hues
+**not** promoted at all. Those are the one part of the palette held at
+conventional positions; the pill gets the ground it was tuned against instead
+(`--ui-bg`, a sunken well), which is also the more period-accurate reading of a
+status in this grammar. Verified on the live site by measuring rendered pixels:
+accent 4.44, dim 6.15, pill hue in its well 4.89 — where the same hue on the
+bare face was 2.52.
+
+**Three of the four fixes were the checker being wrong, not bevel.** Each is
+written down at the line where it was wrong. Expect the same ratio on skin two.
 
 ## Architecture (superseded — kept for the reasoning)
 
@@ -242,6 +271,24 @@ two-axis split is right).
    `sed -e "s|../core/ui.css|../core/ui.css?v=$(date +%s)|" … > demo/_x.html`
    (gitignored), and delete it after. It also reports every element as visible,
    so IntersectionObserver work can only be confirmed with a tall spacer probe.
+
+18. **A custom property cannot refer to itself, even to read the value it
+   inherited.** `--ui-accent:color-mix(...var(--ui-accent)...)` on a descendant
+   looks like it should promote the inherited value; it is a cycle and is
+   invalid at computed-value time, so the property falls back to unset. Capture
+   into a second name at the level above first — bevel's `--ui-bevel-accent`
+   does this, and needed to anyway so a filled button inside a card would not
+   inherit the promoted value as its own background.
+19. **An element's surroundings must be resolved OUTSIDE that element's scope.**
+   bevel's filled button redefines `--ui-bevel-face` to the accent for its own
+   edges, so asking the button what `--ui-raise-fill` means answers "the
+   accent" — its own face, not the panel it sits on. The lit edge scored 1.27
+   against itself where against the panel it is 1.73. Same shape as trap 1: the
+   question is always *where* a var() is being substituted.
+20. **`[hidden]`-style zero-specificity reasoning has a colour twin: a token
+   promoted on a face reaches everything inside that face.** Scope a promotion
+   to the surfaces that need it, and check what else consumes the token before
+   moving it — `--ui-accent` is text in two places and a fill in eight.
 
 ## Positions taken
 
@@ -511,14 +558,21 @@ at 25px, no slot overlaps, and all 8 meters render their exact fraction.
 
 ## NEXT — in priority order
 
-1. **Close the skin gate gap** (see "OPEN — the gate gap that skins just
-   opened"). `validate_palette.py` reported green through two real contrast
-   failures while bevel was being built. Do this before a second skin.
-2. **The first genre**, once the gate can see skins. Promote one of the seven
-   audience presets in `references/palettes.md` — they are proto-genres already,
-   with reasoning written down. Authored, never computed.
-3. `marketing` and `media player` — the last two unbuilt skeletons from the
+1. **The first genre.** The gate can see skins now, so this is unblocked and is
+   the top of the list. Promote one of the seven audience presets in
+   `references/palettes.md` — they are proto-genres already, with reasoning
+   written down. Authored, never computed.
+2. `marketing` and `media player` — the last two unbuilt skeletons from the
    original monoculture list. Neither is blocked.
+3. The sequential ramp / Radiance question (see NEW DIRECTION below).
+
+**One visible change to put in front of Gary:** bevel promotes `--ui-accent` on
+its panel faces, and `--ui-accent` is not only link text — ui.css also fills a
+meter, a switch and a focus ring with it. So those read slightly deeper *inside*
+a panel than on the page. The alternative was to promote only the `color` uses
+and pin every fill back, which needs a list of every fill selector and rots the
+first time ui.css adds one. Stated in the CSS as well. If bevel ever reads
+wrong, look here first.
 
 Everything through the skin layer is committed, pushed, Pages-built and
 verified on the live site. Working tree clean as of this handoff.
