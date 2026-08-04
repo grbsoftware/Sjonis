@@ -182,6 +182,23 @@ Georgia). No webfonts, no network requests, no layout shift, nothing to license.
 If you want a distinctive typeface, override `--ui-font` / `--ui-font-display` and
 load the face yourself. Only those two tokens need to change.
 
+`tokens/fonts.json` is a curated shortlist with reasoning attached. The whole
+Google Fonts library is also catalogued, because cataloguing is nearly free and
+bundling is what costs bytes — those are different questions:
+
+```bash
+python tools/fonts.py fetch                                  # 1,942 families
+python tools/fonts.py find --category mono --variable --max-kb 200
+python tools/fonts.py find --category serif --subset greek --sort popularity
+python tools/fonts.py show Inter
+```
+
+It records only what is checkable — weights, variable axes, subsets, file size,
+designers, dates. It records **no** opinion on x-height, personality or
+legibility: those are judgments or measurements of the binary, and a guess
+written into a data file becomes a fact three months later. Set the font in the
+tuner and look at it.
+
 ## Checking a theme
 
 ```bash
