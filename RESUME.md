@@ -823,33 +823,45 @@ presentation order and has no vanilla, because vanilla came later. It is a
 dated deck, not a picker — nothing in it is clickable. Reordering it would
 falsify a record. The rule is about pickers.
 
-### OPEN — halo renders LIGHT in specimens, by default. Gary, 2026-08-04.
+### RESOLVED — it was VELLUM, not halo, and it was never a bug.
 
-`specimens/directions-01.html`: the halo plate always loads day while the other
-four load night. **Not a label mismatch — he checked, and so did I.**
+**The plate loading light was vellum, and it was authored that way**
+(`mode:"light"` in `DIRECTIONS`). halo was correct the whole time — measured on
+the served page, halo's plate resolves `--s-bg:#0F1018` and paints
+`rgb(15,16,24)`. The live file was byte-identical to local, so nothing was
+cached or stale either.
 
-RULED OUT already, do not redo:
-- `data-mode` is touched in exactly 3 places: line 640 sets it from the entry
-  (halo's `DIRECTIONS` entry says `mode:"dark"`), and 664-665 are the per-plate
-  click toggle. The attribute is correct.
-- The light values live at `.plate[data-spec="halo"][data-mode="light"]`
-  (line 234), which should not match. The dark values are the base rule
-  (line 221).
+**The lesson is about the handoff, not the CSS.** A whole session went into
+halo because this file named halo. The symptom as first reported — "one plate
+loads day, the other four load night" — described *four* correctly and misnamed
+the fifth, and every "ruled out" bullet above was ruled out because it was
+true. When a report and the measurements agree perfectly and the bug still
+isn't there, **re-check the subject of the sentence before the mechanism.**
+Confirm WHICH element is misbehaving by measuring all of them, which takes one
+call and would have ended this on the first day.
 
-So the block being selected is right and the plate renders light anyway —
-the cause is in how halo's VALUES resolve, not in which rule wins.
+Gary's actual complaint, once the subject was right: a full-width bone slab in
+a dark deck **is blinding**, and vellum's dark variant already exists.
 
-**Best lead: trap 11 again.** halo is the only one of the five whose panels are
-`rgba(255,255,255,.055/.028)` over `--s-bg:#0F1018`, with `--s-blur:blur(18px)`
-and two radial glows. If those white-alpha panels composite over anything other
-than `--s-bg` — a page-chrome ground, or an ancestor that is not painting
-`--s-bg` at all — the plate goes pale while the four OPAQUE directions look
-correct. That matches the symptom exactly: only halo, and only halo has
-translucent surfaces.
+FIXED: vellum's plate now loads `mode:"dark"`. All five plates land in the same
+luminance band (0.005-0.010, vellum was 0.892), text holds 14.43 on its ground,
+and the bone ground is one click away on the plate's own toggle (14.06, and the
+toggle round-trips cleanly). The specimen's vellum-dark block was diffed against
+`core/themes.css` first and matches it exactly, so the plate is still a faithful
+specimen rather than a hand-tuned lookalike.
 
-START HERE: check what `.plate[data-spec="halo"]` actually paints as its own
-background, and whether any ancestor between it and the page supplies the
-ground the alpha is landing on.
+**Two labels moved with it, and had to.** The `DIRECTIONS` swatches and the
+index chips both showed the *light* palette; leaving them would have recreated
+the exact "the label disagrees with the plate" confusion that started this. The
+thesis was reworded for the same reason — it opened by describing the bone
+ground, which is no longer what loads, so it now names the light mode as
+something to go and look at.
+
+Vellum-light is still the direction's real argument, and the deck is the poorer
+for not opening on it. If it should ever come back, the better fix than flipping
+this attribute again is to let the plates follow the DECK's chrome mode, so a
+light deck shows all five light — which also gives the side-by-side light
+comparison that does not exist today. Not built; not obviously worth it.
 
 ## NEXT — in priority order
 2. **Skin three — the soft one.** Gary's, and he is right: "black can be
