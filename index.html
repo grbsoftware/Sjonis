@@ -1,0 +1,245 @@
+<title>Sjonis — example browser</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<style>
+/* Deliberately NOT themed with --ui-*: the shell must stay visually quiet so the
+   framed page owns the eye, and so switching the frame's theme never restyles the
+   chrome around it. Same reasoning (and same token prefix) as demo/gallery.html. */
+:root{
+  --g-bg:#F7F8F7; --g-raise:#FFFFFF; --g-ink:#16181A; --g-dim:#5E6468;
+  --g-faint:#8C9396; --g-line:#DFE2E1; --g-line2:#C8CDCB; --g-accent:#2F5D50;
+  --g-sans:"Segoe UI Variable Text","Segoe UI",-apple-system,system-ui,sans-serif;
+  --g-mono:"Cascadia Mono",Consolas,ui-monospace,"SF Mono",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{--g-bg:#0E1011;--g-raise:#15181A;--g-ink:#E8EAE9;--g-dim:#8A9296;
+        --g-faint:#666E71;--g-line:#24282A;--g-line2:#333A3C;--g-accent:#7FB8A4}
+}
+:root[data-theme="dark"]{--g-bg:#0E1011;--g-raise:#15181A;--g-ink:#E8EAE9;--g-dim:#8A9296;
+        --g-faint:#666E71;--g-line:#24282A;--g-line2:#333A3C;--g-accent:#7FB8A4}
+:root[data-theme="light"]{--g-bg:#F7F8F7;--g-raise:#FFFFFF;--g-ink:#16181A;--g-dim:#5E6468;
+        --g-faint:#8C9396;--g-line:#DFE2E1;--g-line2:#C8CDCB;--g-accent:#2F5D50}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--g-bg);color:var(--g-ink);font-family:var(--g-sans);
+     font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;
+     display:flex;flex-direction:column;overflow:hidden}
+
+/* ---- masthead ------------------------------------------------------------ */
+.top{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+     padding:14px 20px 12px;border-bottom:1px solid var(--g-line);flex:none}
+.top h1{margin:0;font-size:16px;font-weight:650;letter-spacing:-.01em}
+.top .sub{margin:0;font-size:12.5px;color:var(--g-dim)}
+.top .note{margin:0 0 0 auto;font-size:11.5px;color:var(--g-faint);max-width:44ch;
+           text-align:right;line-height:1.45}
+
+/* ---- nav bar ------------------------------------------------------------- */
+.bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+     padding:10px 20px;border-bottom:1px solid var(--g-line);
+     background:var(--g-raise);flex:none}
+.pager{display:flex;align-items:center;gap:6px}
+.count{font-family:var(--g-mono);font-size:11.5px;color:var(--g-faint);
+       font-variant-numeric:tabular-nums;min-width:4.5ch;text-align:center}
+
+button{font:inherit;cursor:pointer}
+.nav{width:30px;height:30px;display:grid;place-items:center;padding:0;
+     background:var(--g-bg);border:1px solid var(--g-line2);border-radius:7px;
+     color:var(--g-ink);font-size:14px;line-height:1}
+.nav:hover{border-color:var(--g-accent);color:var(--g-accent)}
+.nav:focus-visible{outline:2px solid var(--g-accent);outline-offset:1px}
+
+.tabs{display:flex;gap:3px;background:var(--g-bg);border:1px solid var(--g-line);
+      border-radius:8px;padding:3px;flex-wrap:wrap;min-width:0}
+.tabs button{background:none;border:1px solid transparent;border-radius:5px;
+  padding:5px 11px;font-size:12.5px;font-weight:550;color:var(--g-dim);white-space:nowrap}
+.tabs button:hover{color:var(--g-ink)}
+.tabs button[aria-current="page"]{background:var(--g-raise);border-color:var(--g-line2);color:var(--g-ink)}
+.tabs button:focus-visible{outline:2px solid var(--g-accent);outline-offset:1px}
+
+.widths{display:flex;gap:3px;margin-left:auto;background:var(--g-bg);
+        border:1px solid var(--g-line);border-radius:8px;padding:3px}
+.widths button{background:none;border:1px solid transparent;border-radius:5px;
+  padding:5px 9px;font-family:var(--g-mono);font-size:11.5px;color:var(--g-dim)}
+.widths button[aria-pressed="true"]{background:var(--g-raise);border-color:var(--g-line2);color:var(--g-ink)}
+.widths button:focus-visible{outline:2px solid var(--g-accent);outline-offset:1px}
+
+/* ---- stage --------------------------------------------------------------- */
+.stage{flex:1;min-height:0;display:flex;flex-direction:column;padding:14px 20px 18px}
+.frame{flex:1;min-height:0;width:100%;margin:0 auto;
+       display:flex;flex-direction:column;
+       border:1px solid var(--g-line);border-radius:11px;overflow:hidden;
+       background:var(--g-raise);box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.frame-bar{display:flex;align-items:center;gap:9px;padding:8px 13px;flex:none;
+  background:var(--g-raise);border-bottom:1px solid var(--g-line)}
+.dot{width:9px;height:9px;border-radius:99px;background:var(--g-line2);flex:none}
+.path{font-family:var(--g-mono);font-size:11.5px;color:var(--g-faint);
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.blurb{font-size:12px;color:var(--g-dim);margin-left:10px;
+       white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.out{margin-left:auto;flex:none;font-size:11.5px;color:var(--g-accent);
+     text-decoration:none;border-bottom:1px solid transparent;white-space:nowrap}
+.out:hover{border-bottom-color:currentColor}
+
+iframe{flex:1;min-height:0;width:100%;border:0;background:var(--g-raise);display:block}
+
+/* Escape hatch: some browsers refuse to frame a local file. The frame sits on
+   top of this, so if it never paints the reader still has a way through. */
+.fallback{position:absolute;inset:auto;display:none}
+
+@media (max-width:720px){
+  .top .note{display:none}
+  .widths{display:none}
+}
+</style>
+
+<header class="top">
+  <h1>Sjonis</h1>
+  <p class="sub">example browser</p>
+  <p class="note">Five standalone pages, framed side by side. Nobody would ship a
+    frame like this — but as sections of one site they'd sit together, and that
+    site-level shell is the piece the suite doesn't have yet.</p>
+</header>
+
+<nav class="bar">
+  <div class="pager">
+    <button class="nav" id="prev" type="button" title="Previous (←)" aria-label="Previous example">&#8592;</button>
+    <span class="count" id="count">1/5</span>
+    <button class="nav" id="next" type="button" title="Next (→)" aria-label="Next example">&#8594;</button>
+  </div>
+  <div class="tabs" id="tabs"></div>
+  <div class="widths" id="widths"></div>
+</nav>
+
+<main class="stage">
+  <div class="frame">
+    <div class="frame-bar">
+      <span class="dot"></span>
+      <span class="path" id="path">—</span>
+      <span class="blurb" id="blurb"></span>
+      <a class="out" id="out" href="#" target="_blank" rel="noopener">open on its own &#8599;</a>
+    </div>
+    <iframe id="stage" title="Example preview"></iframe>
+  </div>
+</main>
+
+<script>
+(function () {
+  /* Order: what you'd build first, then the tools, then the archive. */
+  var EXAMPLES = [
+    { id:"app-shell",  label:"App shell",  src:"archetypes/app-shell.html",
+      blurb:"The admin archetype — rail, toolbar, data table." },
+    { id:"portfolio",  label:"Portfolio",  src:"archetypes/portfolio.html",
+      blurb:"The anti-admin — bands, justified gallery, marquee." },
+    { id:"tuner",      label:"Tuner",      src:"demo/gallery.html",
+      blurb:"Layout × theme × density/radius/accent, with CSS export." },
+    { id:"behaviour",  label:"Behaviour",  src:"demo/behaviour.html",
+      blurb:"Layer 2 — every JS behaviour, live, in all six themes." },
+    { id:"specimens",  label:"Specimens",  src:"specimens/directions-01.html",
+      blurb:"Five directions for one interface (iteration 01)." }
+  ];
+
+  var WIDTHS = [
+    { id:"fit",     label:"fit",  px:null },
+    { id:"1280",    label:"1280", px:1280 },
+    { id:"768",     label:"768",  px:768  },
+    { id:"375",     label:"375",  px:375  }
+  ];
+
+  var frame = document.getElementById("stage");
+  var box   = document.querySelector(".frame");
+  var path  = document.getElementById("path");
+  var blurb = document.getElementById("blurb");
+  var out   = document.getElementById("out");
+  var count = document.getElementById("count");
+  var tabs  = document.getElementById("tabs");
+  var wbar  = document.getElementById("widths");
+
+  var i = 0;             /* current example */
+  var w = "fit";         /* current width preset */
+
+  function indexOfId(id){
+    for (var n=0;n<EXAMPLES.length;n++) if (EXAMPLES[n].id === id) return n;
+    return -1;
+  }
+
+  /* The hash IS the state, so the browser's own back/forward buttons walk the
+     history of what you looked at. go() only writes the hash; hashchange does
+     the work — one code path, and a pasted #portfolio link lands correctly. */
+  function go(n, replace){
+    n = (n + EXAMPLES.length) % EXAMPLES.length;
+    var h = "#" + EXAMPLES[n].id;
+    if (location.hash === h){ show(n); return; }
+    if (replace && location.replace) location.replace(h);
+    else location.hash = h;
+  }
+
+  function show(n){
+    i = n;
+    var ex = EXAMPLES[n];
+    if (frame.getAttribute("src") !== ex.src) frame.setAttribute("src", ex.src);
+    path.textContent  = ex.src;
+    blurb.textContent = ex.blurb;
+    out.setAttribute("href", ex.src);
+    count.textContent = (n+1) + "/" + EXAMPLES.length;
+    document.title = "Sjonis — " + ex.label;
+    paintTabs();
+  }
+
+  function paintTabs(){
+    tabs.innerHTML = "";
+    EXAMPLES.forEach(function(ex, n){
+      var b = document.createElement("button");
+      b.type = "button";
+      b.textContent = ex.label;
+      if (n === i) b.setAttribute("aria-current", "page");
+      b.addEventListener("click", function(){ go(n); });
+      tabs.appendChild(b);
+    });
+  }
+
+  function paintWidths(){
+    wbar.innerHTML = "";
+    WIDTHS.forEach(function(def){
+      var b = document.createElement("button");
+      b.type = "button";
+      b.textContent = def.label;
+      b.setAttribute("aria-pressed", String(def.id === w));
+      b.addEventListener("click", function(){ w = def.id; applyWidth(); paintWidths(); });
+      wbar.appendChild(b);
+    });
+  }
+
+  function applyWidth(){
+    var def = WIDTHS.filter(function(d){ return d.id === w; })[0];
+    box.style.maxWidth = def.px ? def.px + "px" : "";
+  }
+
+  function fromHash(){
+    var n = indexOfId((location.hash || "").replace("#",""));
+    if (n < 0){ go(0, true); return; }
+    show(n);
+  }
+
+  document.getElementById("prev").addEventListener("click", function(){ go(i-1); });
+  document.getElementById("next").addEventListener("click", function(){ go(i+1); });
+
+  /* Arrows only work while focus is in the shell — once you click into the frame
+     the page inside owns the keyboard, and cross-origin file:// means we can't
+     (and shouldn't) reach in to listen. */
+  document.addEventListener("keydown", function(e){
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    var t = e.target, tag = t && t.tagName;
+    if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" ||
+        (t && t.isContentEditable)) return;
+    if (e.key === "ArrowLeft"){ e.preventDefault(); go(i-1); }
+    else if (e.key === "ArrowRight"){ e.preventDefault(); go(i+1); }
+  });
+
+  window.addEventListener("hashchange", fromHash);
+
+  paintWidths();
+  applyWidth();
+  fromHash();
+})();
+</script>
