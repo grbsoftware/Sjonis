@@ -5,20 +5,23 @@
 /* Deliberately NOT themed with --ui-*: the shell must stay visually quiet so the
    framed page owns the eye, and so switching the frame's theme never restyles the
    chrome around it. Same reasoning (and same token prefix) as demo/gallery.html. */
+/* Dark is the default here, not a preference-follow: the shell is a frame around
+   someone else's page, and a dark surround stops it competing with whatever is
+   inside. data-theme on <html> always wins, and the inline script below sets it
+   before first paint so there is no flash. */
 :root{
-  --g-bg:#F7F8F7; --g-raise:#FFFFFF; --g-ink:#16181A; --g-dim:#5E6468;
-  --g-faint:#8C9396; --g-line:#DFE2E1; --g-line2:#C8CDCB; --g-accent:#2F5D50;
+  --g-bg:#0E1011; --g-raise:#15181A; --g-ink:#E8EAE9; --g-dim:#8A9296;
+  --g-faint:#666E71; --g-line:#24282A; --g-line2:#333A3C; --g-accent:#7FB8A4;
   --g-sans:"Segoe UI Variable Text","Segoe UI",-apple-system,system-ui,sans-serif;
   --g-mono:"Cascadia Mono",Consolas,ui-monospace,"SF Mono",monospace;
+  color-scheme:dark;
 }
-@media (prefers-color-scheme:dark){
-  :root{--g-bg:#0E1011;--g-raise:#15181A;--g-ink:#E8EAE9;--g-dim:#8A9296;
-        --g-faint:#666E71;--g-line:#24282A;--g-line2:#333A3C;--g-accent:#7FB8A4}
-}
-:root[data-theme="dark"]{--g-bg:#0E1011;--g-raise:#15181A;--g-ink:#E8EAE9;--g-dim:#8A9296;
-        --g-faint:#666E71;--g-line:#24282A;--g-line2:#333A3C;--g-accent:#7FB8A4}
 :root[data-theme="light"]{--g-bg:#F7F8F7;--g-raise:#FFFFFF;--g-ink:#16181A;--g-dim:#5E6468;
-        --g-faint:#8C9396;--g-line:#DFE2E1;--g-line2:#C8CDCB;--g-accent:#2F5D50}
+        --g-faint:#8C9396;--g-line:#DFE2E1;--g-line2:#C8CDCB;--g-accent:#2F5D50;
+        color-scheme:light}
+:root[data-theme="dark"]{--g-bg:#0E1011;--g-raise:#15181A;--g-ink:#E8EAE9;--g-dim:#8A9296;
+        --g-faint:#666E71;--g-line:#24282A;--g-line2:#333A3C;--g-accent:#7FB8A4;
+        color-scheme:dark}
 
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -87,11 +90,35 @@ iframe{flex:1;min-height:0;width:100%;border:0;background:var(--g-raise);display
    top of this, so if it never paints the reader still has a way through. */
 .fallback{position:absolute;inset:auto;display:none}
 
+/* ---- light/dark toggle ---- */
+.mode{flex:none;width:30px;height:30px;display:grid;place-items:center;padding:0;
+      background:var(--g-bg);border:1px solid var(--g-line2);border-radius:7px;
+      color:var(--g-dim);line-height:1}
+.mode:hover{border-color:var(--g-accent);color:var(--g-accent)}
+.mode:focus-visible{outline:2px solid var(--g-accent);outline-offset:1px}
+.mode svg{width:15px;height:15px;display:block;fill:none;stroke:currentColor;
+          stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.mode .i-sun{display:none}
+:root[data-theme="light"] .mode .i-sun{display:block}
+:root[data-theme="light"] .mode .i-moon{display:none}
+
 @media (max-width:720px){
   .top .note{display:none}
   .widths{display:none}
+  .mode{margin-left:auto}   /* .widths carried the auto margin; it's gone here */
 }
 </style>
+
+<script>
+/* Runs before any content paints, so a stored "light" never flashes dark first.
+   Deliberately not in the main script block at the bottom — by then the page has
+   already been painted once. */
+(function(){
+  var m;
+  try { m = localStorage.getItem("sjonis-shell-mode"); } catch (e) {}
+  document.documentElement.setAttribute("data-theme", m === "light" ? "light" : "dark");
+})();
+</script>
 
 <header class="top">
   <h1>Sjonis</h1>
@@ -109,6 +136,17 @@ iframe{flex:1;min-height:0;width:100%;border:0;background:var(--g-raise);display
   </div>
   <div class="tabs" id="tabs"></div>
   <div class="widths" id="widths"></div>
+  <button class="mode" id="mode" type="button" aria-pressed="false"
+          title="Switch to light (D)" aria-label="Switch to light">
+    <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/>
+    </svg>
+    <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="4.2"/>
+      <path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2
+               M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/>
+    </svg>
+  </button>
 </nav>
 
 <main class="stage">
@@ -221,6 +259,29 @@ iframe{flex:1;min-height:0;width:100%;border:0;background:var(--g-raise);display
     show(n);
   }
 
+  /* ---- shell light/dark ---------------------------------------------------
+     Only the chrome. The framed page keeps whatever theme it was designed in —
+     that pairing is the point of the archetype, and overriding it would hide it. */
+  var modeBtn = document.getElementById("mode");
+
+  function paintMode(){
+    var light = document.documentElement.getAttribute("data-theme") === "light";
+    var to = light ? "dark" : "light";
+    modeBtn.setAttribute("aria-pressed", String(light));
+    modeBtn.setAttribute("title", "Switch to " + to + " (D)");
+    modeBtn.setAttribute("aria-label", "Switch to " + to);
+  }
+
+  function toggleMode(){
+    var next = document.documentElement.getAttribute("data-theme") === "light"
+             ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", next);
+    try { localStorage.setItem("sjonis-shell-mode", next); } catch (e) {}
+    paintMode();
+  }
+
+  modeBtn.addEventListener("click", toggleMode);
+
   document.getElementById("prev").addEventListener("click", function(){ go(i-1); });
   document.getElementById("next").addEventListener("click", function(){ go(i+1); });
 
@@ -234,10 +295,12 @@ iframe{flex:1;min-height:0;width:100%;border:0;background:var(--g-raise);display
         (t && t.isContentEditable)) return;
     if (e.key === "ArrowLeft"){ e.preventDefault(); go(i-1); }
     else if (e.key === "ArrowRight"){ e.preventDefault(); go(i+1); }
+    else if (e.key === "d" || e.key === "D"){ e.preventDefault(); toggleMode(); }
   });
 
   window.addEventListener("hashchange", fromHash);
 
+  paintMode();
   paintWidths();
   applyWidth();
   fromHash();
