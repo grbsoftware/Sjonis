@@ -130,7 +130,9 @@ and reaching for the shell by default is what produces six sites that look ident
 | `.ui-bleed` | Escapes the measure edge-to-edge without leaving the flow |
 | `.ui-cols` | Auto-fit grid — column count follows width, no breakpoints. `--ui-tile` sets the minimum |
 | `.ui-wall` | Column flow for unequal heights. Reads DOWN each column, so never where sequence carries meaning |
-| `.ui-reel` | Horizontal scroll with snap |
+| `.ui-justified` | Gallery rows flush to both edges, images keep their own proportions, nothing cropped. Set `--ui-ratio` per item and `--ui-row-h` on the container; end with `<i class="ui-fill">` or the last row stretches |
+| `.ui-reel` | Horizontal scroll with snap, scrollbar visible on purpose |
+| `.ui-marquee` | Reel that moves on its own. `data-ui-marquee="54"` = seconds per cycle; ui.js clones the track for a seamless loop. Pauses on hover, focus and click (10s), and does not move under reduced-motion |
 | `.ui-frame` | Aspect-ratio box that reserves space before the image exists; `--ui-ratio` or `.ui-ratio-*` |
 | `.ui-figure` / `.ui-caption` / `.ui-frame-label` | Captions beside or over the image |
 | `.ui-display` / `.ui-lead` / `.ui-prose` / `.ui-quote` | Hero and long-form type. `--ui-display-mult` scales the hero |

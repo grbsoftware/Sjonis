@@ -527,6 +527,77 @@
   }
 
   /* ---------------------------------------------------------------------------
+     MARQUEE —  <div class="ui-marquee" data-ui-marquee="60">
+                  <div class="ui-marquee-track"> …items… </div>
+
+     The attribute value is the seconds for one full cycle. The track's items are
+     cloned once, here rather than in the markup, so the author writes each item
+     exactly once and the seamless loop is not their problem. Clones are
+     aria-hidden and taken out of the tab order — a screen reader hearing every
+     caption twice is the usual cost of this effect, and it is avoidable.
+
+     Click pauses for a while and then resumes, which is what you want when
+     something catches your eye mid-scroll. Hover and focus pause too, but in
+     CSS, because those must not fight the timer.
+     ------------------------------------------------------------------------ */
+  var MARQUEE_RESUME = 10000;
+
+  function wireMarquee(root) {
+    $$('[data-ui-marquee]', root).forEach(function (box) {
+      if (!claim(box, 'Marq')) return;
+      var track = $('.ui-marquee-track', box);
+      if (!track) return;
+
+      var secs = parseFloat(box.getAttribute('data-ui-marquee')) || 60;
+      box.style.setProperty('--ui-marquee-dur', secs + 's');
+
+      /* Duplicate once. Any element that could take focus or be read is muted
+         in the copy, so the clone is decoration only. */
+      var copy = document.createDocumentFragment();
+      $$(':scope > *', track).forEach(function (item) {
+        var c = item.cloneNode(true);
+        c.setAttribute('aria-hidden', 'true');
+        $$('a,button,input,[tabindex]', c).concat(c.matches('a,button') ? [c] : [])
+          .forEach(function (f) { f.tabIndex = -1; });
+        copy.appendChild(c);
+      });
+      track.appendChild(copy);
+
+      /* Lazy frames inside the marquee never intersect predictably while they
+         are translating, so load them up front — there are only a handful. */
+      $$('.ui-frame[data-ui-lazy]', track).forEach(loadLazy);
+
+      var timer = null;
+      function resumeLater() {
+        clearTimeout(timer);
+        timer = setTimeout(function () { box.classList.remove('is-paused'); }, MARQUEE_RESUME);
+      }
+      on(box, 'click', function (e) {
+        /* A click on a real link should follow it, not just pause. */
+        if (e.target.closest('a[href]:not([href="#"])')) return;
+        e.preventDefault();
+        if (box.classList.contains('is-paused')) {
+          clearTimeout(timer);
+          box.classList.remove('is-paused');
+        } else {
+          box.classList.add('is-paused');
+          resumeLater();
+        }
+      });
+
+      /* An off-screen tab animating forever is a laptop-battery bug. */
+      on(document, 'visibilitychange', function () {
+        track.style.animationPlayState = document.hidden ? 'paused' : '';
+      });
+    });
+  }
+
+  UI.pauseMarquee = function (sel) {
+    var el = $(sel || '[data-ui-marquee]');
+    if (el) el.classList.add('is-paused');
+  };
+
+  /* ---------------------------------------------------------------------------
      LAZY IMAGES —  <div class="ui-frame" data-ui-lazy><img data-src="…" alt="…">
 
      The download deferral itself is free: loading="lazy" is native, and this
@@ -936,6 +1007,7 @@
     wireSort(root);
     wireFilter(root);
     wireCopy(root);
+    wireMarquee(root);      /* before wireLazy: it creates frames to wire */
     wireLazy(root);
     wireForms(root);
     wirePalette(root);

@@ -376,6 +376,81 @@
 .ui-wall{columns:var(--ui-tile,260px);column-gap:var(--ui-s4)}
 .ui-wall > *{break-inside:avoid;margin-bottom:var(--ui-s4)}
 
+/* -----------------------------------------------------------------------------
+   JUSTIFIED ROWS
+   The gallery layout: every row is flush to both edges, every image keeps its
+   own proportions, and no image is cropped to a common shape. Rows fill.
+
+   The mechanism is one line of arithmetic rather than a library. Give each item
+   a flex-grow AND a flex-basis proportional to its aspect ratio, and the widths
+   inside any row come out proportional to their ratios — which is exactly the
+   condition for every item in that row to land on the same height. --ui-row-h
+   is the target height; actual height floats a little as the row justifies.
+
+   Plain flexbox, calc and aspect-ratio: works in every current browser, and
+   degrades to a sane wrap in old ones.
+
+   The last row is the classic failure — with nothing to fill against, two
+   leftover images stretch to half the page each. .ui-fill is an invisible
+   zero-height item with a huge grow factor: it can only ever land in the last
+   row, where it swallows the slack so the real images keep their size.
+   -------------------------------------------------------------------------- */
+.ui-justified{display:flex;flex-wrap:wrap;gap:var(--ui-s3);min-width:0}
+.ui-justified > *{
+  flex-grow:calc(var(--ui-ratio,4/3));
+  flex-shrink:1;
+  flex-basis:calc(var(--ui-ratio,4/3) * var(--ui-row-h,220px));
+  min-width:0;
+}
+.ui-justified > .ui-fill{
+  flex:9999 1 0;height:0;min-height:0;padding:0;margin:0;border:0;
+  pointer-events:none;
+}
+/* Below this a justified row is one image wide anyway, and the arithmetic just
+   makes the last one enormous. */
+@media (max-width:560px){
+  .ui-justified > *{flex-basis:100%}
+  .ui-justified > .ui-fill{display:none}
+}
+
+/* -----------------------------------------------------------------------------
+   MARQUEE — a reel that moves on its own.
+
+   Deliberately NOT a scroll container: the track is duplicated and translated,
+   so the loop is seamless rather than snapping back at the end, and there is no
+   scrollbar to sit under one band and not the next.
+
+   Auto-moving content is a genuine accessibility problem, so three things are
+   non-negotiable here and all are handled: it pauses on hover and on focus, it
+   pauses on click (WCAG 2.2.2 wants a pause mechanism for anything that moves
+   for more than five seconds), and under prefers-reduced-motion it does not
+   move at all — it becomes an ordinary scrollable reel, because content the
+   reader cannot reach is worse than content that does not animate.
+   -------------------------------------------------------------------------- */
+.ui-marquee{overflow:hidden;position:relative;min-width:0}
+.ui-marquee-track{
+  display:flex;gap:var(--ui-s4);width:max-content;
+  animation:ui-marquee var(--ui-marquee-dur,60s) linear infinite;
+  will-change:transform;
+}
+/* The track holds two identical copies, so travelling exactly half its width
+   plus half a gap lands on the seam — invisible, and the cycle repeats. */
+@keyframes ui-marquee{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(calc(-50% - (var(--ui-s4) / 2)),0,0)}
+}
+.ui-marquee-reverse .ui-marquee-track{animation-direction:reverse}
+.ui-marquee.is-paused .ui-marquee-track{animation-play-state:paused}
+.ui-marquee:hover .ui-marquee-track,
+.ui-marquee:focus-within .ui-marquee-track{animation-play-state:paused}
+.ui-marquee > .ui-marquee-track > *{flex:0 0 auto;width:var(--ui-tile,300px)}
+
+@media (prefers-reduced-motion:reduce){
+  .ui-marquee{overflow-x:auto;scroll-snap-type:x mandatory}
+  .ui-marquee-track{animation:none;width:auto}
+  .ui-marquee-track > *{scroll-snap-align:start}
+}
+
 /* Horizontal reel. Scroll-snap so it lands on a tile; the scrollbar is left
    visible because a hidden one hides the fact that there is more. */
 .ui-reel{

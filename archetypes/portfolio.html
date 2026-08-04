@@ -93,62 +93,70 @@
     <div class="ui-measure">
       <div class="ui-toolbar" style="margin-bottom:var(--ui-s4)">
         <h2 class="ui-title">In progress</h2>
-        <span class="ui-help">scroll →</span>
+        <span class="ui-help">moves on its own · click to hold</span>
       </div>
-      <div class="ui-reel">
+
+      <!-- Auto-scrolling. ui.js clones the track once so the loop is seamless,
+           and the clones are hidden from screen readers. Hover, focus or click
+           pauses it; a click releases after ten seconds. Under
+           prefers-reduced-motion it stops moving and becomes a normal reel. -->
+      <div class="ui-marquee" data-ui-marquee="54" style="--ui-tile:260px">
+      <div class="ui-marquee-track">
         <figure class="ui-figure">
-          <div class="ui-frame ui-ratio-portrait ui-c1">
-            <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-label="Lattice study">
-              <rect width="300" height="400" fill="var(--ui-surface-2)"/>
-              <g stroke="var(--ui-series)" fill="none">
-                <path d="M40 40 h220 v320 h-220 z"/><path d="M70 70 h160 v260 h-160 z"/>
-                <path d="M100 100 h100 v200 h-100 z"/><path d="M130 130 h40 v140 h-40 z"/>
-              </g>
-            </svg>
+          <div class="ui-frame ui-ratio-portrait" data-ui-lazy>
+            <img data-src="../demo/img/lattice.svg" alt="Lattice">
           </div>
           <figcaption class="ui-caption"><b>Lattice</b><span>screenprint</span></figcaption>
         </figure>
         <figure class="ui-figure">
-          <div class="ui-frame ui-ratio-portrait ui-c2">
-            <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-label="Sediment study">
-              <rect width="300" height="400" fill="var(--ui-surface-2)"/>
-              <g fill="var(--ui-series)">
-                <rect y="300" width="300" height="100" opacity=".9"/>
-                <rect y="240" width="300" height="60" opacity=".55"/>
-                <rect y="200" width="300" height="40" opacity=".3"/>
-                <rect y="176" width="300" height="24" opacity=".16"/>
-              </g>
-            </svg>
+          <div class="ui-frame ui-ratio-portrait" data-ui-lazy>
+            <img data-src="../demo/img/sediment.svg" alt="Sediment">
           </div>
           <figcaption class="ui-caption"><b>Sediment</b><span>risograph, 4 layers</span></figcaption>
         </figure>
         <figure class="ui-figure">
-          <div class="ui-frame ui-ratio-portrait ui-c3">
-            <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-label="Orbit study">
-              <rect width="300" height="400" fill="var(--ui-surface-2)"/>
-              <g stroke="var(--ui-series)" fill="none">
-                <circle cx="150" cy="200" r="120"/><circle cx="150" cy="200" r="86"/>
-                <circle cx="150" cy="200" r="52"/>
-              </g>
-              <circle cx="150" cy="80" r="9" fill="var(--ui-series)"/>
-              <circle cx="236" cy="200" r="6" fill="var(--ui-series)"/>
-            </svg>
+          <div class="ui-frame ui-ratio-portrait" data-ui-lazy>
+            <img data-src="../demo/img/orbit.svg" alt="Orbit">
           </div>
           <figcaption class="ui-caption"><b>Orbit</b><span>generative, ongoing</span></figcaption>
         </figure>
         <figure class="ui-figure">
-          <div class="ui-frame ui-ratio-portrait ui-c5">
-            <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-label="Interference study">
-              <rect width="300" height="400" fill="var(--ui-surface-2)"/>
-              <g stroke="var(--ui-series)" fill="none" opacity=".85">
-                <path d="M0 120 q75 -60 150 0 t150 0"/><path d="M0 170 q75 -60 150 0 t150 0"/>
-                <path d="M0 220 q75 -60 150 0 t150 0"/><path d="M0 270 q75 -60 150 0 t150 0"/>
-                <path d="M0 320 q75 -60 150 0 t150 0"/>
-              </g>
-            </svg>
+          <div class="ui-frame ui-ratio-portrait" data-ui-lazy>
+            <img data-src="../demo/img/weave.svg" alt="Weave">
           </div>
-          <figcaption class="ui-caption"><b>Interference</b><span>plotter test</span></figcaption>
+          <figcaption class="ui-caption"><b>Weave</b><span>plotter test</span></figcaption>
         </figure>
+        <figure class="ui-figure">
+          <div class="ui-frame ui-ratio-portrait" data-ui-lazy>
+            <img data-src="../demo/img/arc.svg" alt="Arc">
+          </div>
+          <figcaption class="ui-caption"><b>Arc</b><span>ink on paper</span></figcaption>
+        </figure>
+        <figure class="ui-figure">
+          <div class="ui-frame ui-ratio-portrait" data-ui-lazy>
+            <img data-src="../demo/img/drift.svg" alt="Drift">
+          </div>
+          <figcaption class="ui-caption"><b>Drift</b><span>study, unfinished</span></figcaption>
+        </figure>
+        <figure class="ui-figure">
+          <div class="ui-frame ui-ratio-portrait" data-ui-lazy>
+            <img data-src="../demo/img/stack.svg" alt="Stack">
+          </div>
+          <figcaption class="ui-caption"><b>Stack</b><span>screenprint proof</span></figcaption>
+        </figure>
+        <figure class="ui-figure">
+          <div class="ui-frame ui-ratio-portrait" data-ui-lazy>
+            <img data-src="../demo/img/signal.svg" alt="Signal">
+          </div>
+          <figcaption class="ui-caption"><b>Signal</b><span>plotter, one pass</span></figcaption>
+        </figure>
+        <figure class="ui-figure">
+          <div class="ui-frame ui-ratio-portrait" data-ui-lazy>
+            <img data-src="../demo/img/interval.svg" alt="Interval II">
+          </div>
+          <figcaption class="ui-caption"><b>Interval II</b><span>revision</span></figcaption>
+        </figure>
+      </div>
       </div>
     </div>
   </section>
@@ -163,36 +171,48 @@
            and ui.js fades each one in — except cached ones, which appear at
            once. Swap data-src for a plain src to keep the images working with
            JavaScript disabled; native loading="lazy" still applies. -->
-      <div class="ui-wall">
-        <a class="ui-frame ui-ratio-square" data-ui-lazy href="#">
+      <div class="ui-justified" style="--ui-row-h:200px">
+        <a class="ui-frame" data-ui-lazy href="#" style="--ui-ratio:1">
           <img data-src="../demo/img/grid.svg" alt="Grid Study 01 — four squares at descending opacity">
           <span class="ui-frame-label"><b>Grid Study 01</b><span>2025</span></span>
         </a>
-
-        <a class="ui-frame ui-ratio-portrait" data-ui-lazy href="#">
+        <a class="ui-frame" data-ui-lazy href="#" style="--ui-ratio:3/4">
           <img data-src="../demo/img/column.svg" alt="Column — three vertical bars of unequal height">
           <span class="ui-frame-label"><b>Column</b><span>2025</span></span>
         </a>
-
-        <a class="ui-frame ui-ratio-wide" data-ui-lazy href="#">
+        <a class="ui-frame" data-ui-lazy href="#" style="--ui-ratio:16/9">
           <img data-src="../demo/img/horizon.svg" alt="Horizon — a disc half sunk below a rule">
           <span class="ui-frame-label"><b>Horizon</b><span>2024</span></span>
         </a>
-
-        <a class="ui-frame ui-ratio-square" data-ui-lazy href="#">
+        <a class="ui-frame" data-ui-lazy href="#" style="--ui-ratio:1">
           <img data-src="../demo/img/interval.svg" alt="Interval — five rules of differing length">
           <span class="ui-frame-label"><b>Interval</b><span>2024</span></span>
         </a>
-
-        <a class="ui-frame ui-ratio-portrait" data-ui-lazy href="#">
+        <a class="ui-frame" data-ui-lazy href="#" style="--ui-ratio:3/4">
           <img data-src="../demo/img/fold.svg" alt="Fold — nested triangles">
           <span class="ui-frame-label"><b>Fold</b><span>2023</span></span>
         </a>
-
-        <a class="ui-frame ui-ratio-square" data-ui-lazy href="#">
+        <a class="ui-frame" data-ui-lazy href="#" style="--ui-ratio:1">
           <img data-src="../demo/img/rotation.svg" alt="Rotation — a square rotated three times about its centre">
           <span class="ui-frame-label"><b>Rotation</b><span>2023</span></span>
         </a>
+        <a class="ui-frame" data-ui-lazy href="#" style="--ui-ratio:3/4">
+          <img data-src="../demo/img/weave.svg" alt="Weave — two crossed bands">
+          <span class="ui-frame-label"><b>Weave</b><span>2023</span></span>
+        </a>
+        <a class="ui-frame" data-ui-lazy href="#" style="--ui-ratio:3/4">
+          <img data-src="../demo/img/stack.svg" alt="Stack — five bars narrowing downward">
+          <span class="ui-frame-label"><b>Stack</b><span>2022</span></span>
+        </a>
+        <a class="ui-frame" data-ui-lazy href="#" style="--ui-ratio:16/9">
+          <img data-src="../demo/img/signal.svg" alt="Signal — a single traced waveform">
+          <span class="ui-frame-label"><b>Signal</b><span>2022</span></span>
+        </a>
+        <a class="ui-frame" data-ui-lazy href="#" style="--ui-ratio:3/4">
+          <img data-src="../demo/img/drift.svg" alt="Drift — four circles falling away">
+          <span class="ui-frame-label"><b>Drift</b><span>2022</span></span>
+        </a>
+        <i class="ui-fill"></i>
       </div>
 
       <p class="ui-help" style="margin-top:var(--ui-s5)">
