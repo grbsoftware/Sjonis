@@ -22,9 +22,11 @@ forced a Claude Desktop reinstall. Use WebSearch/WebFetch.
 
 ```
 core/ui.css          structure + components, zero colours
-core/themes.css      6 themes x light/dark
+core/themes.css      6 themes x light/dark (589 tokens, 18 blocks)
 core/ui.js           LAYER 2 — behaviour. classic script, no deps, no build
 demo/behaviour.html  exercises every behaviour, all 6 themes live
+demo/img/*.svg       14 placeholder drawings, transparent grounds
+archetypes/portfolio.html   banded content page — the anti-admin archetype
 tokens/themes.tokens.json   W3C DTCG, generated from CSS
 tokens/fonts.json    15 OFL fonts, curated shortlist
 tools/css_to_tokens.py, build_themes.py   (Python — NO NODE on this machine)
@@ -77,6 +79,18 @@ two-axis split is right).
    keeps wiring state in a WeakMap, off the DOM entirely.
 8. `<dialog>`'s `close` event and `<details>`'s `toggle` event are **queued, not
    synchronous**. Tests that assert immediately after will see the old state.
+9. **`100vw` includes the vertical scrollbar; the page's width does not.** Every
+   `.ui-bleed` overhung by ~15px and gave the document a horizontal scrollbar.
+   `.ui-page` now sets `overflow-x:clip` — `clip`, not `hidden`, because hidden
+   makes it a scroll container and breaks `position:sticky` inside.
+10. **Native controls are painted by the UA, not by CSS.** Dark themes had
+   white-on-white `<select>` drop-downs until `--ui-scheme` drove `color-scheme`.
+   Same fix covers scrollbars, carets, spinners, date pickers.
+11. **The preview pane caches `core/*.css` and `ui.js` hard.** Edits appear not
+   to work. Test with a cache-busted copy:
+   `sed -e "s|../core/ui.css|../core/ui.css?v=$(date +%s)|" … > demo/_x.html`
+   (gitignored), and delete it after. It also reports every element as visible,
+   so IntersectionObserver work can only be confirmed with a tall spacer probe.
 
 ## Positions taken
 
@@ -140,9 +154,59 @@ It buys component reuse and state, but costs the no-build-step property that is
 currently the suite's best feature. A thin `useUI()` wrapper over these same
 data-attributes may be enough.
 
-## OPEN — still the bigger win
+## DONE — layout monoculture, first half
 
-Thread 1, layout monoculture (above), is untouched and remains the highest-value
-work. `ui.css` still has no grid system, no image handling, no hero primitives.
-Gary said he's "ok with the current layout as a prototype," but four pages of one
-SaaS admin app is still one layout.
+**`git` is now in use.** Gary asked for it specifically so the look cannot drift
+between versions unintentionally. Commit anything that changes appearance, with
+a message saying what moved and why. `python tools/build_themes.py verify` before
+every commit.
+
+`archetypes/portfolio.html` shares no layout code with the app shell: no rail, no
+toolbar, no table. A stack of full-width **bands**, each with a centred
+**measure**. It needed the primitives ui.css genuinely lacked, all now in:
+
+- `.ui-page` / `.ui-band` / `.ui-measure` / `.ui-bleed`
+- `.ui-cols` (auto-fit, no breakpoints), `.ui-wall`, `.ui-justified`, `.ui-reel`,
+  `.ui-marquee`
+- `.ui-frame` aspect-ratio boxes, `.ui-figure`, `.ui-caption`, `.ui-frame-label`
+- `.ui-display` / `.ui-lead` / `.ui-prose` / `.ui-quote`, derived `--ui-fs-display`
+
+**Justified rows** are the gallery layout: give each item a `flex-grow` AND
+`flex-basis` proportional to its aspect ratio and every item in a row lands on
+the same height. `<i class="ui-fill">` (huge grow, zero height) can only reach
+the last row, where it stops two leftovers stretching to half the page.
+
+**Lazy loading** — Gary wants this free because galleries charge for it. Native
+`loading="lazy"` does the download deferral; the value added is the reserved box,
+the shimmer, the fade, the error state, and NOT fading cached images (flicker on
+scroll-back is worse than no animation). `data-src` defers harder but needs JS.
+
+**Marquee** — auto-scrolls, track cloned in JS for a seamless loop, clones
+`aria-hidden`. Pauses on hover, focus and click (10s), stops when the tab is
+hidden, and under `prefers-reduced-motion` it stops moving and becomes a
+scrollable reel — hidden overflow plus no animation would strand the content.
+
+**Categorical colour** — `--ui-cat-1..8`, identity rather than state, validated
+with the dataviz skill's Python validator against every theme surface. Position
+held and agreed: the four state colours keep their conventional hues; themes vary
+the hue, never the role. Node is NOT installed — use `validate_palette.py`, and
+set `PYTHONIOENCODING=utf-8` or it dies on cp1252.
+
+## NEXT
+
+A second non-admin archetype, to prove the new primitives generalise past one
+page — **editorial/zine** or **storefront**. Gary was offered these and picked
+portfolio first; the other two are still open. After that: layer 3 (React) is
+still unstarted and still worth questioning, because it costs the no-build-step
+property that is currently the suite's best feature.
+
+## Working with Gary — what came up this session
+
+- He catches real regressions. He spotted that baking a background into the
+  placeholder SVGs broke theming (they're transparent now, so the art takes the
+  theme's ground). Take his visual reports seriously and go measure.
+- Credit generated art as **generated by Claude, reviewed and approved by Gary**.
+  His reasoning: unreviewed AI work presented as finished reflects badly on
+  Anthropic. He also asked for the artist link to point at anthropic.com.
+- He asks good structural questions (density vs text size) — answer the contract
+  question even when deferring the feature.
