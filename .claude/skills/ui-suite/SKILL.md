@@ -114,6 +114,32 @@ preferred mode applies.
 | File | Structure |
 |---|---|
 | `app-shell.html` | Fixed rail + main. Toolbar, stat tiles, data table, banner. The dashboard/admin pattern. |
+| `portfolio.html` | Banded page, no rail. Hero, full-bleed feature, snap reel, column wall, long-form. Content and gallery sites. |
+
+The two are alternatives, not variants: pick by what the thing IS. A rail answers
+"where do the controls live", a band stack answers "where does the content live",
+and reaching for the shell by default is what produces six sites that look identical.
+
+**Content-page primitives** (portfolio and anything like it):
+
+| Class | Does |
+|---|---|
+| `.ui-page` | Band stack. Also clips the scrollbar-width overhang a bleed causes — a bleed must live inside one |
+| `.ui-band` | Full-width strip; `-tight`, `-flush`, `-line`, `-sunk` |
+| `.ui-measure` | Centred column inside a band; `-text` (68ch), `-wide` |
+| `.ui-bleed` | Escapes the measure edge-to-edge without leaving the flow |
+| `.ui-cols` | Auto-fit grid — column count follows width, no breakpoints. `--ui-tile` sets the minimum |
+| `.ui-wall` | Column flow for unequal heights. Reads DOWN each column, so never where sequence carries meaning |
+| `.ui-reel` | Horizontal scroll with snap |
+| `.ui-frame` | Aspect-ratio box that reserves space before the image exists; `--ui-ratio` or `.ui-ratio-*` |
+| `.ui-figure` / `.ui-caption` / `.ui-frame-label` | Captions beside or over the image |
+| `.ui-display` / `.ui-lead` / `.ui-prose` / `.ui-quote` | Hero and long-form type. `--ui-display-mult` scales the hero |
+
+**Lazy images:** put `data-ui-lazy` on the `.ui-frame`. A plain `src` gets native
+`loading="lazy"` plus the fade — that is the default and it survives JS being off.
+`data-src` defers the request until a screen away, which saves more but needs JS.
+Cached images skip the fade deliberately; a flicker on every scroll-back is worse
+than no animation.
 
 More archetypes land in `archetypes/`. If the one you need does not exist, build it
 from `ui.css` primitives and save it there rather than writing one-off CSS.

@@ -19,7 +19,7 @@ core/ui.js           optional behaviour layer — see below
 tokens/              the same themes as W3C DTCG JSON — the portable source
 tools/               token extractor + multi-platform generators (Python, no deps)
 adapters/            bridges to Tailwind v4 and shadcn/ui
-archetypes/          copyable page scaffolds
+archetypes/          copyable page scaffolds — app-shell, portfolio
 dist/                generated: GTK4 CSS, WinUI/WPF XAML
 demo/gallery.html    live theme switcher + tuner + CSS export
 demo/behaviour.html  every interactive component, switchable across all themes
@@ -70,6 +70,26 @@ constraint-validation API for forms, because each of those is a focus trap or a
 state machine that hand-rolled versions get subtly wrong. And it **degrades** —
 delete the file and dialogs stay closed, tab panels render stacked, and forms
 fall back to native validation. Nothing becomes unreadable.
+
+## Free lazy loading
+
+Gallery plugins charge for this; it is thirty lines. Put `data-ui-lazy` on a frame:
+
+```html
+<div class="ui-frame ui-ratio-square" data-ui-lazy>
+  <img data-src="work/01.jpg" alt="Grid Study 01">
+</div>
+```
+
+The deferral itself is one native attribute and is set for you. What the script
+adds is the part that actually costs work: the box is reserved before the image
+exists so nothing jumps, a shimmer holds the space, the swap is a fade, a failed
+image stops animating instead of shimmering forever — and a **cached image does
+not fade**, because a flicker every time you scroll back is worse than no
+animation at all.
+
+Use a plain `src` and it still works with JavaScript off; `data-src` defers the
+request until a screen away, which saves more bandwidth but needs the script.
 
 ## Themes
 

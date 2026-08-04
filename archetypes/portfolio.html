@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Portfolio — UI Suite archetype</title>
+
+<link rel="stylesheet" href="../core/ui.css">
+<link rel="stylesheet" href="../core/themes.css">
+
+<!--
+  PORTFOLIO / GALLERY ARCHETYPE
+
+  The counterweight to app-shell.html. That one answers "where do the controls
+  live"; this one answers "where does the work live", and almost nothing carries
+  over: no rail, no toolbar, no table. Content is a stack of full-width BANDS,
+  each with a centred measure inside it, so the page has a rhythm rather than a
+  chrome.
+
+  Structure:
+    .ui-page                the band stack
+      .ui-band              a full-width strip (padding + vertical rhythm)
+        .ui-measure         the centred column inside it
+          .ui-bleed         escapes the measure edge-to-edge
+
+  Images are inline SVG placeholders drawn from the categorical tokens, so this
+  file has no binary assets and restyles with the theme. Replace each <svg> with
+  an <img> and keep the .ui-frame wrapper — the frame is what reserves the box
+  and prevents layout shift.
+-->
+
+<body class="ui" data-theme="vellum">
+<div class="ui-page">
+
+  <!-- masthead. A row, not a rail: on a content site the navigation is a line
+       of text, not a control surface. ---------------------------------------->
+  <header class="ui-band ui-band-tight">
+    <div class="ui-measure" style="display:flex;align-items:center;gap:var(--ui-s4);flex-wrap:wrap">
+      <div class="ui-brand" style="flex:1">
+        <div class="ui-mark">SJ</div>
+        <div class="ui-brand-name">Sjonis</div>
+      </div>
+      <nav class="ui-key" style="gap:var(--ui-s4);font-size:var(--ui-fs)">
+        <a href="#work" style="color:inherit">Work</a>
+        <a href="#about" style="color:inherit">About</a>
+        <a href="#contact" style="color:inherit">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- hero. One idea, set large, with room around it. The lead is a separate
+       element so it keeps a reading measure while the headline does not. ------>
+  <section class="ui-band">
+    <div class="ui-measure">
+      <p class="ui-eyebrow">Selected work · 2024—2026</p>
+      <h1 class="ui-display">Objects that explain themselves.</h1>
+      <p class="ui-lead" style="margin-top:var(--ui-s4)">
+        Interface, print and installation work. Mostly systems: the piece is usually
+        the set of rules, and what you see is one thing the rules produced.
+      </p>
+    </div>
+  </section>
+
+  <!-- full-bleed feature. .ui-bleed escapes the measure without leaving flow. -->
+  <section class="ui-band ui-band-tight ui-band-flush">
+    <div class="ui-measure">
+      <figure class="ui-figure ui-bleed">
+        <div class="ui-frame ui-ratio-cinema ui-c7" style="border-radius:0">
+          <svg viewBox="0 0 1200 514" preserveAspectRatio="xMidYMid slice" aria-label="Field study, plotter drawing">
+            <rect width="1200" height="514" fill="var(--ui-surface-2)"/>
+            <g stroke="var(--ui-series)" fill="none" stroke-width="1.5" opacity=".8">
+              <path d="M0 400 C 200 300 320 460 520 360 S 900 220 1200 330"/>
+              <path d="M0 430 C 200 330 320 490 520 390 S 900 250 1200 360"/>
+              <path d="M0 460 C 200 360 320 520 520 420 S 900 280 1200 390"/>
+            </g>
+            <circle cx="880" cy="180" r="86" fill="var(--ui-series)" opacity=".18"/>
+            <circle cx="880" cy="180" r="86" stroke="var(--ui-series)" fill="none"/>
+          </svg>
+          <div class="ui-frame-label ui-frame-label-fixed">
+            <span><b>Field Study 04</b> — plotter on cotton, 1200 × 800</span>
+            <span>2026</span>
+          </div>
+        </div>
+        <figcaption class="ui-caption ui-measure" style="padding-inline:var(--ui-s5)">
+          <b>Field Study 04</b><span>Six plotter passes, one seed changed between each.</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- reel. Horizontal scroll with snap — a shape the app shell has no use for
+       and a content site reaches for constantly. ---------------------------- -->
+  <section class="ui-band ui-band-tight">
+    <div class="ui-measure">
+      <div class="ui-toolbar" style="margin-bottom:var(--ui-s4)">
+        <h2 class="ui-title">In progress</h2>
+        <span class="ui-help">scroll →</span>
+      </div>
+      <div class="ui-reel">
+        <figure class="ui-figure">
+          <div class="ui-frame ui-ratio-portrait ui-c1">
+            <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-label="Lattice study">
+              <rect width="300" height="400" fill="var(--ui-surface-2)"/>
+              <g stroke="var(--ui-series)" fill="none">
+                <path d="M40 40 h220 v320 h-220 z"/><path d="M70 70 h160 v260 h-160 z"/>
+                <path d="M100 100 h100 v200 h-100 z"/><path d="M130 130 h40 v140 h-40 z"/>
+              </g>
+            </svg>
+          </div>
+          <figcaption class="ui-caption"><b>Lattice</b><span>screenprint</span></figcaption>
+        </figure>
+        <figure class="ui-figure">
+          <div class="ui-frame ui-ratio-portrait ui-c2">
+            <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-label="Sediment study">
+              <rect width="300" height="400" fill="var(--ui-surface-2)"/>
+              <g fill="var(--ui-series)">
+                <rect y="300" width="300" height="100" opacity=".9"/>
+                <rect y="240" width="300" height="60" opacity=".55"/>
+                <rect y="200" width="300" height="40" opacity=".3"/>
+                <rect y="176" width="300" height="24" opacity=".16"/>
+              </g>
+            </svg>
+          </div>
+          <figcaption class="ui-caption"><b>Sediment</b><span>risograph, 4 layers</span></figcaption>
+        </figure>
+        <figure class="ui-figure">
+          <div class="ui-frame ui-ratio-portrait ui-c3">
+            <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-label="Orbit study">
+              <rect width="300" height="400" fill="var(--ui-surface-2)"/>
+              <g stroke="var(--ui-series)" fill="none">
+                <circle cx="150" cy="200" r="120"/><circle cx="150" cy="200" r="86"/>
+                <circle cx="150" cy="200" r="52"/>
+              </g>
+              <circle cx="150" cy="80" r="9" fill="var(--ui-series)"/>
+              <circle cx="236" cy="200" r="6" fill="var(--ui-series)"/>
+            </svg>
+          </div>
+          <figcaption class="ui-caption"><b>Orbit</b><span>generative, ongoing</span></figcaption>
+        </figure>
+        <figure class="ui-figure">
+          <div class="ui-frame ui-ratio-portrait ui-c5">
+            <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-label="Interference study">
+              <rect width="300" height="400" fill="var(--ui-surface-2)"/>
+              <g stroke="var(--ui-series)" fill="none" opacity=".85">
+                <path d="M0 120 q75 -60 150 0 t150 0"/><path d="M0 170 q75 -60 150 0 t150 0"/>
+                <path d="M0 220 q75 -60 150 0 t150 0"/><path d="M0 270 q75 -60 150 0 t150 0"/>
+                <path d="M0 320 q75 -60 150 0 t150 0"/>
+              </g>
+            </svg>
+          </div>
+          <figcaption class="ui-caption"><b>Interference</b><span>plotter test</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- the wall. Unequal heights, column flow, hover captions. --------------- -->
+  <section class="ui-band ui-band-line" id="work">
+    <div class="ui-measure">
+      <h2 class="ui-title" style="margin-bottom:var(--ui-s5)">Archive</h2>
+
+      <!-- Lazy loaded. data-src defers the request until the frame is within a
+           screen of the viewport; the frame reserves the box so nothing jumps,
+           and ui.js fades each one in — except cached ones, which appear at
+           once. Swap data-src for a plain src to keep the images working with
+           JavaScript disabled; native loading="lazy" still applies. -->
+      <div class="ui-wall">
+        <a class="ui-frame ui-ratio-square" data-ui-lazy href="#">
+          <img data-src="../demo/img/grid.svg" alt="Grid Study 01 — four squares at descending opacity">
+          <span class="ui-frame-label"><b>Grid Study 01</b><span>2025</span></span>
+        </a>
+
+        <a class="ui-frame ui-ratio-portrait" data-ui-lazy href="#">
+          <img data-src="../demo/img/column.svg" alt="Column — three vertical bars of unequal height">
+          <span class="ui-frame-label"><b>Column</b><span>2025</span></span>
+        </a>
+
+        <a class="ui-frame ui-ratio-wide" data-ui-lazy href="#">
+          <img data-src="../demo/img/horizon.svg" alt="Horizon — a disc half sunk below a rule">
+          <span class="ui-frame-label"><b>Horizon</b><span>2024</span></span>
+        </a>
+
+        <a class="ui-frame ui-ratio-square" data-ui-lazy href="#">
+          <img data-src="../demo/img/interval.svg" alt="Interval — five rules of differing length">
+          <span class="ui-frame-label"><b>Interval</b><span>2024</span></span>
+        </a>
+
+        <a class="ui-frame ui-ratio-portrait" data-ui-lazy href="#">
+          <img data-src="../demo/img/fold.svg" alt="Fold — nested triangles">
+          <span class="ui-frame-label"><b>Fold</b><span>2023</span></span>
+        </a>
+
+        <a class="ui-frame ui-ratio-square" data-ui-lazy href="#">
+          <img data-src="../demo/img/rotation.svg" alt="Rotation — a square rotated three times about its centre">
+          <span class="ui-frame-label"><b>Rotation</b><span>2023</span></span>
+        </a>
+      </div>
+
+      <p class="ui-help" style="margin-top:var(--ui-s5)">
+        Placeholder drawings by <b>Claude (Opus 5)</b> — one rule each, one categorical
+        token each, no gradients. They carry no background of their own, so they take the
+        ground from whatever theme is running. Replace them with your own work; keep the
+        <code class="ui-mono">.ui-frame</code> wrapper, which is what reserves the box.
+      </p>
+    </div>
+  </section>
+
+  <!-- long form. The one place a reading measure, not the container, sets the
+       width — and where a bleed image inside prose earns its keep. ---------- -->
+  <section class="ui-band ui-band-sunk" id="about">
+    <div class="ui-measure ui-measure-text">
+      <div class="ui-prose">
+        <p class="ui-eyebrow">About</p>
+        <h2 class="ui-display" style="--ui-display-mult:1.5">The rules are the piece.</h2>
+        <p>
+          Most of this work starts as a constraint rather than an image. A plotter that can
+          only draw one continuous line. A press that can hold four colours. A grid that has
+          to survive being reprinted at four different sizes.
+        </p>
+        <blockquote class="ui-quote">
+          If the system only produces one good result, it isn't a system — it's a drawing
+          that took a long time.
+        </blockquote>
+        <p>
+          The interesting part is the range: what the same set of rules does when you change
+          one input. Half of what is shown here is the fourth or fifth output of something
+          that produced two hundred.
+        </p>
+        <h2>Process</h2>
+        <p>
+          Sketch on paper, formalise as code, plot, then decide by eye which outputs are
+          worth printing. The eye stays in the loop — automation gets it to the shortlist,
+          not past it.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- contact + appearance -------------------------------------------------- -->
+  <footer class="ui-band ui-band-tight ui-band-line" id="contact">
+    <div class="ui-measure" style="display:flex;gap:var(--ui-s5);flex-wrap:wrap;align-items:flex-end">
+      <div style="flex:1;min-width:240px">
+        <h2 class="ui-title">Enquiries</h2>
+        <p class="ui-lead" style="font-size:var(--ui-fs)">Commissions, prints and exhibition requests.</p>
+        <a class="ui-btn" href="#" style="margin-top:var(--ui-s3)">Get in touch</a>
+      </div>
+
+      <div class="ui-field" style="min-width:180px">
+        <label for="th" class="ui-label">Appearance</label>
+        <select class="ui-input" id="th" data-ui-theme>
+          <option>vanilla</option><option>blueprint</option><option>halo</option>
+          <option>graphite</option><option>oxide</option><option selected>vellum</option>
+        </select>
+      </div>
+      <button class="ui-mode-toggle" data-ui-mode="toggle">
+        <span class="ui-mode-word" data-ui-mode-label>Night</span>◐
+      </button>
+    </div>
+  </footer>
+</div>
+
+<script src="../core/ui.js"></script>
+</body>
+</html>

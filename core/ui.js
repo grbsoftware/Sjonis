@@ -527,6 +527,98 @@
   }
 
   /* ---------------------------------------------------------------------------
+     LAZY IMAGES —  <div class="ui-frame" data-ui-lazy><img data-src="…" alt="…">
+
+     The download deferral itself is free: loading="lazy" is native, and this
+     function sets it for you. What is NOT free, and what this adds, is the
+     part around it — a reserved box, a placeholder, a fade that only plays for
+     images that actually made the user wait, and an error state that stops the
+     shimmer instead of animating forever.
+
+     Two levels, and the choice matters:
+
+       <img src="…">        already in the HTML. Native lazy applies, the image
+                            still works with JS off, and search engines and
+                            reader modes see it. THIS IS THE DEFAULT — use it.
+
+       <img data-src="…">   deferred until the frame nears the viewport. Saves
+                            more on a long wall, but the image does not exist
+                            without JS, so it is opt-in rather than automatic.
+                            If IntersectionObserver is missing we load them all
+                            immediately: a slow page beats an empty one.
+
+     rootMargin pre-loads a screen ahead, so a normal scroll never actually sees
+     the placeholder — the point is to save bandwidth on what is never reached,
+     not to make scrolling feel slow.
+     ------------------------------------------------------------------------ */
+  function markLoaded(frame, img, instant) {
+    frame.classList.add(instant ? 'is-instant' : 'is-loaded');
+    if (instant) frame.classList.add('is-loaded');
+    img.removeAttribute('data-pending');
+  }
+
+  function loadLazy(frame) {
+    var img = $('img,video', frame);
+    if (!img || img.dataset.uiLazyDone) return;
+    img.dataset.uiLazyDone = '1';
+
+    var src = img.getAttribute('data-src');
+    var srcset = img.getAttribute('data-srcset');
+    if (srcset) img.setAttribute('srcset', srcset);
+    if (src) img.setAttribute('src', src);
+
+    /* A cached image is already complete the moment src is set. Fading that in
+       makes every scroll-back flicker, so skip the transition for it. */
+    if (img.complete && img.naturalWidth) { markLoaded(frame, img, true); return; }
+
+    on(img, 'load', function () { markLoaded(frame, img, false); });
+    on(img, 'error', function () {
+      frame.classList.add('is-failed', 'is-loaded');
+      if (!img.alt) img.alt = 'Image failed to load';
+    });
+  }
+
+  var lazyObserver = null;
+  function wireLazy(root) {
+    var frames = $$('.ui-frame[data-ui-lazy]', root).filter(function (f) { return claim(f, 'Lazy'); });
+    if (!frames.length) return;
+
+    frames.forEach(function (f) {
+      var img = $('img', f);
+      if (!img) return;
+      if (!img.hasAttribute('loading')) img.setAttribute('loading', 'lazy');
+      /* Decoding off the main thread; without it a big image can still jank the
+         scroll at the moment it appears, which reads as a slow page. */
+      if (!img.hasAttribute('decoding')) img.setAttribute('decoding', 'async');
+    });
+
+    if (!('IntersectionObserver' in window)) {
+      frames.forEach(loadLazy);            /* slow beats empty */
+      return;
+    }
+    if (!lazyObserver) {
+      lazyObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          lazyObserver.unobserve(e.target); /* one shot — never re-fire */
+          loadLazy(e.target);
+        });
+      }, { rootMargin: '100% 0px', threshold: 0 });
+    }
+    frames.forEach(function (f) {
+      /* Nothing to defer (plain src, native lazy already handling it): just
+         wire the fade so it matches the deferred ones. */
+      var img = $('img', f);
+      if (img && !img.getAttribute('data-src')) {
+        if (img.complete && img.naturalWidth) markLoaded(f, img, true);
+        else { on(img, 'load', function () { markLoaded(f, img, false); }); }
+        return;
+      }
+      lazyObserver.observe(f);
+    });
+  }
+
+  /* ---------------------------------------------------------------------------
      FORM VALIDATION —  <form data-ui-validate>
 
      The browser already knows whether a field is valid; what it does badly is
@@ -844,6 +936,7 @@
     wireSort(root);
     wireFilter(root);
     wireCopy(root);
+    wireLazy(root);
     wireForms(root);
     wirePalette(root);
     wireThemeControls(root);

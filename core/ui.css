@@ -88,6 +88,11 @@
   --ui-font:          "Segoe UI Variable Text","Segoe UI",-apple-system,system-ui,sans-serif;
   --ui-font-mono:     "Cascadia Mono",Consolas,ui-monospace,"SF Mono",monospace;
 
+  /* Display sizes are DERIVED from the theme's own scale (see the .ui block)
+     rather than fixed here, so a portfolio hero in vellum is not the same size
+     as one in blueprint. --ui-display-mult is the knob. */
+  --ui-display-mult:  2.4;
+
   --ui-fs-xs:         10.5px;   /* uppercase labels only */
   --ui-fs-sm:         12px;
   --ui-fs:            13.5px;   /* body / UI default */
@@ -138,7 +143,13 @@
   --ui-s5: calc(24px * var(--ui-density));
   --ui-s6: calc(32px * var(--ui-density));
   --ui-s7: calc(48px * var(--ui-density));
+  --ui-s8: calc(72px * var(--ui-density));   /* section rhythm, not component */
   --ui-font-display: var(--ui-font);
+
+  /* Same substitution rule as the space scale: this reads --ui-fs-xl, so it has
+     to be declared wherever a theme can set it, not only on :root. Clamped so a
+     hero is fluid between phone and desktop without a media query. */
+  --ui-fs-display: clamp(var(--ui-fs-xl), 7.5vw, calc(var(--ui-fs-xl) * var(--ui-display-mult)));
 }
 
 /* -----------------------------------------------------------------------------
@@ -287,6 +298,201 @@
   background:var(--ui-surface);border:1px solid var(--ui-line-strong);
   display:grid;place-items:center;
   font-family:var(--ui-font-mono);font-size:10px;font-weight:700;color:var(--ui-text-dim);
+}
+
+/* =============================================================================
+   EDITORIAL LAYOUT
+   The app shell above answers "where do the controls live". These answer
+   "where does the content live" — a different question, and the reason the
+   suite could only produce admin panels before they existed.
+
+   The unit here is the BAND: a full-width strip with a centred measure inside
+   it. Bands stack; nothing is nested in a scrolling pane.
+   ============================================================================= */
+
+/* A page whose children are bands. Named apart from .ui-shell because the two
+   are alternatives — a page is not a shell with the rail removed.
+
+   overflow-x:clip is load-bearing, not tidying. A full-bleed child is 100vw
+   wide, and 100vw INCLUDES the vertical scrollbar while the page's own width
+   excludes it — so every bleed overhangs by ~15px and the whole document gains
+   a horizontal scrollbar. clip rather than hidden: hidden would make this a
+   scroll container and break position:sticky for anything inside. */
+.ui-page{display:flex;flex-direction:column;min-width:0;overflow-x:clip}
+
+.ui-band{
+  padding-block:var(--ui-s8);
+  padding-inline:var(--ui-s5);
+  display:flex;flex-direction:column;gap:var(--ui-s5);
+}
+.ui-band-tight{padding-block:var(--ui-s6)}
+.ui-band-flush{padding-inline:0}
+.ui-band-line{border-top:1px solid var(--ui-line)}
+.ui-band-sunk{background:var(--ui-surface-2)}
+
+/* The measure. Text wants ~66ch; images want more; both want the same left
+   edge, so the width is a variable rather than three different containers. */
+.ui-measure{
+  width:100%;max-width:var(--ui-measure,1180px);
+  margin-inline:auto;min-width:0;
+}
+.ui-measure-text{--ui-measure:68ch}
+.ui-measure-wide{--ui-measure:1440px}
+
+/* Escape the measure without leaving the flow — for a full-bleed image inside
+   an article. Works whatever the parent's padding is. It DOES overhang by the
+   scrollbar width; .ui-page above clips that, so a bleed must live inside one. */
+.ui-bleed{width:100%;max-width:none;margin-inline:0}
+.ui-measure > .ui-bleed{
+  width:100vw;max-width:100vw;
+  margin-inline:calc(50% - 50vw);
+}
+
+/* -----------------------------------------------------------------------------
+   GRID
+   Auto-fit, so the column COUNT is a consequence of the available width and the
+   minimum tile size — not a breakpoint you maintain. min() keeps a single
+   narrow column from overflowing when the viewport is smaller than --ui-tile.
+   -------------------------------------------------------------------------- */
+.ui-cols{
+  display:grid;gap:var(--ui-s4);min-width:0;
+  grid-template-columns:repeat(auto-fit,minmax(min(var(--ui-tile,260px),100%),1fr));
+}
+.ui-cols-sm{--ui-tile:180px}
+.ui-cols-lg{--ui-tile:380px}
+.ui-cols-tight{gap:var(--ui-s2)}
+
+/* Feature tiles. Ignored once auto-fit has collapsed to fewer tracks than the
+   span, which is why the span rules are guarded by a width query. */
+@media (min-width:700px){
+  .ui-span-2{grid-column:span 2}
+  .ui-span-row-2{grid-row:span 2}
+}
+
+/* Column flow — for a wall of images of unequal height. CSS columns rather than
+   grid masonry: masonry is still not shipped everywhere, and this degrades to a
+   single column instead of to nothing. Order reads DOWN each column, so use it
+   only where sequence does not carry meaning. */
+.ui-wall{columns:var(--ui-tile,260px);column-gap:var(--ui-s4)}
+.ui-wall > *{break-inside:avoid;margin-bottom:var(--ui-s4)}
+
+/* Horizontal reel. Scroll-snap so it lands on a tile; the scrollbar is left
+   visible because a hidden one hides the fact that there is more. */
+.ui-reel{
+  display:grid;grid-auto-flow:column;
+  grid-auto-columns:min(var(--ui-tile,300px),78%);
+  gap:var(--ui-s4);overflow-x:auto;overscroll-behavior-x:contain;
+  scroll-snap-type:x mandatory;padding-bottom:var(--ui-s2);
+}
+.ui-reel > *{scroll-snap-align:start}
+
+/* -----------------------------------------------------------------------------
+   IMAGES
+   An image with no intrinsic box is the single biggest cause of layout shift.
+   Every image primitive here reserves its space first and fills it second.
+   -------------------------------------------------------------------------- */
+.ui-frame{
+  position:relative;display:block;overflow:hidden;
+  aspect-ratio:var(--ui-ratio,4/3);
+  background:var(--ui-surface-2);
+  border-radius:var(--ui-radius);
+  min-width:0;
+}
+.ui-frame > img,.ui-frame > video,.ui-frame > svg{
+  width:100%;height:100%;display:block;
+  object-fit:var(--ui-fit,cover);object-position:var(--ui-fit-pos,center);
+}
+.ui-ratio-square{--ui-ratio:1}
+.ui-ratio-portrait{--ui-ratio:3/4}
+.ui-ratio-wide{--ui-ratio:16/9}
+.ui-ratio-cinema{--ui-ratio:21/9}
+.ui-ratio-free{aspect-ratio:auto}          /* let the image's own ratio stand */
+.ui-fit-contain{--ui-fit:contain}
+
+/* Bare images that are not in a frame still must not blow out their column. */
+.ui img,.ui video{max-width:100%}
+
+/* Lazy loading. The download itself is one native attribute — loading="lazy" —
+   and needs no library at all. What actually costs work, and what paid gallery
+   plugins are really selling, is everything around it:
+
+     · the box is reserved before the image exists, so nothing jumps (.ui-frame)
+     · something occupies the space while it loads, so it is not a white hole
+     · the swap is a fade, not a flash
+     · an image already in cache does NOT fade in — a flicker on every scroll
+       back is worse than no animation at all (ui.js checks .complete first)
+
+   The shimmer is deliberately slow and low-contrast: a fast bright one draws
+   the eye to the thing that is NOT ready yet. */
+.ui-frame[data-ui-lazy]:not(.is-loaded)::before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(100deg,
+    var(--ui-surface-2) 30%,var(--ui-surface-3) 50%,var(--ui-surface-2) 70%);
+  background-size:220% 100%;
+  animation:ui-shimmer 1.6s var(--ui-ease) infinite;
+}
+@keyframes ui-shimmer{from{background-position:180% 0}to{background-position:-80% 0}}
+
+.ui-frame[data-ui-lazy] > img{opacity:0;transition:opacity .32s var(--ui-ease)}
+.ui-frame.is-loaded > img{opacity:1}
+/* Already cached, or JS never ran: show it, skip the animation entirely. */
+.ui-frame.is-instant > img{opacity:1;transition:none}
+.ui-frame.is-failed::before{animation:none}
+
+.ui-figure{display:flex;flex-direction:column;gap:var(--ui-s2);margin:0;min-width:0}
+.ui-caption{
+  font-size:var(--ui-fs-sm);color:var(--ui-text-faint);
+  display:flex;gap:var(--ui-s2);align-items:baseline;
+}
+.ui-caption b{font-weight:var(--ui-weight-medium);color:var(--ui-text-dim)}
+
+/* A caption laid over the image, for a wall where captions between tiles would
+   break the rhythm. Scrim is a gradient, not a flat wash: a flat one greys the
+   whole picture to protect two words. */
+.ui-frame-label{
+  position:absolute;inset:auto 0 0 0;
+  padding:var(--ui-s5) var(--ui-s3) var(--ui-s3);
+  display:flex;justify-content:space-between;align-items:flex-end;gap:var(--ui-s2);
+  background:linear-gradient(to top,rgba(0,0,0,.62),rgba(0,0,0,0));
+  color:#fff;font-size:var(--ui-fs-sm);
+  opacity:0;transition:opacity var(--ui-dur) var(--ui-ease);
+}
+.ui-frame:hover .ui-frame-label,
+.ui-frame:focus-within .ui-frame-label,
+.ui-frame-label-fixed{opacity:1}
+
+/* -----------------------------------------------------------------------------
+   DISPLAY TYPE
+   Bigger than .ui-title, and behaves differently: tighter tracking, balanced
+   wrapping, and a measure that stops a hero from running to 30 words a line.
+   -------------------------------------------------------------------------- */
+.ui-display{
+  margin:0;font-family:var(--ui-font-display);
+  font-size:var(--ui-fs-display);
+  font-weight:var(--ui-weight-heading);
+  letter-spacing:-.028em;line-height:1.02;
+  text-wrap:balance;max-width:18ch;
+}
+.ui-display-full{max-width:none}
+.ui-lead{
+  font-size:var(--ui-fs-md);line-height:1.55;color:var(--ui-text-dim);
+  max-width:58ch;margin:0;text-wrap:pretty;
+}
+
+/* Long-form body copy. Only place in the suite where the reading measure, not
+   the container, sets the width. */
+.ui-prose{max-width:68ch;display:flex;flex-direction:column;gap:var(--ui-s4)}
+.ui-prose p{margin:0}
+.ui-prose h2{
+  margin:var(--ui-s4) 0 0;font-family:var(--ui-font-display);
+  font-size:var(--ui-fs-lg);font-weight:var(--ui-weight-heading);
+  letter-spacing:var(--ui-tracking-head);
+}
+.ui-quote{
+  margin:var(--ui-s4) 0;padding-left:var(--ui-s4);
+  border-left:2px solid var(--ui-accent);
+  font-family:var(--ui-font-display);font-size:var(--ui-fs-md);
+  line-height:1.4;color:var(--ui-text);max-width:44ch;
 }
 
 /* -----------------------------------------------------------------------------
