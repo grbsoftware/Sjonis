@@ -106,7 +106,7 @@ The system is now an onion. One word per layer, no synonyms:
 | **skeleton** | structure | what the thing *is* | 6 |
 | **skin** | how a surface is drawn | which visual grammar | 2 |
 | **theme** | colour, type, radius | who it is *for* | 6 |
-| **genre** | a named complete look | the point of view | 0 |
+| **genre** | a named complete look | the point of view | 1 |
 
 `archetypes/` is now `skeletons/`. "Archetype" and "layout" are gone everywhere.
 
@@ -305,6 +305,16 @@ two-axis split is right).
    accent" — its own face, not the panel it sits on. The lit edge scored 1.27
    against itself where against the panel it is 1.73. Same shape as trap 1: the
    question is always *where* a var() is being substituted.
+21. **A skin or genre applied by SCRIPT has to land on the `.ui` element, not
+   `<html>`** — trap 1 wearing a new hat, and it shipped green through every
+   gate. ui.css's derived block is `:root,.ui`, so it re-declares the four role
+   tokens at the `.ui` level; a skin on an ancestor is overwritten and does
+   nothing at all, silently. The skeletons carry `data-theme` on `<html>` and
+   `class="ui"` on `<body>`, which is fine for a theme (nothing re-declares
+   palette tokens) and fatal for a skin. Measured on the live site before the
+   fix: `.ui-card` was a 1px near-black box instead of a 2px bevel on the mid
+   face. `check_genres.py` now fails a page whose genre attributes sit on a tag
+   without `class="ui"`.
 20. **`[hidden]`-style zero-specificity reasoning has a colour twin: a token
    promoted on a face reaches everything inside that face.** Scope a promotion
    to the surfaces that need it, and check what else consumes the token before
@@ -576,12 +586,45 @@ the very wash protecting it, a failure that would show on only half the themes.
 Verified on the live site: art covers the stage exactly, all four corners pinned
 at 25px, no slot overlaps, and all 8 meters render their exact fraction.
 
-## NEXT — in priority order
+## DONE — GENRE ONE IS BUILT AND LIVE: Control Panel
 
-1. **The first genre.** The gate can see skins now, so this is unblocked and is
-   the top of the list. Promote one of the seven audience presets in
-   `references/palettes.md` — they are proto-genres already, with reasoning
-   written down. Authored, never computed.
+The fourth ring has one entry. `#control-panel` in the example browser.
+
+    tokens/genres.json          the authored record: bevel + graphite dark +
+                                app-shell, with reasoning per choice
+    genres/control-panel.css    the ornament
+    tools/check_genres.py       the gate
+
+**Mechanism, and why it is deliberately dumb.** `data-genre` does NOT imply the
+skin and theme. Making it imply them means either every theme knows about every
+genre (alias selectors generated into themes.css), or the page needs JavaScript
+to resolve — and everything here has to survive being double-clicked off a disk.
+So the composition is written out in the markup and `check_genres.py` gates the
+spelling against the manifest. **Say it twice, check it once.** The gate also
+refuses a genre stylesheet containing an unscoped selector, which would silently
+restyle any page that merely links it.
+
+**Ornament stays where contrast cannot follow it.** The palette gate cannot see
+genres — the same blindness skins had, one ring up. So with one exception the
+file changes only type, case, spacing and density. That exception is the caption
+bar, measured first: it wanted a gradient and cannot have one. `--ui-accent-ink`
+must clear 4.5 at BOTH ends and no direction works, because themes with light
+ink fail when the bar darkens and themes with dark ink fail when it lightens.
+Toward `--ui-bg` tops out at 3.94; toward black at 95% — by then not a gradient
+— reaches 4.34. Solid accent is 4.61 everywhere. **Any ornament putting a
+one-directional ramp under themed ink has this shape.**
+
+`index.html` frames the REAL skeleton and dresses it rather than shipping a copy
+wearing the genre, which would drift within a session. The entry names only the
+genre id; the composition is read from the manifest.
+
+Verified live: card on the mid face with a light top edge and dark bottom edge,
+pill in its `--ui-bg` well, caption 9.71, body on the card face 6.61.
+
+**Extending the palette gate to genres is now the obvious next gate job** — it
+is the identical gap, and this genre only avoided it by self-restraint.
+
+## NEXT — in priority order
 2. **Skin three — the soft one.** Gary's, and he is right: "black can be
    beveled on black, I've done it before with softer shadows and or highlights."
    The mid face is NOT a property of bevels; it follows from two rules bevel
