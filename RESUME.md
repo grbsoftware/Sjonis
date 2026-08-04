@@ -48,9 +48,12 @@ forced a Claude Desktop reinstall. Use WebSearch/WebFetch.
 ## What exists
 
 ```
-core/ui.css          structure + components, zero colours
+core/ui.css          structure + components + the DEFAULT (flat) skin, zero colours
 core/themes.css      6 themes x light/dark (589 tokens, 18 blocks)
 core/ui.js           LAYER 2 — behaviour. classic script, no deps, no build
+skins/bevel.css      THE SECOND SKIN. Win95/Motif grammar. Proof the ring works.
+demo/skins.html      flat vs bevel, one <template> stamped into both panels
+skeletons/game.html  GAME/HUD — stage, 9 HUD slots, meters, leaderboard
 index.html           EXAMPLE BROWSER — the front door. Frames every example,
                      hash-routed, global dark toggle, live tuner (T)
 demo/behaviour.html  exercises every behaviour, all 6 themes live
@@ -506,10 +509,24 @@ the very wash protecting it, a failure that would show on only half the themes.
 Verified on the live site: art covers the stage exactly, all four corners pinned
 at 25px, no slot overlaps, and all 8 meters render their exact fraction.
 
-## NEXT
+## NEXT — in priority order
 
-`marketing` and `media player` from the original monoculture list are the last
-two unbuilt skeletons. Neither is blocked.
+1. **Close the skin gate gap** (see "OPEN — the gate gap that skins just
+   opened"). `validate_palette.py` reported green through two real contrast
+   failures while bevel was being built. Do this before a second skin.
+2. **The first genre**, once the gate can see skins. Promote one of the seven
+   audience presets in `references/palettes.md` — they are proto-genres already,
+   with reasoning written down. Authored, never computed.
+3. `marketing` and `media player` — the last two unbuilt skeletons from the
+   original monoculture list. Neither is blocked.
+
+Everything through the skin layer is committed, pushed, Pages-built and
+verified on the live site. Working tree clean as of this handoff.
+
+**Live URLs** (note: `/archetypes/*` is DEAD, renamed to `/skeletons/*`):
+- https://grbsoftware.github.io/Sjonis/            example browser, 10 entries
+- https://grbsoftware.github.io/Sjonis/demo/skins.html
+- https://grbsoftware.github.io/Sjonis/skeletons/game.html
 
 **Verification note that cost time here:** the preview pane reports
 `innerWidth`/`innerHeight` of **0** when it is not displayed, so every `vh`/`vw`/
