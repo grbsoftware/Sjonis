@@ -349,7 +349,43 @@ positioned over a full-bleed image, a stat readout at display size, a ranked
 table with a highlighted "you" row, and a progress/meter element — `ui.css` has
 no meter of any kind, which is a real gap independent of the game page.
 
-- **The palette decision** — the only thing genuinely blocked on Gary.
+### DECIDED 2026-08-04 — palette: rim the dots, do not change a hue
+
+Gary chose the rim. **Do not darken the light-mode categorical ramp.** Every
+`--ui-cat-*` value stays exactly as agreed; `.ui-dot` (and the `.ui-tag::before`
+dot, and `.ui-swatch`) gets a thin rim so the MARK clears 3:1 while the FILL
+keeps its identity. The rim must come from a token, not a literal — something
+like `box-shadow:0 0 0 1px color-mix(in oklab,var(--ui-series) 55%,var(--ui-text))`
+so it darkens on light grounds and lightens on dark ones without ui.css naming a
+colour. Re-run `validate_palette.py` after: the dot checks should be measured
+against the RIM, so `tag_checks`/`checks` need updating to reflect that, or the
+tool will keep reporting a failure that has been solved a different way.
+
+### NEW DIRECTION — more palettes, and Radiance
+
+Gary: "there are palettes I like a lot that are not listed. For instance I really
+like blue purple and green together." He is unsure whether it belongs here,
+"always, or yet" — so treat it as an invitation, not a spec, and push back if it
+does not fit.
+
+Honest read to carry forward: that is an **analogous** scheme (adjacent hues),
+and the current `--ui-cat-*` set is deliberately the opposite — maximally
+separated hues, because eight series must stay apart from EACH OTHER. Analogous
+palettes are gorgeous and are the wrong tool for categorical identity. Where they
+genuinely fit: a **sequential/continuous** ramp (one variable, low to high), a
+theme's accent family, or a decorative gradient. So the right move is probably a
+NEW token family — a sequential ramp — rather than editing `--ui-cat-*`.
+
+**Radiance** is Gary's own public repo (`grbsoftware/Radiance`): a PWA that
+generates palettes by HSL interpolation between anchor colours. Not yet read.
+The real question to answer next session: could its interpolation formulae
+generate a perceptually even sequential ramp for Sjonis? Caveats to check first —
+HSL interpolation is not perceptually uniform (it bunches and produces dead
+greys through the middle); OKLCH would be. If Radiance is HSL-only, the useful
+move may be to improve Radiance's maths (oklch interpolation) and then reuse it,
+which serves both projects.
+
+- **The palette decision** — DECIDED above; implement the rim.
 - Layer 3 (React) still unstarted and still worth questioning, because it costs
   the no-build-step property that is currently the suite's best feature.
 - **Adapters — DONE this session.** Both now expose `--ui-cat-1..8` (shadcn's
