@@ -249,7 +249,7 @@ input[type="color"]{width:44px;height:28px;padding:2px;border:1px solid var(--g-
     { id:"behaviour",  label:"Behaviour",  src:"demo/behaviour.html", mode:"ui",
       blurb:"Layer 2 — every JS behaviour, live, in all six themes." },
     { id:"skins",      label:"Skins",      src:"demo/skins.html", mode:"chrome",
-      blurb:"One markup, two skins — flat and bevel, across every theme." },
+      blurb:"One markup, three skins — flat, bevel and cushion, across every theme." },
     { id:"specimens",  label:"Specimens",  src:"specimens/directions-01.html", mode:"chrome",
       blurb:"Five directions for one interface (iteration 01)." },
     /* A GENRE entry frames the REAL skeleton file and dresses it, rather than
@@ -259,7 +259,12 @@ input[type="color"]{width:44px;height:28px;padding:2px;border:1px solid var(--g-
        in exactly one place. */
     { id:"control-panel", label:"Control panel", src:"skeletons/app-shell.html",
       mode:"mode", genre:"control-panel",
-      blurb:"Genre one — the app shell as an instrument, not a document." }
+      blurb:"Genre one — the app shell as an instrument, not a document." },
+    /* The sibling. Same skeleton, same theme, one skin apart — put them next to
+       each other in the strip on purpose, because the pair is the argument. */
+    { id:"control-surface", label:"Control surface", src:"skeletons/app-shell.html",
+      mode:"mode", genre:"control-surface",
+      blurb:"Genre two — the same instrument in the present tense." }
   ];
 
   /* ---- genres -------------------------------------------------------------
@@ -276,7 +281,18 @@ input[type="color"]{width:44px;height:28px;padding:2px;border:1px solid var(--g-
         .then(function(d){
           (d && d.genres || []).forEach(function(g){ GENRES[g.id] = g; });
         })
-        .catch(function(){});
+        /* SAY SOMETHING. This used to be `.catch(function(){})`, on the
+           reasoning that file:// has no origin to fetch from and an undressed
+           skeleton is a fine degradation. Both halves are true and the silence
+           was still wrong: every OTHER way this can fail — a typo in the JSON,
+           a renamed file, a cached empty body — produces the identical blank
+           result, so the one expected failure was hiding all the unexpected
+           ones. A warning costs nothing on file:// and is the only signal
+           anybody gets when the manifest is genuinely broken. */
+        .catch(function(e){
+          if (location.protocol !== "file:")
+            console.warn("Sjonis: genre manifest did not load —", e);
+        });
     } catch (e) { return null; }
   }
 
@@ -285,6 +301,8 @@ input[type="color"]{width:44px;height:28px;padding:2px;border:1px solid var(--g-
      there is no mechanism here that a hand-written page does not have. */
   function applyGenreToFrame(){
     var ex = EXAMPLES[i], g = ex.genre && GENRES[ex.genre];
+    if (ex.genre && !g && Object.keys(GENRES).length)
+      console.warn('Sjonis: no genre "' + ex.genre + '" in tokens/genres.json');
     if (!g) return;
     try {
       var doc = frame.contentWindow && frame.contentWindow.document;

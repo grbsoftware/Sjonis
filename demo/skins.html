@@ -2,26 +2,35 @@
 <html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Skins — flat and bevel, same markup</title>
+<title>Skins — flat, bevel and cushion, same markup</title>
 
 <link rel="stylesheet" href="../core/ui.css">
 <link rel="stylesheet" href="../core/themes.css">
 <link rel="stylesheet" href="../skins/bevel.css">
+<link rel="stylesheet" href="../skins/cushion.css">
 
 <!--
   THE SKIN LAYER, DEMONSTRATED
 
-  Both panels below contain BYTE-IDENTICAL markup. It is written once in a
-  <template> and stamped into each panel by the script at the bottom, so the two
+  All three panels below contain BYTE-IDENTICAL markup. It is written once in a
+  <template> and stamped into each panel by the script at the bottom, so the
   columns cannot drift and the comparison cannot be fudged.
 
   The only difference between them is data-skin on the wrapper.
 
-  A theme could not produce the right-hand column at any setting. It can change
-  colour, radius, spacing and typeface — it cannot say "a raised surface is drawn
-  with a light edge on two sides and a dark edge on the other two", because that
-  is the shape of the rule rather than a value the rule reads. That distinction
-  is the whole reason this layer exists.
+  A theme could not produce either of the right-hand columns at any setting. It
+  can change colour, radius, spacing and typeface — it cannot say "a raised
+  surface is drawn with a light edge on two sides and a dark edge on the other
+  two", because that is the shape of the rule rather than a value the rule
+  reads. That distinction is the whole reason this layer exists.
+
+  Two skins rather than one also demonstrates the thing a single skin could not:
+  bevel and cushion are SIBLINGS. Same family, same claim — that a surface has a
+  lit edge and a shaded one — and they disagree about everything else. bevel
+  replaces the theme's boundary with opaque bars mixed from a mid face and draws
+  its depth; cushion modulates the theme's own line and casts its depth. Neither
+  is a softened version of the other, which is exactly why they are two entries
+  rather than one with a knob.
 -->
 
 <style>
@@ -37,7 +46,7 @@
   *{box-sizing:border-box}
   body{margin:0;background:var(--g-bg);color:var(--g-ink);
        font-family:var(--g-sans);font-size:15px;line-height:1.55}
-  .wrap{max-width:1180px;margin:0 auto;padding:22px 20px 64px}
+  .wrap{max-width:1400px;margin:0 auto;padding:22px 20px 64px}
   header h1{margin:0 0 6px;font-size:18px;font-weight:650;letter-spacing:-.01em}
   header p{margin:0;color:var(--g-dim);font-size:13px;max-width:76ch}
   header code{font-family:var(--g-mono);font-size:12px;color:var(--g-ink)}
@@ -50,7 +59,7 @@
   .bar select{font:inherit;font-size:13px;background:var(--g-bg);color:var(--g-ink);
               border:1px solid var(--g-line);border-radius:6px;padding:5px 8px}
 
-  .pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr));
+  .pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(380px,100%),1fr));
         gap:20px;align-items:start}
   .col{min-width:0}
   .col > h2{margin:0 0 3px;font-size:13px;font-weight:600;letter-spacing:.01em}
@@ -70,12 +79,12 @@
 <div class="wrap">
 
   <header>
-    <h1>One markup, two skins</h1>
-    <p>Both columns are stamped from the same <code>&lt;template&gt;</code>. The only
-      difference is <code>data-skin="bevel"</code> on the right-hand wrapper — no
-      skeleton, theme or component rule differs. Change the theme below and both
-      re-derive: the bevel's light and dark edges are mixed from whatever surface
-      the theme supplies, so it is a grammar, not a picture of Windows 95.</p>
+    <h1>One markup, three skins</h1>
+    <p>All three columns are stamped from the same <code>&lt;template&gt;</code>. The
+      only difference is <code>data-skin</code> on the wrapper — no skeleton, theme
+      or component rule differs. Change the theme below and all three re-derive:
+      every edge here is mixed from whatever surface or line the theme supplies,
+      so these are grammars rather than pictures of a particular decade.</p>
   </header>
 
   <div class="bar">
@@ -104,14 +113,41 @@
         <div class="ui" data-theme="vanilla" data-mode="light" data-skin="bevel" data-mount></div>
       </div>
     </section>
+
+    <section class="col">
+      <h2>cushion</h2>
+      <p>skins/cushion.css</p>
+      <div class="mount">
+        <div class="ui" data-theme="vanilla" data-mode="light" data-skin="cushion" data-mount></div>
+      </div>
+    </section>
   </div>
 
-  <p class="note"><b>What to look at.</b> Corners are square and no surface casts a
-    soft shadow — depth is drawn with a light edge on two sides and a dark edge on
-    the other two. Press a button and it goes down rather than changing colour.
-    The input is cut <em>into</em> the page: its edges are the raised ones
+  <p class="note"><b>bevel — what to look at.</b> Corners are square and no surface
+    casts a soft shadow — depth is drawn with a light edge on two sides and a dark
+    edge on the other two. Press a button and it goes down rather than changing
+    colour. The input is cut <em>into</em> the page: its edges are the raised ones
     reversed. Focus is a dotted rectangle inside the control, not a ring around
     it. None of that is reachable from a theme at any setting.</p>
+
+  <p class="note"><b>cushion — what to look at, and what to look for.</b> The panel
+    keeps the theme's own radius and its own surface colour; only the top and
+    bottom edges move, and the depth is <em>underneath</em> rather than around.
+    Now switch to dark and watch which edge is doing the work. In light mode it
+    is the shaded bottom (4.6–4.7 against the ground); in dark mode that edge
+    all but vanishes and the lit top takes over (1.28–1.33). One edge carries
+    each mode, which is how a lit surface actually behaves — and it is why the
+    left and right edges stay on the theme's plain line, so a surface still has
+    a boundary when its carrying edge fades out.</p>
+
+  <p class="note"><b>The cost each skin pays.</b> bevel moves every panel to a mid
+    face, and then has to re-tune four families of ink against it — dim text,
+    faint text, the accent, and the rims on categorical marks — plus give
+    <code>.ui-pill</code> a sunken well to sit in, because a state hue printed as
+    text on that face lands around 2.0 against a 4.5 bar. cushion pays none of
+    that: its fill <em>is</em> <code>--ui-surface</code>, so every ink is meeting
+    the ground it was validated against. That is the trade. Drawn depth costs a
+    face; cast depth costs a compositor.</p>
 
 </div>
 

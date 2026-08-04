@@ -57,6 +57,48 @@
         "argument. Portfolio and editorial would fight it; the storefront is a",
         "shop, not an instrument."
       ]
+    },
+    {
+      "id": "control-surface",
+      "name": "Control Surface",
+      "family": "relief",
+      "skin": "cushion",
+      "theme": "graphite",
+      "mode": "dark",
+      "skeletons": ["app-shell"],
+      "facets": {
+        "era": "present tense",
+        "industry": "infrastructure, observability, vehicles",
+        "mood": "calm, watchful, uncrowded",
+        "ideology": "the reading matters; the apparatus does not"
+      },
+      "why": [
+        "The sibling to control-panel, and the first pair in a family. Same",
+        "theme, same skeleton, one skin apart — which is the exact shape the",
+        "family rule describes, and until there were two of them it was a word",
+        "in this file rather than something the suite could show.",
+        "",
+        "The stance is not really about bevels. control-panel says every",
+        "control is equal and every one is named: uppercase mono labels at the",
+        "weight of the values, packed tight, because an operator who knows the",
+        "layout is hunting a specific cell and everything must be findable at",
+        "the same speed. This one says the READING is the thing — large quiet",
+        "numbers, labels demoted, more air — because the operator is watching a",
+        "handful of values change and the rest is context.",
+        "",
+        "Choosing between those is itself a point of view, which is the test",
+        "that makes them two genres instead of one with a switch. Nobody would",
+        "shrug at getting the other one.",
+        "",
+        "cushion because soft relief is the present tense of the same claim",
+        "bevel makes — that a surface has a lit edge and a shaded one. It also",
+        "leaves --ui-surface alone, which is why this genre needs no colour",
+        "exception where its sibling needed one for the caption bar.",
+        "",
+        "graphite dark and app-shell are held FIXED from control-panel, not",
+        "chosen again. Varying more than one ring would make the pair a",
+        "comparison of two looks rather than a demonstration of what a skin is."
+      ]
     }
   ]
 }

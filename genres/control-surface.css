@@ -1,0 +1,174 @@
+/* =============================================================================
+   GENRE — CONTROL SURFACE
+   skin: cushion   theme: graphite dark   skeleton: app-shell
+
+   THE SIBLING. Control Panel and Control Surface share a theme, a skeleton and
+   a family, and differ only in skin. That is the whole reason this file exists:
+   the family idea was Gary's, and until there were two of them it was a word in
+   a manifest rather than a thing the suite could show.
+
+   Usage. The composition is declared in the markup, not conjured by this file:
+
+     <html class="ui" data-theme="graphite" data-mode="dark"
+                      data-skin="cushion" data-genre="control-surface">
+       <link rel="stylesheet" href="core/ui.css">
+       <link rel="stylesheet" href="core/themes.css">
+       <link rel="stylesheet" href="skins/cushion.css">
+       <link rel="stylesheet" href="genres/control-surface.css">
+
+   ---------------------------------------------------------------------------
+   WHY THIS IS A SECOND GENRE AND NOT A SETTING ON THE FIRST
+
+   The rule is that a genre carries no alternatives, so a look that falls out of
+   flipping a switch is not a point of view. The test that decides it: is
+   choosing between the two ITSELF a stance?
+
+   Here it plainly is, and the stance is not really about bevels. Control Panel
+   says every control is equal and every one is named -- uppercase mono labels
+   at the same weight as the values, packed tight, because an operator who knows
+   the layout is scanning for a specific cell and everything must be findable at
+   the same speed. Control Surface says the READING is the thing and the chrome
+   should get out of its way -- large quiet numbers, labels demoted to a
+   whisper, more air between groups, because the operator is watching a handful
+   of values change and the rest is context.
+
+   Those are different beliefs about what an instrument is for. 1996 and the
+   present tense disagree about it, which is why the era facet is the honest
+   label for the pair, and why the answer is two genres rather than one with a
+   toggle.
+
+   ---------------------------------------------------------------------------
+   THIS GENRE TAKES NO COLOUR EXCEPTION, AND THAT IS THE SKIN'S DOING
+
+   Control Panel has one: its caption bar is solid accent, and the file has to
+   explain at length why it could not be the gradient the era wants. This file
+   has nothing of the kind. Every rule below changes type, size, case, spacing
+   or density, and the only colours named are tokens already validated against
+   the exact surfaces they land on.
+
+   That is not restraint on this genre's part, it is inherited. cushion leaves
+   --ui-surface alone, so every pairing here is one the theme pass already
+   measured. bevel moves every panel to a mid face, and a genre sitting on top
+   of it is one step further from anything the gate has seen. Ornament is
+   cheapest on the skin that moved the least.
+   ========================================================================== */
+
+[data-genre="control-surface"]{
+  /* Looser than the theme ships, and the opposite of the sibling's .92. Air is
+     how this genre says which things belong together, since it is not using
+     rules and boxes to say it. */
+  --ui-density:1.06;
+
+  /* Labels are quiet here, so they do not need the sibling's uppercase
+     tracking. This is nearly ui.css's default, restated because the value is
+     load-bearing rather than incidental: a label at .11em next to a lowercase
+     word looks like a mistake. */
+  --ui-tracking-label:.02em;
+}
+
+/* -----------------------------------------------------------------------------
+   THE VALUE IS THE ELEMENT; THE LABEL IS THE CAPTION
+
+   ui.css draws a readout as a number with a label under it, both at ordinary
+   sizes. This genre pulls them apart hard: the number goes up and the label
+   goes down and dim. It is the single change that most makes a screen read as
+   present-tense apparatus, and the reason is behavioural rather than stylistic
+   -- when six values are being watched at once, the eye needs to find the one
+   that moved before it reads any of them, and it can only do that if the
+   numbers are the only thing at that size.
+
+   tabular-nums is NOT part of that argument and is not era-specific. Digits on
+   a fixed advance align down a column so a changed value is visible without
+   reading it. The sibling does this too, and both are right.
+   -------------------------------------------------------------------------- */
+[data-genre="control-surface"] .ui-stat-value,
+[data-genre="control-surface"] .ui-readout-value,
+[data-genre="control-surface"] .ui-num,
+[data-genre="control-surface"] .ui-delta,
+[data-genre="control-surface"] .ui-table td{
+  font-variant-numeric:tabular-nums;
+}
+[data-genre="control-surface"] .ui-stat-value,
+[data-genre="control-surface"] .ui-readout-value{
+  font-size:calc(var(--ui-fs) * 2.1);
+  font-weight:var(--ui-weight-medium);
+  letter-spacing:-.02em;
+  line-height:1.05;
+}
+
+/* Labels recede. --ui-text-faint rather than --ui-text-dim would be the fuller
+   expression of the idea and is not taken: faint is validated at 3.0 as a
+   non-essential tint, and a label naming a number is not decoration -- if you
+   cannot read it you cannot use the number. dim clears 4.5 on every surface in
+   every theme, so this is the furthest the idea can go without the genre
+   quietly lowering a bar the rest of the suite holds. */
+[data-genre="control-surface"] .ui-label,
+[data-genre="control-surface"] .ui-eyebrow,
+[data-genre="control-surface"] .ui-readout-label,
+[data-genre="control-surface"] .ui-meter-head,
+[data-genre="control-surface"] .ui-stat-label{
+  font-size:var(--ui-fs-sm);
+  font-weight:var(--ui-weight-normal);
+  letter-spacing:var(--ui-tracking-label);
+  text-transform:none;
+  color:var(--ui-text-dim);
+}
+
+/* -----------------------------------------------------------------------------
+   THE BRAND IS NOT A TITLE BAR
+
+   The sibling turns .ui-brand into a caption bar, because in 1996 the window
+   announced itself. Here it is the quietest thing on the rail: no ground, no
+   border, at label size. A modern instrument does not tell you which instrument
+   you are looking at every time you glance at it -- you already know, and the
+   pixels are better spent on the values.
+   -------------------------------------------------------------------------- */
+[data-genre="control-surface"] .ui-brand-name{
+  font-size:var(--ui-fs-sm);
+  font-weight:var(--ui-weight-medium);
+  letter-spacing:.01em;
+  color:var(--ui-text-dim);
+}
+
+/* Column heads are labels too, and get the same demotion. Note what is NOT
+   here: the sibling makes th uppercase mono, which turns the header row into
+   another band of chrome. Here it recedes and the data is the only thing with
+   weight in the table. */
+[data-genre="control-surface"] .ui-table th{
+  font-size:var(--ui-fs-sm);
+  font-weight:var(--ui-weight-normal);
+  text-transform:none;
+  letter-spacing:var(--ui-tracking-label);
+  color:var(--ui-text-dim);
+}
+
+/* -----------------------------------------------------------------------------
+   A TITLE, NOT A HEADLINE -- BUT FOR THE OPPOSITE REASON TO THE SIBLING
+
+   Control Panel shrinks the page title because an instrument has no headline.
+   This genre agrees about the size and disagrees about why: the title here is
+   the largest piece of TEXT on the page and still smaller than the smallest
+   VALUE. The hierarchy is not text-then-more-text, it is numbers first and
+   everything else second, and a title that outranked a readout would put the
+   page back in the document world.
+   -------------------------------------------------------------------------- */
+[data-genre="control-surface"] .ui-title,
+[data-genre="control-surface"] .ui-title-lg{
+  font-size:calc(var(--ui-fs) * 1.45);
+  font-weight:var(--ui-weight-medium);
+  letter-spacing:-.012em;
+}
+
+/* Meters get thinner and longer. A modern readout treats the bar as a position
+   on a scale rather than as a filled container -- there is no gauge face here,
+   so weight would only compete with the number it belongs to. */
+[data-genre="control-surface"] .ui-meter{
+  block-size:6px;
+}
+
+/* Nav items are places, not commands, and sit at reading size. The sibling
+   shrinks them to command size; that difference is the same argument as
+   everything above, applied to the rail. */
+[data-genre="control-surface"] .ui-nav-item{
+  letter-spacing:.005em;
+}

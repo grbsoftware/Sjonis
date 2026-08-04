@@ -9,9 +9,9 @@ the one inside it, and each can be swapped without touching the others:
 | layer | owns | chosen by | built |
 |---|---|---|---|
 | **skeleton** | structure — what goes where | what the thing *is* | 6 |
-| **skin** | how a surface is drawn | which visual grammar | 2 |
+| **skin** | how a surface is drawn | which visual grammar | 3 |
 | **theme** | colour, type, radius | who it is *for* | 6 |
-| **genre** | a named complete look | the point of view | — |
+| **genre** | a named complete look | the point of view | 2 |
 
 Any skeleton works with any skin and any theme, because skeletons contain no
 colour, size or typeface and no surface treatment. They reference tokens; skins
@@ -26,14 +26,20 @@ one thing is how a vocabulary rots.
 theme can only change *values* — colour, radius, spacing, typeface. It can never
 change the grammar: whether a surface is raised, inset, bevelled or absent. That
 is why a design system with twenty themes still ships one look. `skin` owns the
-grammar, so `bevel` and `flat` are genuinely different interfaces rather than the
-same interface repainted.
+grammar, so `bevel`, `cushion` and `flat` are genuinely different interfaces
+rather than the same interface repainted. `bevel` draws its depth with opaque
+edges on a mid face; `cushion` casts its depth and leaves the theme's fill,
+border and radius untouched. See `demo/skins.html`, where all three columns are
+stamped from one `<template>` so they cannot drift.
 
-**genre** is not built yet. It is the composition layer — a named look that picks
-a skin and a theme, adds era- or audience-specific ornament, and says which
-skeletons it suits. Genres are *authored, never generated*: the moment a look
-falls out of a parameter combination it stops being a point of view, which is the
-exact failure the skin layer exists to fix.
+**genre** is the composition layer — a named look that picks a skin and a theme,
+adds era- or audience-specific ornament, and says which skeletons it suits.
+Genres are *authored, never generated*: the moment a look falls out of a
+parameter combination it stops being a point of view, which is the exact failure
+the skin layer exists to fix. Two are built, and they are a **family**:
+`control-panel` and `control-surface` share a theme and a skeleton and differ
+only in skin, because choosing between 1996 and the present tense is itself a
+stance. See `tokens/genres.json`, which states the reasoning per choice.
 
 No build step, no dependencies, no framework. Two stylesheets and HTML — plus one
 optional script if you want the parts that move.

@@ -1,0 +1,212 @@
+/* =============================================================================
+   SKIN — CUSHION
+   Soft relief. The same two edges a bevel has — one catching light, one falling
+   into shade — but drawn as hairlines just inside the theme's own boundary, and
+   with the depth CAST underneath instead of drawn around.
+
+   This is the third skin and it exists because Gary was right: "black can be
+   beveled on black, I've done it before with softer shadows and or highlights."
+   bevel.css claimed a mid grey face was what made a bevel work. It is not. It
+   follows from two rules bevel chose for ITSELF — edges that are opaque and
+   mixed from the face, and --ui-shadow:none. Drop both and the face can stay on
+   the theme's own ground, which is what this file does.
+
+   Usage — data-skin goes on the SAME element as class="ui" and data-theme:
+
+     <body class="ui" data-theme="vanilla" data-mode="light" data-skin="cushion">
+
+   On an ancestor instead, ui.css's derived block re-declares the role tokens at
+   the .ui level and the skin silently does nothing (trap 1, and trap 21).
+
+     <link rel="stylesheet" href="core/ui.css">
+     <link rel="stylesheet" href="core/themes.css">
+     <link rel="stylesheet" href="skins/cushion.css">
+
+   ---------------------------------------------------------------------------
+   WHAT THIS SKIN DOES NOT TOUCH, AND WHY THAT IS THE DESIGN
+
+   Fill, border and radius are all left exactly as the theme set them. A panel
+   here is --ui-surface with --ui-line around it at --ui-radius, which is what
+   it was before the skin loaded. Only the shadows change.
+
+   That restraint is the whole answer to bevel's one real weakness. bevel moves
+   every panel to a mid face, and then has to re-tune four families of ink
+   against the new ground — dim text, faint text, the accent, and the rims on
+   categorical marks — plus give .ui-pill a sunken well, because a state hue
+   printed as text on that face lands near 2.0 against a 4.5 bar. None of that
+   appears in this file. Every ink is meeting the ground it was validated
+   against, so there is nothing to re-tune and nothing to re-check.
+
+   It also means the boundary is not an argument. Soft relief is one keystroke
+   away from neumorphism, which failed for a specific reason worth naming: it
+   REMOVED the boundary and asked two shadows to imply it. A 1px edge at 1.0:1
+   is not a boundary, and a control whose only outline is a shadow fails 1.4.11
+   outright. Here the theme's line is still there, untouched and already
+   validated, and the relief is added inside it.
+
+   ---------------------------------------------------------------------------
+   THE ASYMMETRY IS THE POINT, AND IT IS ONE-SIDED PER MODE
+
+   Predicted over --ui-bg across all twelve theme x mode combinations, at the
+   10% white / 55% black used below, then measured on rendered pixels against
+   the ground the edges actually meet, which is the card's own --ui-surface:
+
+                     predicted (on --ui-bg)   measured (on --ui-surface)
+       dark   lit      1.28-1.33                1.32-1.36
+       dark   shade    1.05-1.12                1.10-1.21
+       light  lit      1.00-1.01                1.00
+       light  shade    4.60-4.73                4.72-4.76
+
+   Exactly one edge carries each mode — the highlight in dark, the shadow in
+   light — and that is not a defect to engineer out. It is how a lit surface
+   behaves: on a pale ground you see where the light stops, on a dark ground you
+   see where it lands. The other edge is meant to be almost nothing. What would
+   be a defect is having no boundary when the carrying edge fades, and the
+   theme's border answers that in every case.
+
+   ---------------------------------------------------------------------------
+   WHY THESE ARE LITERAL rgba AND NOT MIXED FROM --ui-line
+
+   The first version of this file derived the two edges as
+   color-mix(in srgb, var(--ui-line) 50%, #fff) and ...#000, on the reasoning
+   that an edge modulating the theme's own line is more principled than a
+   literal. It measured wrong on halo and the reason generalises:
+
+   COLOR-MIX AVERAGES ALPHA ALONG WITH THE CHANNELS. halo's --ui-line is
+   rgba(255,255,255,.10). Mixed 50/50 with opaque #fff the result is white at
+   alpha .55 — the edge came out five and a half times more opaque than the
+   line it was supposed to be a variation of, and halo dark grew a bright white
+   rim on every panel. The same expression is well behaved on the five opaque
+   themes, so it passes everywhere except the one theme it breaks.
+
+   This is trap 11 and trap 17 in a third costume: any expression combining a
+   token with a literal has to be checked against the theme whose token is
+   translucent, because that is the case the arithmetic silently changes.
+
+   Literals composite predictably over anything, translucent surfaces included,
+   which is exactly what an edge that must work on six themes needs.
+
+   ---------------------------------------------------------------------------
+   COULD A THEME DO THIS ONE? MOSTLY NOT, AND THE EXCEPTION IS INSTRUCTIVE
+
+   Being honest about it, since this skin is far smaller than bevel: a theme
+   CAN set --ui-shadow and --ui-shadow-lg, so a theme could put a relief stack
+   under raised surfaces and floating ones. It gets about a third of the way.
+
+   What it cannot reach:
+     - the reverse. --ui-inset-shadow is `none` in ui.css and no theme value
+       feeds it, so a theme cannot make a field read as a hole. Relief without
+       its inverse is decoration; with it, it is a grammar.
+     - the pressed state. A control that sinks needs the cast to become an
+       inset and the element to move, which is two rules and a transform.
+     - the tab, which loses one edge so it joins the panel it opens.
+     - the reduced-transparency fallback, which trades softness for weight
+       rather than turning the relief off.
+
+   So the line holds: a theme sets adjectives, a skin may add rules. It is just
+   that this skin needs fewer of them, which is a property of soft relief and
+   not a weakness in the demonstration.
+   ========================================================================== */
+
+[data-skin="cushion"]{
+  /* The two edges. Literal, for the reason above. Drawn as inset hairlines
+     rather than as border-color so the theme's boundary stays exactly where it
+     was — these sit just inside it and follow whatever radius the theme set. */
+  --ui-cushion-lit:   rgba(255,255,255,.10);
+  --ui-cushion-shade: rgba(0,0,0,.55);
+
+  --ui-cushion-relief:    inset 0 1px 0 var(--ui-cushion-lit),
+                          inset 0 -1px 0 var(--ui-cushion-shade);
+  /* A hole is lit on its far wall, so the same two edges swap ends. */
+  --ui-cushion-hollow:    inset 0 1px 0 var(--ui-cushion-shade),
+                          inset 0 -1px 0 var(--ui-cushion-lit),
+                          inset 0 2px 4px -2px rgba(0,0,0,.30);
+
+  /* Depth is cast, so it does not depend on either edge being visible. Two
+     layers each: a tight contact shadow saying the surface is touching the
+     page, and a wide soft one saying how far above it. One layer alone reads
+     as either a sticker or a fog. */
+  --ui-cushion-cast:    0 1px 2px rgba(0,0,0,.16), 0 4px 12px -2px rgba(0,0,0,.20);
+  --ui-cushion-cast-lg: 0 2px 6px rgba(0,0,0,.20), 0 18px 42px -10px rgba(0,0,0,.34);
+  --ui-cushion-press:   inset 0 1px 3px rgba(0,0,0,.32);
+
+  /* The four roles. FILL, BORDER AND RADIUS ARE ABSENT ON PURPOSE — see the
+     header. Restating ui.css's defaults here would only guarantee that this
+     file drifts from them the first time one changes. */
+  --ui-raise-shadow:   var(--ui-cushion-relief), var(--ui-cushion-cast);
+  --ui-float-shadow:   var(--ui-cushion-relief), var(--ui-cushion-cast-lg);
+  --ui-inset-shadow:   var(--ui-cushion-hollow);
+  --ui-control-shadow: var(--ui-cushion-relief), var(--ui-cushion-cast);
+}
+
+/* -----------------------------------------------------------------------------
+   A PRESSED CONTROL GOES DOWN
+
+   Shared family grammar with bevel — that much both skins agree on. What
+   differs is how it is told. bevel flips two opaque edges and shuffles the
+   padding, because it has no shadow to lose. Here the cast collapses into an
+   inset one and the whole control moves 1px: the same event in the vocabulary
+   of cast depth rather than drawn depth.
+
+   translate, not bevel's asymmetric padding: this skin keeps the theme's
+   radius, and nudging padding on a rounded corner visibly skews it.
+   -------------------------------------------------------------------------- */
+[data-skin="cushion"] .ui-btn:active,
+[data-skin="cushion"] .ui-btn-ghost:active,
+[data-skin="cushion"] .ui-btn-danger:active{
+  box-shadow:var(--ui-cushion-hollow), var(--ui-cushion-press);
+  translate:0 1px;
+}
+
+/* Ghost and danger have no ground in ui.css, and relief needs a surface to
+   catch the light — a transparent control would simply show none. Unlike bevel
+   there is no claim here that everything clickable must be raised; this is the
+   narrower point that a control asking to look raised has to have a face. */
+[data-skin="cushion"] .ui-btn-ghost,
+[data-skin="cushion"] .ui-btn-danger{
+  background:var(--ui-surface);
+  box-shadow:var(--ui-cushion-relief), var(--ui-cushion-cast);
+}
+
+/* A rail is a panel that happens to be tall, so its depth casts sideways. The
+   inner edge is the one facing the content it is raised above. */
+[data-skin="cushion"] .ui-rail{
+  box-shadow:inset -1px 0 0 var(--ui-cushion-shade),
+             1px 0 2px rgba(0,0,0,.10), 6px 0 18px -6px rgba(0,0,0,.18);
+}
+
+/* Tabs rise out of the panel rather than folding into it. The selected one
+   casts upward and loses its bottom edge so it joins what it opens; the rest
+   sit flat and have nothing to cast. */
+[data-skin="cushion"] .ui-tab[aria-selected="true"]{
+  box-shadow:inset 0 1px 0 var(--ui-cushion-lit),
+             0 -1px 2px rgba(0,0,0,.08), 0 -6px 14px -8px rgba(0,0,0,.22);
+}
+
+/* -----------------------------------------------------------------------------
+   REDUCED TRANSPARENCY IS NOT REDUCED DEPTH
+
+   The two get conflated. A user who asks for less translucency is asking about
+   SURFACES they cannot read through, not about drop shadows, so turning the
+   relief off would be answering a question nobody asked.
+
+   What the setting does justify is trusting softness less: a wide, low-opacity
+   cast is the first thing a low-quality compositor loses. So the shadows get
+   tighter and heavier — the same depth, stated in fewer pixels — and the relief
+   survives as shape rather than as haze.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-transparency:reduce){
+  [data-skin="cushion"]{
+    --ui-cushion-cast:    0 1px 2px rgba(0,0,0,.28);
+    --ui-cushion-cast-lg: 0 2px 8px rgba(0,0,0,.38);
+  }
+}
+
+/* Forced colours replaces the palette outright and drops box-shadows entirely,
+   so there is no relief left to express. Nothing here needs undoing — unlike
+   bevel, which has to collapse its border-colour grammar back to a plain box —
+   because everything this skin draws is already gone. The theme's border is
+   what remains, which is the correct picture: an honest box.
+
+   That is a small argument for building depth out of shadow rather than out of
+   edges. The high-contrast path is whatever you left alone. */

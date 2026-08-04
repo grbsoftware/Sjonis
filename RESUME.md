@@ -648,6 +648,91 @@ pill in its `--ui-bg` well, caption 9.71, body on the card face 6.61.
 **Extending the palette gate to genres is now the obvious next gate job** — it
 is the identical gap, and this genre only avoided it by self-restraint.
 
+## DONE 2026-08-04 (session 2) — SKIN THREE, GENRE TWO, and Radiance
+
+**`skins/cushion.css` — the soft skin. Built, gated, verified on all 12
+theme x mode combinations.** Fill, border and radius are left EXACTLY as the
+theme set them; only the shadows change. That restraint is the payoff: bevel
+moves every panel to a mid face and then re-tunes four ink families plus gives
+`.ui-pill` a well; cushion needs none of it, because every ink is meeting the
+ground it was already validated against. Measured on rendered pixels:
+
+    dark   lit 1.32-1.36   shade 1.10-1.21
+    light  lit 1.00        shade 4.72-4.76
+
+One edge carries each mode by design — highlight in dark, shadow in light —
+and the theme's untouched border is what guarantees a boundary when the
+carrying edge fades. That is also the neumorphism trap named and avoided.
+
+22. **NEW TRAP — `color-mix()` averages ALPHA along with the channels.** The
+   first cushion derived its edges as `color-mix(in srgb,var(--ui-line) 50%,#fff)`.
+   halo's `--ui-line` is `rgba(255,255,255,.10)`, so mixing it 50/50 with opaque
+   `#fff` gave white at alpha **.55** — an edge five and a half times more
+   opaque than the line it was a variation of, and halo dark grew a bright
+   white rim on every panel. It is well behaved on the five opaque themes, so
+   it passes everywhere except the one theme it breaks. Trap 11 and 17 in a
+   third costume: any expression combining a token with a literal must be
+   checked against the theme whose token is translucent. Edges are literal
+   rgba now, which composites predictably over anything.
+
+**`genres/control-surface.css` — genre two, and the first FAMILY pair.** Same
+theme (graphite dark), same skeleton (app-shell), one skin apart from
+control-panel. Held fixed on purpose: varying more than one ring would make the
+pair a comparison of two looks instead of a demonstration of what a skin is.
+The stance is not about bevels — control-panel says every control is equal and
+named (uppercase mono, packed tight); control-surface says the READING is the
+thing (large quiet numbers, labels demoted to `--ui-text-dim`, more air). It
+takes **no colour exception**, where its sibling needed one for the caption
+bar, and that is inherited: ornament is cheapest on the skin that moved least.
+
+Both genres verified dressing correctly in `index.html` (`#control-panel`,
+`#control-surface`). **The genre gallery is no longer blocked** — two genres
+exist, which was the stated precondition.
+
+**Two silent failures made loud in `index.html`.** `loadGenres` ended in
+`.catch(function(){})`, justified by file:// having no origin. True, and still
+wrong: a JSON typo, a renamed file and a cached empty body all produce the
+identical blank page, so the one expected failure was hiding every unexpected
+one. It now warns on non-file:// origins, and `applyGenreToFrame` warns when an
+entry names a genre the manifest does not have. Both cost nothing and would
+have saved most of this session's debugging.
+
+**Verification note that cost real time:** the pane served a CACHED
+`tokens/genres.json` (`transferSize: 0`) while `fetch()` from the console
+returned the new one. Both genres appeared broken and neither was. Trap 13/14
+again — **check `performance.getEntriesByType('resource')` for `transferSize:0`
+before believing any "it isn't applying" result.**
+
+`.claude/launch.json` gained `sjonis-alt` (port 8139) because another session
+held 8137, and `radiance` (port 8138, serving `../code/Radiance`).
+
+### RADIANCE — three fixes, pushed and live
+
+Cloned to `C:\Users\grben\code\Radiance` (stable, so launch.json can serve it).
+
+- **The label ink was wrong on 14 of 114 preset colours.** `getLuminance`
+  weighted GAMMA-ENCODED channels 0.299/0.587/0.114 and switched at 0.5 —
+  exactly the crossover error already written down here. Worst was `#FF00FF`
+  with white at **3.14:1** where black scores **6.70:1**. Worst anywhere now
+  4.72, so every hex code on screen clears AA.
+- **Out-of-gamut midpoints now give up saturation, not lightness.** Per-channel
+  clamping moved 23 of the presets' bridges up to **3.6° in hue and 0.014 in
+  L**. Chroma reduction: **0.9° and 0.0009**. Green -> blue lands at L 0.659
+  exactly — the residual the README blamed on clipping is gone, not explained.
+- **Bridges: Blend or Wheel.** Blend averages a and b as coordinates, so as
+  hues diverge the vectors cancel and the bridge drifts grey (gold -> navy =
+  `#7E7D70`; 12 preset bridges lose over half their anchors' chroma). Wheel
+  averages L and chroma as scalars and walks hue the short arc (gold -> navy =
+  `#009083`). Both defensible, which is the test a setting must pass. Blend is
+  the default. **Push-to-hull was measured and REJECTED** — the headroom is
+  largest exactly where hue means least (two pale neutrals at chroma 0.002 have
+  **89x** of it, and spending it turns a soft grey into `#C3FF3B`).
+- Also: bridge bars are keyboard-reachable and announced, clipboard failures no
+  longer fail silently, `loadState` validates what it finds, sw at **v4**.
+
+**Still open on Radiance:** the GitHub repo DESCRIPTION still says "smooth
+HSL-interpolated bridges" — Gary's to change, it is a repo setting.
+
 ## NEXT — in priority order
 2. **Skin three — the soft one.** Gary's, and he is right: "black can be
    beveled on black, I've done it before with softer shadows and or highlights."

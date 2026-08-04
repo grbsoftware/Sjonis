@@ -6,6 +6,18 @@
       "runtimeExecutable": "python",
       "runtimeArgs": ["-m", "http.server", "8137"],
       "port": 8137
+    },
+    {
+      "name": "sjonis-alt",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8139"],
+      "port": 8139
+    },
+    {
+      "name": "radiance",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8138", "--directory", "../code/Radiance"],
+      "port": 8138
     }
   ]
 }
