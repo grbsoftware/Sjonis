@@ -261,6 +261,22 @@ has no background, so its hue meets the page, never `--ui-*-soft`), composites
 rgba tokens over their ground first, and prints ASCII only so cp1252 cannot kill
 it. `python tools/validate_palette.py`, exit 1 on failure.
 
+## Traps found by measuring rather than looking
+
+Two bugs this session were invisible on screen and obvious in arithmetic. Both
+had been shipped and reviewed without anyone noticing:
+
+- **The black-vs-white ink crossover is 0.1791, not 0.45 or 0.5.** White beats
+  black only while `1.05/(L+0.05) > (L+0.05)/0.05`, so the boundary is
+  `sqrt(0.0525) - 0.05`. The old 0.45 gave a mid ochre accent white text at
+  2.17:1 where black scores 9.70:1. Four of six test hues flipped.
+- **halo light shipped a failing button label** — `#FFFFFF` on `#0E9C86`, 3.43:1.
+  Now `#06231F`, which halo dark already used, 4.83:1.
+
+The lesson worth keeping: contrast is not a thing to eyeball. `validate_palette.py`
+found the second one in a second, and would have found the first if the tuner's
+maths had been in a checkable place rather than inline in a page.
+
 ## OPEN — palette findings, NOT yet acted on
 
 The validator reports **126 required failures**, all in the light modes, and they
@@ -286,8 +302,12 @@ and the hue moved to the border and a dot. That alone cleared 142 failures.
 - **The palette decision above** — the only thing genuinely blocked on Gary.
 - Layer 3 (React) still unstarted and still worth questioning, because it costs
   the no-build-step property that is currently the suite's best feature.
-- The tuner still only offers the four original layouts; it has not been taught
-  about storefront, product or editorial.
+- `demo/gallery.html` is now largely redundant. Tuning moved to `index.html`,
+  which reaches into the framed document and tunes the REAL archetype files;
+  gallery still tunes four hand-built mini-layouts that duplicate the
+  archetypes and drift from them. Either retire it or repoint it — but it is
+  still the only place showing one layout across six themes side by side, so
+  decide deliberately rather than deleting it.
 - Adapters (`adapters/tailwind-v4.css`, `shadcn.css`) predate the site frame,
   commerce and editorial primitives and only bridge tokens, not classes — check
   whether that is still the right boundary before extending them.
