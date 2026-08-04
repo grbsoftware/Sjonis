@@ -895,6 +895,223 @@ a.ui-brand{color:inherit;text-decoration:none}
 }
 
 /* -----------------------------------------------------------------------------
+   TRANSPORT / PLAYER
+   Every other skeleton's chrome sits BESIDE the content (a rail), ABOVE it (a
+   site header) or ON it (a HUD over artwork). A transport bar does something
+   none of those do: it is docked to the viewport and OUTLIVES the content, so
+   the page scrolls underneath a control that is describing something still
+   happening. That is the structural difference, and two things follow from it.
+
+   First, it needs an opaque ground. It is over arbitrary content — a photo, a
+   table, whatever is at that scroll position — so the same answer as
+   .ui-hud-panel: mix from --ui-bg, the only token opaque in all six themes.
+
+   Second, and the part that is normally got wrong: a docked bar covers the
+   bottom of the document. The last row of a list is unreachable, and anchor
+   navigation lands items underneath it. --ui-transport-h is declared once and
+   pays for both the spacer and the scroll padding, so they cannot drift apart.
+   -------------------------------------------------------------------------- */
+/* --ui-transport-h is declared on :root, not on .ui-page. The bar is docked to
+   the VIEWPORT, so it is almost always a sibling of the page rather than a
+   child of it — `.ui-page:has(.ui-transport)` matches nothing in that markup
+   and fails silently, taking the scroll padding with it. The scrolling box is
+   the document anyway, which is the element scroll-padding has to land on. */
+:root:has(.ui-transport),.ui:has(.ui-transport){
+  --ui-transport-h:5.75rem;
+  /* Anchor targets and focus scrolls stop ABOVE the bar rather than under it. */
+  scroll-padding-block-end:calc(var(--ui-transport-h) + var(--ui-s4));
+}
+/* The spacer is a real box in the flow, not padding on the page: padding would
+   be inside .ui-page's background and a banded layout paints those bands
+   edge to edge, so the last band would end in a stripe of ground.
+
+   The token has to be the bar's REAL height or this is worse than useless — it
+   looks solved and still clips the last row. So the bar takes the token as a
+   min-block-size, which makes the two agree by construction rather than by a
+   number somebody measured once. A bar given more content than the token
+   allows grows, and a page that cares can observe it (player.html does, in
+   four lines) — but the default is right without any script. */
+.ui-transport-spacer{block-size:var(--ui-transport-h,5.75rem);flex:0 0 auto}
+
+.ui-transport{
+  position:fixed;inset-inline:0;inset-block-end:0;z-index:40;
+  display:grid;gap:var(--ui-s2);
+  padding:var(--ui-s2) var(--ui-s4);
+  min-block-size:var(--ui-transport-h,5.75rem);
+  align-content:center;
+  /* --ui-bg exactly, not a mix of it. The first version tinted 12% toward the
+     ink to separate the bar from the page, which INVENTED A GROUND no token
+     describes — and every text level had been validated against the four real
+     grounds, not against that one. Measured: --ui-text-dim landed at 4.08-4.44
+     across all five light themes, under the 4.5 bar, on the now-playing artist
+     and both scrub times.
+
+     The HUD panel mixes because it floats over arbitrary ARTWORK and has no
+     other option. A transport floats over the page, whose ground is --ui-bg —
+     so it can simply use it, and then every ink on the bar is meeting a ground
+     the palette gate already checks. The separation is carried by the top
+     border and the upward shadow, which is a boundary drawn as a SHAPE rather
+     than as a colour difference. Same answer cushion.css reached. */
+  background:var(--ui-bg);
+  border-block-start:1px solid var(--ui-line);
+  backdrop-filter:var(--ui-blur);
+  /* The shadow points UP: this is the one surface in the suite lit from below,
+     because the thing it needs to separate itself from is above it. */
+  box-shadow:0 -6px 22px rgb(0 0 0 / .18);
+}
+.ui-transport-row{
+  display:grid;align-items:center;gap:var(--ui-s4);
+  grid-template-columns:1fr auto 1fr;
+}
+/* Under a phone the three-column balance is a lie — the now-playing block and
+   the controls both want the full width, and the volume cluster is the part a
+   touch device does not need at all. */
+@media (max-width:640px){
+  .ui-transport-row{grid-template-columns:1fr auto}
+  .ui-transport-end{display:none}
+}
+.ui-transport-end{display:flex;align-items:center;gap:var(--ui-s3);justify-content:flex-end;min-width:0}
+
+/* NOW PLAYING — art, title, artist. min-width:0 on both the cluster and the
+   text column, or a long title refuses to shrink and pushes the controls off
+   the bar entirely. A grid child's default min-width is auto, not zero, and
+   this is the single most common cause of an unbreakable overflowing row. */
+.ui-nowplaying{display:flex;align-items:center;gap:var(--ui-s3);min-width:0}
+.ui-nowplaying-art{
+  inline-size:2.75rem;block-size:2.75rem;flex:0 0 auto;
+  border-radius:var(--ui-radius-sm);overflow:hidden;
+  background:var(--ui-surface-2);
+}
+.ui-nowplaying-art img{inline-size:100%;block-size:100%;object-fit:cover;display:block}
+.ui-nowplaying-text{min-width:0}
+.ui-nowplaying-title,.ui-nowplaying-artist{
+  margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.ui-nowplaying-title{font-weight:var(--ui-weight-medium);color:var(--ui-text)}
+.ui-nowplaying-artist{font-size:var(--ui-fs-sm);color:var(--ui-text-dim)}
+
+/* Transport buttons. Round, because they are the one control set on the page
+   identified by SHAPE at a glance rather than read. */
+.ui-transport-controls{display:flex;align-items:center;gap:var(--ui-s2)}
+.ui-btn-round{
+  inline-size:2.25rem;block-size:2.25rem;padding:0;
+  border-radius:var(--ui-radius-pill);
+  display:grid;place-items:center;flex:0 0 auto;
+}
+.ui-btn-round-lg{inline-size:2.75rem;block-size:2.75rem}
+
+/* SCRUBBER — a native <input type="range">, and that is a deliberate trade.
+   Styling one costs three vendor spellings for the thumb and track, which is
+   exactly the argument .ui-meter uses to REFUSE <progress>. The difference is
+   that a scrubber is INTERACTIVE, so the platform is handing over pointer
+   drag, arrow keys, Home/End, PageUp/Down, the value in the accessibility tree
+   and a live announcement of it. A hand-rolled role="slider" would reimplement
+   all of that and get some of it subtly wrong — the same reasoning that put
+   <dialog> and <details> under the behavioural components.
+
+   Two fills, one gradient. --ui-scrub is the played fraction and
+   --ui-scrub-buffered the loaded one, both 0-1 like --ui-meter so the author
+   never does arithmetic against a container they cannot measure. Hard colour
+   stops, so this is a gradient in syntax only and none of the ramp-under-ink
+   problems apply. */
+.ui-scrub{display:grid;grid-template-columns:auto 1fr auto;gap:var(--ui-s3);align-items:center}
+.ui-scrub-time{
+  font-variant-numeric:tabular-nums;font-size:var(--ui-fs-sm);
+  color:var(--ui-text-dim);flex:0 0 auto;
+}
+.ui-scrub input[type="range"]{
+  -webkit-appearance:none;appearance:none;
+  inline-size:100%;background:transparent;margin:0;
+  /* The hit target is the whole bar height even though the track is 4px: a
+     4px pointer target is a miss, and on a scrubber a miss means a seek to
+     the wrong place rather than nothing happening. */
+  block-size:var(--ui-s5);cursor:pointer;
+}
+.ui-scrub input[type="range"]:focus-visible{outline:2px solid var(--ui-accent);outline-offset:4px}
+.ui-scrub{
+  --ui-scrub:0;--ui-scrub-buffered:0;
+  --ui-scrub-track:
+    linear-gradient(to right,
+      var(--ui-accent) 0 calc(var(--ui-scrub) * 100%),
+      color-mix(in oklab,var(--ui-text) 28%,transparent) calc(var(--ui-scrub) * 100%) calc(var(--ui-scrub-buffered) * 100%),
+      var(--ui-surface-3) calc(var(--ui-scrub-buffered) * 100%) 100%);
+}
+.ui-scrub input[type="range"]::-webkit-slider-runnable-track{
+  block-size:4px;border-radius:var(--ui-radius-pill);background:var(--ui-scrub-track);
+}
+.ui-scrub input[type="range"]::-moz-range-track{
+  block-size:4px;border-radius:var(--ui-radius-pill);background:var(--ui-scrub-track);
+}
+.ui-scrub input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  inline-size:13px;block-size:13px;margin-block-start:-4.5px;
+  border-radius:var(--ui-radius-pill);
+  background:var(--ui-accent);border:2px solid var(--ui-bg);
+}
+.ui-scrub input[type="range"]::-moz-range-thumb{
+  inline-size:13px;block-size:13px;box-sizing:border-box;
+  border-radius:var(--ui-radius-pill);
+  background:var(--ui-accent);border:2px solid var(--ui-bg);
+}
+
+/* TRACK LIST — not .ui-list. A list item is a title and some metadata; a track
+   row is a fixed four-column ruler (index, title, album, duration) that must
+   line up down the whole list, and the index cell doubles as the play control.
+   Duration is tabular for the same reason .ui-price is. */
+.ui-tracklist{list-style:none;margin:0;padding:0}
+.ui-track{
+  display:grid;align-items:center;gap:var(--ui-s3);
+  grid-template-columns:2rem 1fr minmax(0,1fr) auto;
+  padding:var(--ui-s2) var(--ui-s3);
+  border-radius:var(--ui-radius-sm);
+}
+@media (max-width:680px){
+  /* The album column is the one that carries least and costs most. */
+  .ui-track{grid-template-columns:2rem 1fr auto}
+  .ui-track-album{display:none}
+}
+.ui-track:hover{background:var(--ui-surface-3)}
+.ui-track-index{
+  font-variant-numeric:tabular-nums;color:var(--ui-text-faint);
+  text-align:end;font-size:var(--ui-fs-sm);
+}
+.ui-track-title{margin:0;color:var(--ui-text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ui-track-artist{margin:0;font-size:var(--ui-fs-sm);color:var(--ui-text-dim);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ui-track-album{color:var(--ui-text-dim);font-size:var(--ui-fs-sm);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ui-track-time{font-variant-numeric:tabular-nums;color:var(--ui-text-dim);font-size:var(--ui-fs-sm)}
+
+/* The playing row. Three signals, not one: a tinted ground, the accent on the
+   title, and an equaliser mark in place of the index — because the ground alone
+   is a colour difference, and the same reasoning that gave .ui-rank its
+   three signals applies to the only row on the page that is a STATE rather
+   than a position. It hangs off aria-current, the attribute the screen reader
+   already announces, rather than a parallel class that can drift out of step. */
+   The accent is NOT used for the title here, though every player does it.
+   --ui-accent-soft is a tinted ground, and accent-on-accent-soft is a pairing
+   no theme was tuned for: measured, it fails five of the twelve combinations
+   and reaches 2.67 on halo light — under even the 3.0 non-text bar, so the
+   equaliser could not wear it either. --ui-text plus weight is the signal, and
+   it costs nothing, because the tint and the moving mark are already saying
+   "this one" twice over. */
+.ui-track[aria-current]{background:var(--ui-accent-soft)}
+.ui-track[aria-current] .ui-track-title{color:var(--ui-text);font-weight:var(--ui-weight-heading)}
+.ui-track[aria-current] .ui-track-index{color:var(--ui-text)}
+
+/* Three bars at three phases. The animation is decoration on a row that
+   already says "playing" in text, so reduced-motion stops it flat rather than
+   substituting anything. */
+.ui-eq{display:flex;align-items:flex-end;gap:2px;block-size:.85em;justify-self:end}
+.ui-eq i{
+  inline-size:2px;background:currentColor;block-size:100%;
+  transform-origin:bottom;animation:ui-eq 900ms var(--ui-ease) infinite alternate;
+}
+.ui-eq i:nth-child(2){animation-delay:-300ms}
+.ui-eq i:nth-child(3){animation-delay:-600ms}
+@keyframes ui-eq{from{transform:scaleY(.28)}to{transform:scaleY(1)}}
+
+/* -----------------------------------------------------------------------------
    GRID
    Auto-fit, so the column COUNT is a consequence of the available width and the
    minimum tile size — not a breakpoint you maintain. min() keeps a single
@@ -1885,6 +2102,11 @@ a.ui-brand{color:inherit;text-decoration:none}
   .ui *,.ui *::before,.ui *::after{
     transition-duration:.01ms!important;animation-duration:.01ms!important;
   }
+  /* The blanket rule STOPS an animation, it does not choose where. An
+     alternating keyframe collapsed to .01ms freezes wherever it lands, so the
+     equaliser can end up as three stubs — which reads as a broken mark rather
+     than as a still one. Pin it to the shape it should hold. */
+  .ui-eq i{transform:none}
 }
 
 /* -----------------------------------------------------------------------------
@@ -1945,6 +2167,22 @@ a.ui-brand{color:inherit;text-decoration:none}
   /* The accent disc becomes Canvas on Canvas — the number survives, the circle
      does not, and a step that looks like a bare digit reads as a list marker. */
   .ui-step::before{border:1px solid CanvasText}
+  /* The transport is a floating surface over the document; without an edge it
+     merges into the page it is docked over. */
+  .ui-transport{border-block-start:1px solid CanvasText;background:Canvas;backdrop-filter:none}
+  /* Both scrub fills are backgrounds on a UA-painted control, so played,
+     buffered and remaining collapse to one flat track and the reading is gone.
+     Highlight is the user's own emphasis colour — the same choice .ui-meter
+     makes, and the only honest one here. */
+  .ui-scrub input[type="range"]::-webkit-slider-runnable-track,
+  .ui-scrub input[type="range"]::-moz-range-track{
+    background:Canvas;border:1px solid CanvasText;
+  }
+  .ui-scrub input[type="range"]::-webkit-slider-thumb,
+  .ui-scrub input[type="range"]::-moz-range-thumb{background:Highlight;border-color:Canvas}
+  /* Tinted ground is gone, so the playing row needs an edge to carry the
+     state — same fix, same reason, as the .ui-rank "you" row above. */
+  .ui-track[aria-current]{outline:1px solid Highlight;outline-offset:-1px}
   /* Halo's blur is a no-op here and only costs paint time. */
   .ui,.ui *{backdrop-filter:none}
 }
@@ -1987,6 +2225,12 @@ a.ui-brand{color:inherit;text-decoration:none}
 
   /* Sticky is meaningless on paper and repeats the header into the text. */
   .ui-sitehead-stick{position:static!important}
+
+  /* A transport bar describes something happening now, which paper cannot be.
+     Fixed positioning would also stamp it onto every printed page. The spacer
+     goes with it, or the last sheet ends in a band of nothing. */
+  .ui-transport{display:none!important}
+  .ui-transport-spacer{display:none!important}
 
   /* Anything that scrolls has content outside the viewport, which on paper is
      content that simply does not exist. Let it wrap instead. */

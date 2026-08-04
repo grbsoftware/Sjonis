@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Media player — UI Suite skeleton</title>
+
+<link rel="stylesheet" href="../core/ui.css">
+<link rel="stylesheet" href="../core/themes.css">
+
+<!--
+  MEDIA PLAYER SKELETON
+
+  The eighth skeleton, and the last one from the original monoculture list.
+
+  What makes it structurally different from all seven others: every other
+  skeleton's chrome sits BESIDE the content (app-shell's rail), ABOVE it (the
+  site frame) or ON it (game.html's HUD floating over artwork). A transport bar
+  does none of those — it is docked to the VIEWPORT and it OUTLIVES the
+  content. You can scroll the whole library past it, follow a link, change what
+  you are looking at entirely, and the bar keeps describing something that is
+  still happening. It is the only chrome in the suite that is not about what is
+  on screen.
+
+  Two things follow, and both are in core/ui.css (TRANSPORT / PLAYER):
+
+  1. It needs an OPAQUE ground. It floats over arbitrary content, so the same
+     answer as the HUD panel: mix from --ui-bg, the only token opaque in all
+     six themes.
+
+  2. It COVERS the bottom of the document. Without help, the last row of the
+     library is unreachable and an anchor lands its target underneath the bar.
+     --ui-transport-h is declared once and pays for both the spacer element and
+     scroll-padding-block-end, so the two cannot drift apart.
+
+  New primitives:
+    .ui-transport / -row / -end / -spacer   the docked bar and its offset
+    .ui-scrub                               two fills, one gradient, native range
+    .ui-nowplaying / -art / -title          the cluster that must not overflow
+    .ui-tracklist / .ui-track               a four-column ruler, not a list
+    .ui-eq                                  the playing mark
+    .ui-btn-round / -lg                     controls identified by shape
+
+  The transport is WIRED here, in this file, rather than in ui.js. Playback is
+  application state — which track, how far through, whether it is playing — and
+  ui.js's rule is that it wires BEHAVIOUR that is the same on every page. A
+  player's state never is. So ui.js supplies the dialog, menu, filter and
+  toast; the twenty lines that move a scrubber belong to the app.
+
+  There is no <audio> element and no media file. This is a skeleton: it shows
+  the structure and the states, and the timer below stands in for playback so
+  every state can be seen without shipping a binary asset.
+-->
+
+<body class="ui" data-theme="graphite" id="top">
+<a class="ui-skip" href="#main">Skip to content</a>
+
+<div class="ui-page">
+
+  <header class="ui-sitehead ui-sitehead-stick">
+    <div class="ui-sitebar ui-measure ui-measure-wide">
+      <a class="ui-brand" href="#top">
+        <div class="ui-mark">SJ</div>
+        <div class="ui-brand-name">Sjonis Radio</div>
+      </a>
+      <nav class="ui-sitenav" aria-label="Library">
+        <a class="ui-sitenav-item" aria-current="page" href="#main">Library</a>
+        <a class="ui-sitenav-item" href="#queue">Queue</a>
+        <a class="ui-sitenav-item" href="#main">Sessions</a>
+      </nav>
+      <div class="ui-sitehead-actions">
+        <input class="ui-input" type="search" placeholder="Filter tracks…"
+               aria-label="Filter tracks"
+               data-ui-filter="#tracks" data-ui-filter-status="#trackcount">
+      </div>
+    </div>
+  </header>
+
+  <!-- the record being played. A player's hero is not a headline, it is the
+       artwork — so the measure starts below it, not around it. ------------->
+  <section class="ui-band ui-band-tight" id="main" tabindex="-1">
+    <div class="ui-measure ui-measure-wide">
+      <div class="ui-feature">
+        <div class="ui-frame ui-ratio-square" data-ui-lazy style="max-inline-size:22rem">
+          <img data-src="../demo/img/orbit.svg" alt="Cover of Orbit Sessions">
+        </div>
+        <div>
+          <p class="ui-eyebrow">Album · 2026 · 9 tracks</p>
+          <h1 class="ui-display">Orbit Sessions</h1>
+          <p class="ui-lead" style="margin-top:var(--ui-s3)">
+            Nine takes recorded in one room over two days, mixed in the order
+            they were played and left that way.
+          </p>
+          <div class="ui-row" style="gap:var(--ui-s3);margin-top:var(--ui-s5)">
+            <button class="ui-btn ui-btn-lg" data-ui-playall>Play all</button>
+            <button class="ui-btn ui-btn-ghost ui-btn-lg" data-ui-open="#about">
+              About this session
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE LIBRARY.
+       A tracklist is not .ui-list. A list item is a title plus metadata that
+       can be any shape; a track row is a fixed ruler — index, title, album,
+       duration — and the columns must line up down the entire list or the eye
+       cannot scan the durations. The index cell doubles as the play control,
+       which is why it is a button rather than a number in a <span>. -->
+  <section class="ui-band ui-band-tight" id="queue" tabindex="-1">
+    <div class="ui-measure ui-measure-wide">
+      <div class="ui-toolbar">
+        <h2 class="ui-title">Tracks</h2>
+        <p class="ui-faint" id="trackcount" aria-live="polite">9 of 9</p>
+      </div>
+
+      <ol class="ui-tracklist" id="tracks">
+        <!-- The playing row carries THREE signals — tinted ground, accent
+             title, and the equaliser replacing the index — because a ground
+             tint alone is a colour difference and nothing else. It hangs off
+             aria-current, the attribute a screen reader already announces,
+             rather than a parallel class that can drift out of step with it. -->
+        <li class="ui-track" data-ui-item aria-current="true" data-time="214">
+          <span class="ui-track-index" aria-hidden="true">
+            <span class="ui-eq"><i></i><i></i><i></i></span>
+          </span>
+          <div style="min-width:0">
+            <p class="ui-track-title">Orbit</p>
+            <p class="ui-track-artist">Hald &amp; Reyes</p>
+          </div>
+          <span class="ui-track-album">Orbit Sessions</span>
+          <span class="ui-track-time">3:34</span>
+        </li>
+        <li class="ui-track" data-ui-item data-time="256">
+          <span class="ui-track-index">2</span>
+          <div style="min-width:0">
+            <p class="ui-track-title">Lattice</p>
+            <p class="ui-track-artist">Hald &amp; Reyes</p>
+          </div>
+          <span class="ui-track-album">Orbit Sessions</span>
+          <span class="ui-track-time">4:16</span>
+        </li>
+        <li class="ui-track" data-ui-item data-time="188">
+          <span class="ui-track-index">3</span>
+          <div style="min-width:0">
+            <p class="ui-track-title">Sediment</p>
+            <p class="ui-track-artist">Hald &amp; Reyes</p>
+          </div>
+          <span class="ui-track-album">Orbit Sessions</span>
+          <span class="ui-track-time">3:08</span>
+        </li>
+        <li class="ui-track" data-ui-item data-time="401">
+          <span class="ui-track-index">4</span>
+          <div style="min-width:0">
+            <p class="ui-track-title">Horizon, unresolved</p>
+            <p class="ui-track-artist">Hald &amp; Reyes</p>
+          </div>
+          <span class="ui-track-album">Orbit Sessions</span>
+          <span class="ui-track-time">6:41</span>
+        </li>
+        <li class="ui-track" data-ui-item data-time="167">
+          <span class="ui-track-index">5</span>
+          <div style="min-width:0">
+            <p class="ui-track-title">Drift</p>
+            <p class="ui-track-artist">Hald &amp; Reyes</p>
+          </div>
+          <span class="ui-track-album">Orbit Sessions</span>
+          <span class="ui-track-time">2:47</span>
+        </li>
+        <li class="ui-track" data-ui-item data-time="298">
+          <span class="ui-track-index">6</span>
+          <div style="min-width:0">
+            <p class="ui-track-title">Interval</p>
+            <p class="ui-track-artist">Hald &amp; Reyes</p>
+          </div>
+          <span class="ui-track-album">Orbit Sessions</span>
+          <span class="ui-track-time">4:58</span>
+        </li>
+        <li class="ui-track" data-ui-item data-time="233">
+          <span class="ui-track-index">7</span>
+          <div style="min-width:0">
+            <p class="ui-track-title">Weave</p>
+            <p class="ui-track-artist">Hald &amp; Reyes</p>
+          </div>
+          <span class="ui-track-album">Orbit Sessions</span>
+          <span class="ui-track-time">3:53</span>
+        </li>
+        <li class="ui-track" data-ui-item data-time="512">
+          <span class="ui-track-index">8</span>
+          <div style="min-width:0">
+            <p class="ui-track-title">Rotation (long take)</p>
+            <p class="ui-track-artist">Hald &amp; Reyes</p>
+          </div>
+          <span class="ui-track-album">Orbit Sessions</span>
+          <span class="ui-track-time">8:32</span>
+        </li>
+        <li class="ui-track" data-ui-item data-time="145">
+          <span class="ui-track-index">9</span>
+          <div style="min-width:0">
+            <p class="ui-track-title">Fold</p>
+            <p class="ui-track-artist">Hald &amp; Reyes</p>
+          </div>
+          <span class="ui-track-album">Orbit Sessions</span>
+          <span class="ui-track-time">2:25</span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- The spacer, not padding on .ui-page: padding sits inside the page's
+       background, and a banded layout paints its bands edge to edge, so the
+       last band would end in a stripe of bare ground above the bar. ------->
+  <div class="ui-transport-spacer" aria-hidden="true"></div>
+</div>
+
+<!-- THE TRANSPORT.
+     Outside .ui-page because it is not part of the document — it is docked to
+     the viewport and describes something that outlives whatever is on screen.
+     role="region" with a label, so a screen reader user can jump to it from
+     anywhere in the page rather than having to find it in reading order. -->
+<div class="ui-transport" role="region" aria-label="Player">
+
+  <div class="ui-scrub">
+    <span class="ui-scrub-time" id="elapsed">0:00</span>
+    <input type="range" id="seek" min="0" max="214" value="0" step="1"
+           aria-label="Seek">
+    <span class="ui-scrub-time" id="duration">3:34</span>
+  </div>
+
+  <div class="ui-transport-row">
+    <div class="ui-nowplaying">
+      <div class="ui-nowplaying-art">
+        <img src="../demo/img/orbit.svg" alt="">
+      </div>
+      <div class="ui-nowplaying-text">
+        <p class="ui-nowplaying-title" id="np-title">Orbit</p>
+        <p class="ui-nowplaying-artist" id="np-artist">Hald &amp; Reyes</p>
+      </div>
+    </div>
+
+    <div class="ui-transport-controls">
+      <button class="ui-btn ui-btn-ghost ui-btn-round" data-ui-prev
+              aria-label="Previous track">&#9664;&#9664;</button>
+      <button class="ui-btn ui-btn-round ui-btn-round-lg" id="playpause"
+              aria-pressed="false" aria-label="Play">&#9654;</button>
+      <button class="ui-btn ui-btn-ghost ui-btn-round" data-ui-next
+              aria-label="Next track">&#9654;&#9654;</button>
+    </div>
+
+    <div class="ui-transport-end">
+      <span class="ui-label" id="vol-label">Volume</span>
+      <div class="ui-scrub" style="--ui-scrub:.7;--ui-scrub-buffered:1;inline-size:8rem">
+        <input type="range" min="0" max="100" value="70" aria-labelledby="vol-label">
+      </div>
+    </div>
+  </div>
+</div>
+
+<dialog class="ui-dialog" id="about">
+  <div class="ui-dialog-head">
+    <h2 class="ui-title">About this session</h2>
+    <button class="ui-btn ui-btn-ghost ui-x" data-ui-close aria-label="Close"></button>
+  </div>
+  <div class="ui-dialog-body">
+    <p>Recorded over two days in a room with a concrete floor and no treatment,
+      which is audible and was the point. Two microphones, no overdubs, and the
+      takes are in the order they happened.</p>
+    <p class="ui-credit">Placeholder cover generated by
+      <a href="https://www.anthropic.com">Claude</a>, reviewed and approved by Gary.</p>
+  </div>
+  <div class="ui-dialog-foot">
+    <button class="ui-btn ui-btn-ghost" data-ui-close>Close</button>
+  </div>
+</dialog>
+
+<script src="../core/ui.js"></script>
+<script>
+/* The player's own wiring. This is APPLICATION state — which track, how far
+   through, playing or not — and ui.js deliberately does not own it: its rule is
+   that it wires behaviour that is identical on every page, and no two players
+   agree on any of this. What it does own here is the dialog, the filter and
+   the toast, which are the same everywhere.
+
+   There is no <audio> element on purpose. A skeleton ships no binary assets, so
+   a timer stands in for playback: it moves the same tokens a real player would
+   move, which is the part worth demonstrating. Swap the timer for the media
+   element's timeupdate event and nothing else in this file changes. */
+(function () {
+  var scrub    = document.querySelector('.ui-transport .ui-scrub');
+  var seek     = document.getElementById('seek');
+  var elapsed  = document.getElementById('elapsed');
+  var duration = document.getElementById('duration');
+  var playBtn  = document.getElementById('playpause');
+  var tracks   = [].slice.call(document.querySelectorAll('.ui-track'));
+
+  var current = 0, at = 0, playing = false, timer = null;
+
+  function fmt(s) {
+    s = Math.max(0, Math.round(s));
+    return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+  }
+
+  /* One place writes the tokens. --ui-scrub is a 0-1 fraction for exactly the
+     reason --ui-meter is: the author never computes a percentage against a
+     container whose width they cannot know, and the CSS cannot be handed a
+     value out of range. */
+  function paint() {
+    var total = Number(tracks[current].dataset.time) || 1;
+    scrub.style.setProperty('--ui-scrub', at / total);
+    /* Buffered runs ahead of played and is capped at 1 — a real player reads
+       this off the media element's buffered TimeRanges. */
+    scrub.style.setProperty('--ui-scrub-buffered', Math.min(1, at / total + 0.18));
+    seek.max = total;
+    seek.value = at;
+    elapsed.textContent = fmt(at);
+    duration.textContent = fmt(total);
+  }
+
+  function select(i) {
+    if (i < 0 || i >= tracks.length) return;
+    tracks.forEach(function (t) { t.removeAttribute('aria-current'); });
+    /* The equaliser lives in the row that is playing and nowhere else, so it
+       moves with aria-current rather than being toggled separately — one fact,
+       one place, no chance of a row claiming to play while silent. */
+    var eq = document.querySelector('.ui-eq');
+    current = i;
+    tracks[i].setAttribute('aria-current', 'true');
+    var idx = tracks[i].querySelector('.ui-track-index');
+    if (eq && idx && !idx.contains(eq)) {
+      var old = eq.closest('.ui-track-index');
+      if (old) old.textContent = String(tracks.indexOf(old.closest('.ui-track')) + 1);
+      idx.textContent = '';
+      idx.appendChild(eq);
+      idx.setAttribute('aria-hidden', 'true');
+    }
+    document.getElementById('np-title').textContent =
+      tracks[i].querySelector('.ui-track-title').textContent;
+    document.getElementById('np-artist').textContent =
+      tracks[i].querySelector('.ui-track-artist').textContent;
+    at = 0;
+    paint();
+  }
+
+  function setPlaying(on) {
+    playing = on;
+    /* Label AND pressed state. The glyph alone is a picture; aria-pressed
+       alone leaves the accessible name saying "Play" while it is playing. */
+    playBtn.setAttribute('aria-pressed', String(on));
+    playBtn.setAttribute('aria-label', on ? 'Pause' : 'Play');
+    playBtn.innerHTML = on ? '&#10073;&#10073;' : '&#9654;';
+    clearInterval(timer);
+    if (on) {
+      timer = setInterval(function () {
+        var total = Number(tracks[current].dataset.time) || 1;
+        at += 1;
+        if (at >= total) { select(current + 1 < tracks.length ? current + 1 : 0); }
+        paint();
+      }, 1000);
+    }
+  }
+
+  playBtn.addEventListener('click', function () { setPlaying(!playing); });
+  seek.addEventListener('input', function () { at = Number(seek.value); paint(); });
+
+  document.querySelector('[data-ui-prev]').addEventListener('click', function () {
+    /* The convention every player uses: back within a track restarts it, and
+       only a second press near the start moves to the previous one. */
+    if (at > 3) { at = 0; paint(); }
+    else select(current > 0 ? current - 1 : tracks.length - 1);
+  });
+  document.querySelector('[data-ui-next]').addEventListener('click', function () {
+    select(current + 1 < tracks.length ? current + 1 : 0);
+  });
+  document.querySelector('[data-ui-playall]').addEventListener('click', function () {
+    select(0); setPlaying(true);
+  });
+
+  tracks.forEach(function (row, i) {
+    row.addEventListener('dblclick', function () { select(i); setPlaying(true); });
+  });
+
+  /* The tab is hidden: a timer that keeps running is a clock that lies about
+     where playback got to. Same reasoning as the marquee pausing off-screen. */
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden && playing) { clearInterval(timer); }
+    else if (!document.hidden && playing) { setPlaying(true); }
+  });
+
+  paint();
+
+  /* Keep --ui-transport-h honest. ui.css sizes the bar from the token and the
+     spacer from the same token, so they agree by construction — but only while
+     the bar's content fits. The moment it does not (a wrapped title on a narrow
+     phone, a row an author added) the bar grows and the spacer does not, and
+     the last track goes back under it. Measuring costs four lines and removes
+     a whole class of "the last row is unreachable" bug.
+
+     Written here rather than in ui.js on purpose: with no script the CSS
+     default is already correct for this bar, so this is a correction, not a
+     requirement, and ui.js is for behaviour a page cannot do without. */
+  if ('ResizeObserver' in window) {
+    var bar = document.querySelector('.ui-transport');
+    new ResizeObserver(function () {
+      document.documentElement.style.setProperty(
+        '--ui-transport-h', bar.getBoundingClientRect().height + 'px');
+    }).observe(bar);
+  }
+})();
+</script>
+</body>
+</html>
