@@ -1377,3 +1377,107 @@ a.ui-brand{color:inherit;text-decoration:none}
     transition-duration:.01ms!important;animation-duration:.01ms!important;
   }
 }
+
+/* -----------------------------------------------------------------------------
+   FORCED COLOURS  (Windows High Contrast, and any UA that replaces the palette)
+
+   In this mode the UA throws our colours away and substitutes the user's own.
+   That is the correct behaviour and must not be fought — but anything drawn
+   with a BACKGROUND rather than a border disappears entirely, because every
+   background collapses to Canvas. Every such element needs a border it did not
+   previously need, in a system colour keyword so the UA keeps it.
+   -------------------------------------------------------------------------- */
+@media (forced-colors:active){
+  /* Marks carry meaning by fill alone; without a border they vanish. */
+  .ui-dot,.ui-swatch,.ui-badge,.ui-spark,.ui-avatar,.ui-mark{
+    border:1px solid CanvasText;
+    forced-color-adjust:none;   /* a swatch that is not its own colour is a lie */
+  }
+  .ui-dot,.ui-badge,.ui-avatar,.ui-mark{forced-color-adjust:auto}
+
+  /* Buttons and fields are distinguished from the page by fill in normal use. */
+  .ui-btn,.ui-input,.ui-card,.ui-frame,.ui-menu,.ui-dialog,.ui-toast{
+    border:1px solid CanvasText;
+  }
+  /* Selected state reads as a colour swap normally — give it a shape too. */
+  .ui-tab[aria-selected="true"],.ui-nav-item[aria-current],
+  .ui-sitenav-item[aria-current="page"]{
+    border-bottom:3px solid Highlight;
+  }
+  .ui-swatch[aria-pressed="true"]{outline:3px solid Highlight;outline-offset:2px}
+  /* Halo's blur is a no-op here and only costs paint time. */
+  .ui,.ui *{backdrop-filter:none}
+}
+
+/* -----------------------------------------------------------------------------
+   REDUCED TRANSPARENCY
+
+   Honest scope: this drops the BLUR, which is the expensive and disorienting
+   part, and is all ui.css can do without hardcoding a colour — flattening a
+   theme's rgba surfaces would mean writing literal values into a file that is
+   required to contain none, and `--ui-surface: color-mix(…, var(--ui-surface))`
+   is a cycle, not a solution. A theme that wants true opacity under this query
+   should declare it in themes.css alongside its own values.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-transparency:reduce){
+  .ui,.ui *{backdrop-filter:none}
+  .ui{--ui-blur:none}
+}
+
+/* -----------------------------------------------------------------------------
+   PRINT
+
+   A page that is read is a page that gets printed, and nothing in this suite
+   addressed that. The rules divide into three jobs: stop spending ink on
+   things that are not content, stop the interactive layer from printing at
+   all, and stop the layout from cutting content in half.
+
+   Backgrounds are left to the UA. Browsers omit them by default and the reader
+   can turn them on; forcing white here would override that choice, and forcing
+   colours to print would empty a cartridge on a dark theme.
+   -------------------------------------------------------------------------- */
+@media print{
+  /* Chrome, controls and transient layers: none of it is the document. */
+  .ui-rail,.ui-toolbar,.ui-skip,.ui-mode-toggle,.ui-menu,.ui-scrim,
+  .ui-toasts,.ui-tip,.ui-sitehead-actions,.ui-palette{display:none!important}
+
+  /* Sticky is meaningless on paper and repeats the header into the text. */
+  .ui-sitehead-stick{position:static!important}
+
+  /* Anything that scrolls has content outside the viewport, which on paper is
+     content that simply does not exist. Let it wrap instead. */
+  .ui-reel,.ui-marquee{
+    display:block!important;overflow:visible!important;
+    animation:none!important;
+  }
+  .ui-marquee-track{display:flex;flex-wrap:wrap;gap:var(--ui-s4);transform:none!important}
+  .ui-scroll,.ui-table-wrap{overflow:visible!important}
+
+  /* A collapsed accordion prints as a row of headings with the answers
+     missing — the reader cannot click a sheet of paper. */
+  .ui-accordion details{display:block}
+  .ui-accordion details > *{display:revert}
+
+  /* Do not cut these in half across a page boundary. */
+  .ui-card,.ui-figure,.ui-frame,.ui-pullquote,.ui-quote,.ui-stat,
+  .ui-banner,.ui-list-item,.ui-table tr{break-inside:avoid}
+  h1,h2,h3,.ui-title,.ui-display{break-after:avoid}
+
+  /* A URL the reader cannot click is a URL they cannot follow. Print it —
+     but only in prose, never in navigation, where it would double the words
+     on every link. Same-page anchors are worthless on paper. */
+  .ui-prose a[href^="http"]::after,
+  .ui-measure-text a[href^="http"]::after,
+  .ui-columns a[href^="http"]::after{
+    content:" (" attr(href) ")";
+    font-size:.85em;word-break:break-all;
+  }
+
+  /* Tables run to the sheet edge; a repeated head is what makes page two
+     readable at all. */
+  .ui-table{width:100%}
+  .ui-table thead{display:table-header-group}
+
+  /* Images must not be scaled past the sheet. */
+  .ui-frame img,.ui-figure img{max-width:100%;height:auto}
+}
