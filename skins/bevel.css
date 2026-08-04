@@ -60,6 +60,18 @@
   --ui-bevel-lit:  color-mix(in srgb,var(--ui-bevel-face) 15%,#fff);
   --ui-bevel-shade:color-mix(in srgb,var(--ui-bevel-face) 25%,#000);
 
+  /* The theme's accent, FROZEN at this level. The face block below promotes
+     --ui-accent so a link is readable on the mid face, and a filled button
+     inside a card would otherwise inherit that promoted value as its own
+     background -- the same primary button muddier inside a card than outside
+     it. Capturing it here pins it: a var() in a custom property is substituted
+     where it is DECLARED (trap 1), so this resolves once, against the theme.
+     Note the promotion cannot be written as --ui-accent:color-mix(...
+     var(--ui-accent)...) either; a custom property that refers to itself on the
+     same element is a cycle and is invalid at computed-value time, inherited
+     value or not. So the capture is required twice over. */
+  --ui-bevel-accent: var(--ui-accent);
+
   /* Depth was drawn, not cast. No theme's soft shadow survives here. */
   --ui-shadow:none;
   --ui-shadow-lg:none;
@@ -93,18 +105,46 @@
 /* -----------------------------------------------------------------------------
    THE COST OF A MID FACE, PAID EXPLICITLY
 
-   Moving every surface to a mid tone breaks the three-level text hierarchy that
-   was tuned against --ui-bg. Measured on the new face, --ui-text still clears
-   comfortably (5.9-8.9) but --ui-text-dim lands at 2.7-3.3 against a 4.5 bar —
-   failing in all twelve theme x mode combinations, and .ui-table td uses it. A
-   skin that quietly shipped that would undo two sessions of contrast work.
+   Moving every surface to a mid tone breaks EVERY ink that was tuned against
+   --ui-bg, not just one. --ui-text still clears comfortably (5.9-8.9), but
+   measured on the face across all twelve theme x mode combinations:
 
-   So dim and faint are re-derived FROM the face rather than inherited. The mixes
-   are the smallest promotion that clears both bars everywhere, so the hierarchy
-   survives rather than collapsing to one level: worst dim 4.58, worst faint 3.10.
+     --ui-text-dim   2.7-3.3   against 4.5    and .ui-table td prints in it
+     --ui-accent     1.6-      against 3.0    every link on a panel
+     the four states 2.0-      against 4.5    every .ui-pill on a card
+     the mark rims   2.5-      against 3.0    every .ui-dot on a card
+
+   The first of those was found by hand while this skin was being written; the
+   other three were found by tools/validate_palette.py once it could see skins,
+   which is the whole reason that half of the tool exists.
+
+   The obvious fix -- soften the face -- was tried and does not exist. Sweeping
+   the face mix from 60% to 100% of --ui-bg: the states first clear 4.5 at 100%,
+   where the lit edge is 1.02 and there is no bevel left. The mid face and the
+   tuned hues are mutually exclusive, so each ink is dealt with on its own terms
+   rather than by moving one number and hoping.
+
+   Re-derived here, smallest promotion that clears everywhere, so the hierarchy
+   survives rather than collapsing to one level:
+
+     dim    82% ink     worst 4.58
+     faint  59% ink     worst 3.10
+     accent 55% accent  worst 3.37   (60% also clears at 3.08; trap 16 says
+                                      leave margin, and 55% is still the accent)
+     rim    40% series  worst 3.48   via --ui-mark-rim-mix, which ui.css
+                                      documents as safe to set from any level
 
    Scoped to the faces themselves, not to [data-skin], because --ui-bg is
    unchanged — text on the page ground was already correct and must stay as it is.
+
+   ONE VISIBLE COST, STATED RATHER THAN HIDDEN. --ui-accent is not only link
+   text: ui.css also fills a meter, a switch and a focus ring with it. Promoting
+   the token means those read slightly deeper INSIDE a panel than on the page.
+   The alternative was to promote only the `color` uses and pin the fills back,
+   which needs a list of every fill selector and rots the first time ui.css adds
+   one. This way is consistent — on bevel, panels are a darker world and
+   everything on them is tuned to it — but it is a real change and it is the
+   thing to look at first if the skin ever reads wrong.
    -------------------------------------------------------------------------- */
 [data-skin="bevel"] .ui-card,
 [data-skin="bevel"] .ui-table-wrap,
@@ -113,10 +153,43 @@
 [data-skin="bevel"] .ui-toast,
 [data-skin="bevel"] .ui-hud-panel,
 [data-skin="bevel"] .ui-rail,
+[data-skin="bevel"] .ui-tab,
 [data-skin="bevel"] .ui-btn-ghost,
+[data-skin="bevel"] .ui-btn-danger,
 [data-skin="bevel"] .ui-table th{
   --ui-text-dim:  color-mix(in srgb,var(--ui-text) 82%,var(--ui-bevel-face));
   --ui-text-faint:color-mix(in srgb,var(--ui-text) 59%,var(--ui-bevel-face));
+  --ui-accent:    color-mix(in srgb,var(--ui-bevel-accent) 55%,var(--ui-text));
+  --ui-mark-rim-mix:40%;
+}
+
+/* -----------------------------------------------------------------------------
+   A STATUS IS A WELL, NOT TINTED TEXT
+
+   .ui-pill has no ground of its own in ui.css — the state hue is printed as
+   text and the pill is drawn in currentColor, so on a bevel panel that hue
+   meets the mid face and lands at 2.0-3.3 against a 4.5 bar in every theme.
+
+   Promoting the four hues toward the ink the way dim and faint are promoted
+   would work and would be wrong: the state colours are the one part of the
+   palette held at conventional positions, and muddying them is exactly the
+   thing the categorical rim decision refused to do to the series.
+
+   So the pill gets the ground it was tuned against instead. --ui-bg is the only
+   token opaque in all six themes (trap 11), and it is the ground the theme pass
+   already validates every state hue against at 4.5 — so this is not a new
+   contrast claim, it is the existing one made to apply again.
+
+   It is also the more period-accurate reading. A status in this grammar was a
+   sunken field with a light interior, not a coloured word floating on the
+   panel, and with --ui-radius-pill at 0 it reads as exactly that box.
+   -------------------------------------------------------------------------- */
+[data-skin="bevel"] .ui-pill{
+  background:var(--ui-bg);
+  padding-inline:var(--ui-s2);
+  border-color:var(--ui-bevel-shade) var(--ui-bevel-lit)
+               var(--ui-bevel-lit) var(--ui-bevel-shade);
+  border-width:2px;
 }
 
 /* -----------------------------------------------------------------------------
@@ -164,10 +237,10 @@
    reads as primary — the bevel is depth, not colour, and the two are separate
    jobs. Its edges mix from the accent instead of the surface. */
 [data-skin="bevel"] .ui-btn{
-  background:var(--ui-accent);
-  --ui-bevel-face: var(--ui-accent);
-  --ui-bevel-lit:  color-mix(in srgb,var(--ui-accent) 58%,#fff);
-  --ui-bevel-shade:color-mix(in srgb,var(--ui-accent) 52%,#000);
+  background:var(--ui-bevel-accent);
+  --ui-bevel-face: var(--ui-bevel-accent);
+  --ui-bevel-lit:  color-mix(in srgb,var(--ui-bevel-accent) 58%,#fff);
+  --ui-bevel-shade:color-mix(in srgb,var(--ui-bevel-accent) 52%,#000);
 }
 
 /* Ghost and danger sit on the raised face rather than on nothing — in this
