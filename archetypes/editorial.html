@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Rule and the Pull — Sjonis Quarterly</title>
+
+<link rel="stylesheet" href="../core/ui.css">
+<link rel="stylesheet" href="../core/themes.css">
+
+<!--
+  EDITORIAL / ZINE ARCHETYPE
+
+  The fourth skeleton. app-shell is scanned, storefront is compared, portfolio is
+  browsed — this one is READ, start to finish, and that single difference decides
+  every choice on the page.
+
+  What follows from "read":
+    - the line length is the design. Everything else yields to it.
+    - the reader's place in the line must survive an interruption, so pull
+      quotes and figures sit BESIDE the column or break it cleanly, never inside
+      a paragraph.
+    - there is exactly one thing to do here, so there is no toolbar, no filter,
+      no card. The only controls are in the footer, out of the way.
+
+  It reuses the site frame unchanged (this is issue 4 of a periodical, so it has
+  siblings), and the EDITORIAL primitives in core/ui.css:
+    .ui-columns / -ruled   multi-column body, column-WIDTH so the count follows
+    .ui-dropcap            the way in; ::first-letter, never a <span>
+    .ui-pullquote / -side  an interruption on purpose; aria-hidden, it repeats
+    .ui-sidenote           margin note on wide screens, inline on narrow
+    .ui-standfirst / .ui-byline / .ui-dinkus
+
+  Theme is oxide: warm, printerly, and the one that most looks like ink on
+  stock. Switch it in the footer — the archetype holds in all six.
+-->
+
+<body class="ui" data-theme="oxide" id="top">
+<a class="ui-skip" href="#main">Skip to content</a>
+
+<div class="ui-page">
+
+  <header class="ui-sitehead ui-sitehead-stick">
+    <div class="ui-sitebar ui-measure ui-measure-wide">
+      <a class="ui-brand" href="#top">
+        <div class="ui-mark">SQ</div>
+        <div class="ui-brand-name">Sjonis Quarterly</div>
+      </a>
+      <nav class="ui-sitenav" aria-label="Sections">
+        <a class="ui-sitenav-item" aria-current="page" href="#main">Essays</a>
+        <a class="ui-sitenav-item" href="#main">Interviews</a>
+        <a class="ui-sitenav-item" href="#main">Archive</a>
+      </nav>
+      <div class="ui-sitehead-actions">
+        <a class="ui-btn ui-btn-ghost" href="#contact">Subscribe</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- The headline gets the full page width; the standfirst does not. A title
+       is looked at, a standfirst is read, and they want different measures. -->
+  <article>
+  <section class="ui-band" id="main" tabindex="-1">
+    <div class="ui-measure">
+      <p class="ui-eyebrow">Essay · Issue four</p>
+      <h1 class="ui-display">The rule and the pull</h1>
+      <p class="ui-standfirst">Every printed edition is an argument between a system
+        that wants to repeat exactly and a hand that cannot. The interesting work
+        lives in the gap, and the gap is not a defect.</p>
+      <p class="ui-byline">
+        <span><b>Gary Benninger</b></span>
+        <span>·</span>
+        <span>2,100 words</span>
+        <span>·</span>
+        <span>March 2026</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- Full-bleed opener. Escapes the measure without leaving the flow; .ui-page
+       clips the scrollbar overhang it would otherwise cause. ----------------->
+  <section class="ui-band ui-band-flush ui-band-tight">
+    <div class="ui-measure">
+      <figure class="ui-figure ui-bleed">
+        <div class="ui-frame ui-ratio-cinema" data-ui-lazy>
+          <img data-src="../demo/img/rotation.svg" alt="Rotation, a plate registration study">
+        </div>
+        <figcaption class="ui-caption">
+          <b>Rotation</b><span>Registration study, four plates, 2025</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- The body. Two columns at reading width, one on a phone, because the
+       column WIDTH is fixed and the count is whatever fits. ----------------->
+  <section class="ui-band ui-band-tight">
+    <div class="ui-measure">
+      <div class="ui-columns ui-columns-ruled">
+
+        <p class="ui-dropcap">Screenprinting is a rule system with a body attached.
+          The plate says where the ink may go and the squeegee decides how much
+          arrives, and only one of those two is a specification. Everything that
+          makes an edition worth owning happens in the second one.</p>
+
+        <p>A generative rule set has the same shape. The rules are exact and the
+          output is not, because the output has to land somewhere physical — a
+          screen at some pixel density, a sheet at some humidity, a plate pulled
+          by an arm that tires across forty copies. Designers who have only ever
+          shipped to screens tend to read that variation as noise to be removed.
+          Printers read it as the work.</p>
+
+        <p class="ui-pullquote ui-pullquote-side" aria-hidden="true">
+          The rules are exact and the output is not, because the output has to
+          land somewhere physical.
+        </p>
+
+        <p>The distinction matters more than it sounds. If the variation is noise,
+          the correct move is to tighten tolerances until the fortieth pull is
+          indistinguishable from the first — and that is achievable, at the cost
+          of everything that made the process worth choosing over a printer.</p>
+
+        <p class="ui-sidenote">Registration drift across an edition of forty is
+          typically under 0.4mm. Visible at arm's length; invisible in a
+          photograph, which is why catalogues flatten the argument.</p>
+
+        <p>If the variation is the work, the correct move is the opposite: specify
+          the rule tightly enough that the drift has something to drift
+          <em>against</em>. A loose rule plus a loose hand gives mush. A tight
+          rule plus a loose hand gives a series.</p>
+
+        <h2>What a system owes the hand</h2>
+
+        <p>This is not a romantic argument about craft. It is a structural one,
+          and it has a test: can you state the rule without reference to the
+          output? If you can, the rule is doing work. If the only way to describe
+          it is to point at the result, there was no rule — there was a taste
+          exercised repeatedly, which is a different and much less transferable
+          thing.</p>
+
+        <p>Design systems fail the same test in the same way. A token that means
+          "the blue we used on the marketing site" is a taste with a name on it.
+          A token that means "the ground everything else is measured against" is a
+          rule, and it survives a rebrand, a dark mode and a new designer.</p>
+
+        <hr class="ui-dinkus">
+
+        <p>The second half of the argument is about limits. A rule set that can
+          express anything expresses nothing, and the constraint that makes a
+          series legible is almost always the one that felt arbitrary when it was
+          set. Four plates, not five. One family, not three. Eight categorical
+          hues, and if you need a ninth the chart is wrong.</p>
+
+        <p>Which is the same reason a print run ends. Forty is not a
+          manufacturing limit — the screen would keep going. Forty is a decision
+          that this particular argument has been made enough times, and the
+          number is part of the work in exactly the way the plate order is.</p>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- A quote set across the full measure, breaking the columns. The rhythm
+       change is the point: it tells the reader a section ended. ------------->
+  <section class="ui-band ui-band-sunk ui-band-line">
+    <div class="ui-measure ui-measure-text">
+      <blockquote class="ui-quote">A tight rule plus a loose hand gives a series.
+        A loose rule plus a loose hand gives mush.</blockquote>
+    </div>
+  </section>
+
+  <section class="ui-band ui-band-tight">
+    <div class="ui-measure">
+      <div class="ui-columns ui-columns-ruled">
+        <p>None of which resolves the original argument, and it should not. The
+          gap between the specification and the sheet is where the edition lives.
+          Close it completely and you have a file. Leave it open and you have
+          forty things, each of which is the argument made once.</p>
+
+        <p>The only real mistake is pretending the gap is not there — printing
+          forty and calling them identical, or shipping a system and calling it
+          neutral. Both are claims about the world that the world declines to
+          honour.</p>
+      </div>
+    </div>
+  </section>
+  </article>
+
+  <!-- More from the issue -------------------------------------------------- -->
+  <section class="ui-band ui-band-line">
+    <div class="ui-measure ui-measure-wide">
+      <h2 class="ui-title">Also in issue four</h2>
+      <div class="ui-cols">
+        <a class="ui-card ui-card-flush" href="#main">
+          <div class="ui-frame ui-ratio-wide" data-ui-lazy>
+            <img data-src="../demo/img/column.svg" alt="Column">
+          </div>
+          <div class="ui-card-body">
+            <p class="ui-eyebrow">Interview</p>
+            <h3 class="ui-title">The last analogue proof</h3>
+            <p class="ui-faint">On keeping a process nobody else can service.</p>
+          </div>
+        </a>
+        <a class="ui-card ui-card-flush" href="#main">
+          <div class="ui-frame ui-ratio-wide" data-ui-lazy>
+            <img data-src="../demo/img/stack.svg" alt="Stack">
+          </div>
+          <div class="ui-card-body">
+            <p class="ui-eyebrow">Essay</p>
+            <h3 class="ui-title">Eight colours is a claim</h3>
+            <p class="ui-faint">Why categorical palettes stop at eight, and what
+              happens at nine.</p>
+          </div>
+        </a>
+        <a class="ui-card ui-card-flush" href="#main">
+          <div class="ui-frame ui-ratio-wide" data-ui-lazy>
+            <img data-src="../demo/img/arc.svg" alt="Arc">
+          </div>
+          <div class="ui-card-body">
+            <p class="ui-eyebrow">Notebook</p>
+            <h3 class="ui-title">Forty pulls, measured</h3>
+            <p class="ui-faint">Registration drift across a single edition.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="ui-sitefoot" id="contact">
+    <div class="ui-measure ui-measure-wide">
+      <div class="ui-sitefoot-cols">
+        <div>
+          <div class="ui-label">Read</div>
+          <ul>
+            <li><a href="#main">Essays</a></li>
+            <li><a href="#main">Interviews</a></li>
+            <li><a href="#main">Notebook</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="ui-label">Issues</div>
+          <ul>
+            <li><a href="#main">Four — current</a></li>
+            <li><a href="#main">Three</a></li>
+            <li><a href="#main">Archive</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="ui-label">About</div>
+          <ul>
+            <li><a href="#main">Masthead</a></li>
+            <li><a href="#main">Submissions</a></li>
+            <li><a href="#main">Contact</a></li>
+          </ul>
+        </div>
+        <div class="ui-field">
+          <label for="th" class="ui-label">Appearance</label>
+          <select class="ui-input" id="th" data-ui-theme>
+            <option>vanilla</option><option>blueprint</option><option>halo</option>
+            <option>graphite</option><option selected>oxide</option><option>vellum</option>
+          </select>
+          <button class="ui-mode-toggle" data-ui-mode="toggle" style="margin-top:var(--ui-s2)">
+            <span class="ui-mode-word" data-ui-mode-label>Night</span>◐
+          </button>
+        </div>
+      </div>
+
+      <div class="ui-sitefoot-base">
+        <span>&copy; 2026 Sjonis Quarterly</span>
+        <span>Placeholder drawings generated by
+          <a href="https://www.anthropic.com">Claude</a>, reviewed and approved by Gary.</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="../core/ui.js"></script>
+</body>
+</html>

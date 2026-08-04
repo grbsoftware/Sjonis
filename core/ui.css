@@ -357,6 +357,137 @@
 }
 
 /* -----------------------------------------------------------------------------
+   EDITORIAL
+   Long-form: an article that wants to be read start to finish, rather than
+   scanned like a dashboard or compared like a catalogue. Everything here exists
+   to protect the line — its length, its rhythm, and the reader's place in it.
+
+   .ui-prose already handles a single column at 68ch. This is what a magazine
+   adds on top: multiple columns, a way in, and things that interrupt on
+   purpose.
+   -------------------------------------------------------------------------- */
+
+/* Multi-column body. column-width, not column-count, so the number of columns
+   falls out of the available width — the same reasoning as .ui-cols. A fixed
+   count would give a 40-character line on a phone, which is the one thing
+   multi-column text must never do. */
+.ui-columns{
+  columns:var(--ui-col-w,22rem);
+  column-gap:var(--ui-s6);
+  text-align:justify;
+  hyphens:auto;                 /* justified without hyphens gives rivers */
+}
+.ui-columns > *{margin-top:0}
+.ui-columns > * + *{margin-top:var(--ui-s3)}
+/* A rule between columns reads as structure at a glance; without it two columns
+   of similar text look like one column that wrapped wrong. */
+.ui-columns-ruled{column-rule:1px solid var(--ui-line)}
+.ui-columns-2{--ui-col-w:min(22rem,100%)}
+/* Headings and figures must not be split across a column break. */
+.ui-columns h2,.ui-columns h3,.ui-columns figure,
+.ui-columns .ui-frame,.ui-columns .ui-pullquote{break-inside:avoid}
+.ui-columns h2,.ui-columns h3{break-after:avoid}
+
+/* The way in. ::first-letter is the only correct mechanism — a <span> would be
+   read aloud as a separate word and would break selection. initial-letter does
+   the metrics properly where supported; the float is the fallback, and both are
+   given so the shape holds either way. */
+.ui-dropcap::first-letter{
+  initial-letter:3;
+  -webkit-initial-letter:3;
+  float:left;
+  font-family:var(--ui-font-display);
+  font-size:3.1em;
+  line-height:.84;
+  font-weight:var(--ui-weight-heading);
+  padding-inline-end:.08em;
+  margin-block-start:.06em;
+  color:var(--ui-text);
+}
+@supports (initial-letter:3) or (-webkit-initial-letter:3){
+  /* The float is only a fallback; where initial-letter works it does the
+     line-alignment properly and the float would fight it. */
+  .ui-dropcap::first-letter{float:none;font-size:inherit;margin-block-start:0}
+}
+
+/* An interruption, on purpose. Not a <blockquote> — a pull quote repeats text
+   that is already in the article, so it is decorative by definition and must be
+   aria-hidden or a screen reader hears the sentence twice. */
+.ui-pullquote{
+  margin:var(--ui-s5) 0;
+  padding-block:var(--ui-s3);
+  border-top:2px solid var(--ui-text);
+  border-bottom:1px solid var(--ui-line);
+  font-family:var(--ui-font-display);
+  font-size:var(--ui-fs-lg);
+  line-height:1.24;
+  letter-spacing:-.012em;
+  text-align:left;
+  hyphens:none;
+  color:var(--ui-text);
+}
+/* Beside the text rather than through it. Only past the width where a floated
+   quote still leaves a readable line beside it — below that it stacks. */
+@media (min-width:900px){
+  .ui-pullquote-side{
+    float:inline-end;
+    width:min(20rem,42%);
+    margin-inline-start:var(--ui-s5);
+    margin-block-start:0;
+  }
+}
+
+/* Margin note. Beside the measure on a wide screen, inline on a narrow one —
+   and inline is the honest fallback, because a sidenote squeezed into 8rem is
+   worse than one that simply sits in the flow. */
+.ui-sidenote{
+  display:block;
+  font-size:var(--ui-fs-sm);
+  line-height:1.45;
+  color:var(--ui-text-dim);
+  border-inline-start:2px solid var(--ui-line-strong);
+  padding-inline-start:var(--ui-s3);
+  margin-block:var(--ui-s4);
+}
+@media (min-width:1180px){
+  .ui-measure-text > .ui-sidenote,.ui-prose > .ui-sidenote{
+    position:relative;
+    float:inline-start;
+    width:14rem;
+    margin-inline-start:calc(-14rem - var(--ui-s5));
+    margin-block:0;
+    border:0;padding-inline-start:0;
+    text-align:end;
+  }
+}
+
+/* Standfirst — the paragraph between the headline and the article, set larger
+   and never justified. */
+.ui-standfirst{
+  font-size:var(--ui-fs-md);
+  line-height:1.42;
+  color:var(--ui-text-dim);
+  max-width:52ch;
+  text-align:start;
+  hyphens:none;
+}
+.ui-byline{
+  display:flex;flex-wrap:wrap;align-items:center;gap:var(--ui-s3);
+  font-size:var(--ui-fs-sm);color:var(--ui-text-faint);
+}
+.ui-byline b{color:var(--ui-text);font-weight:var(--ui-weight-medium)}
+
+/* Section break inside prose. A row of marks, not a full rule: a <hr> across
+   the measure reads as "article over". */
+.ui-dinkus{
+  border:0;margin:var(--ui-s5) auto;
+  color:var(--ui-text-faint);text-align:center;
+  font-size:var(--ui-fs-sm);letter-spacing:.6em;
+  break-inside:avoid;
+}
+.ui-dinkus::before{content:"***"}
+
+/* -----------------------------------------------------------------------------
    COMMERCE
    A small vocabulary for the things a catalogue has and a dashboard does not:
    a price, a badge on the corner of an image, a row of colour options.
