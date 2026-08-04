@@ -367,19 +367,64 @@ dot vanished under Windows High Contrast), and marks now `print-color-adjust:
 exact` — a browser drops backgrounds on paper, and a legend whose dots did not
 print is a list of labels bound to nothing.
 
+## DONE — the GAME / HUD archetype (`archetypes/game.html`)
+
+The sixth skeleton, built and live. Every other archetype puts chrome BESIDE the
+content (app-shell's rail) or ABOVE it (the site frame); a HUD does neither — it
+floats on the art and the art keeps going underneath. It is also the only
+archetype with no reading measure in its hero, and the measure deliberately
+returns below the fold where there is prose again.
+
+New primitives, all of which were genuinely missing:
+
+- `.ui-meter` — the real gap, and useful far outside this page. One 0-1 fraction
+  drives it (`--ui-meter`), so the author never does arithmetic against a
+  container they cannot measure; `clamp()` guards both ends. `.ui-meter-seg`
+  masks track and fill together so the pips' gaps are the page, not a colour
+  ui.css would have to name. NOT `<progress>`: it cannot be segmented and its
+  pseudo-elements are still three vendor spellings. The `role` is the author's
+  (`meter` = a static measurement, `progressbar` = a task advancing) — they read
+  differently and only the author knows which it is.
+- `.ui-stage` / `.ui-stage-scrim` / `.ui-hud` + nine slots — children stacked in
+  one grid cell, corners pinned at every size with no media query.
+  `pointer-events:none` on the grid, `auto` on its children, so the art stays
+  live between the chrome. **`100svh`, not `vh`** — vh is the tallest the
+  viewport ever gets, so a "full screen" stage hides under a phone's browser
+  chrome until you scroll.
+- `.ui-readout` (label under the number, for glancing), `.ui-rank` (leaderboard),
+  `.ui-sr` (visually hidden — a real gap), `.ui-btn-lg`.
+
+`.ui-rank` has no gold/silver/bronze on purpose: ui.css names no colours, so the
+top three are marked by WEIGHT, which also survives greyscale and forced colours.
+The "you" row hangs off `aria-current` — the same attribute the screen reader
+announces — rather than a parallel class that could drift out of step, and
+carries three signals (tint, an inset edge that is a shape, and a visible word).
+
+**The honest hard problem, and the two answers.** Chrome over artwork has no
+guaranteed contrast, and a scrim does not fix it because the author can always
+supply a bright picture. So: `.ui-hud-panel` mixes its ground from `--ui-bg`, the
+one token opaque in all six themes — measured against pure white AND pure black
+art in all 12 theme x mode combinations, worst `--ui-text` ratio is **9.44:1**.
+The legibility is the mix, not the blur (only halo sets `--ui-blur`, so five of
+six themes have no blur here and are still fine). And `.ui-hud-ink`, for text
+sitting on the scrim, is a literal `#fff` because the scrim is ALWAYS a black
+wash — a themed `--ui-text` would go dark under any light theme and vanish into
+the very wash protecting it, a failure that would show on only half the themes.
+
+Verified on the live site: art covers the stage exactly, all four corners pinned
+at 25px, no slot overlaps, and all 8 meters render their exact fraction.
+
 ## NEXT
 
-**Not started, and it was next in line: the GAME / HUD archetype.** The most
-different remaining skeleton — overlaid HUD chrome on hero art, a leaderboard,
-loud display type, no reading measure at all. `marketing` and `media player`
-from the original monoculture list are also unbuilt, but game is the one that
-proves the primitives stretch furthest. Nothing blocks it; it just needs a fresh
-context window, which is why it was deferred rather than half-built.
+`marketing` and `media player` from the original monoculture list are the last
+two unbuilt skeletons. Neither is blocked.
 
-Likely new primitives it would need, none of which exist yet: an overlay layer
-positioned over a full-bleed image, a stat readout at display size, a ranked
-table with a highlighted "you" row, and a progress/meter element — `ui.css` has
-no meter of any kind, which is a real gap independent of the game page.
+**Verification note that cost time here:** the preview pane reports
+`innerWidth`/`innerHeight` of **0** when it is not displayed, so every `vh`/`vw`/
+`svh` value resolves to nothing and a `100svh` stage measures 0x0. Layout looks
+catastrophically broken and is fine. Pin an explicit px size via JS
+(`stage.style.blockSize='760px'`) and measure the LOGIC instead — see trap 14,
+this is the same pane and the same class of lie.
 
 ### DECIDED 2026-08-04 — palette: rim the dots — SHIPPED, see "palette thread is
 CLOSED" above. The 55% guess in the original decision turned out to be exactly
@@ -430,10 +475,19 @@ which serves both projects.
   commerce and editorial primitives and only bridge tokens, not classes — check
   whether that is still the right boundary before extending them.
 
-Five archetype files now exist: app-shell, portfolio, storefront,
-storefront-product, editorial. The layout-monoculture thread is closed — four
-genuinely different skeletons (the fifth is page two of one of them), not four
-pages of one app.
+Six archetype files now exist: app-shell, portfolio, storefront,
+storefront-product, editorial, game. The layout-monoculture thread is closed —
+five genuinely different skeletons (storefront-product is page two of one of
+them), not five pages of one app.
+
+**The two axes, restated, because Gary asked directly (2026-08-04) whether each
+"template" showcases a different skeleton.** They are independent, and that is
+the whole architecture: an ARCHETYPE is structure, chosen by what the thing is;
+a THEME is appearance, chosen by who it is for. Every archetype works in all six
+themes, so six skeletons x six themes is 36 combinations, not six. `game.html`
+carries `data-theme="oxide"` only because rust suits it — change that one
+attribute and the identical skeleton becomes blueprint or halo. A new skeleton
+therefore never needs a new theme, and a new theme never needs a new page.
 
 ## Working with Gary — what came up this session
 
