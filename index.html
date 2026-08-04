@@ -90,6 +90,32 @@ iframe{flex:1;min-height:0;width:100%;border:0;background:var(--g-raise);display
    top of this, so if it never paints the reader still has a way through. */
 .fallback{position:absolute;inset:auto;display:none}
 
+/* ---- tuning strip ---- */
+.tune-btn[aria-expanded="true"]{border-color:var(--g-accent);color:var(--g-accent)}
+.tune{padding:12px 20px;border-bottom:1px solid var(--g-line);background:var(--g-raise);flex:none}
+.tune-row{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-end}
+.ctl{display:flex;flex-direction:column;gap:6px;min-width:0}
+.ctl > label{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
+             color:var(--g-faint);font-weight:600}
+.seg{display:flex;gap:3px;background:var(--g-bg);border:1px solid var(--g-line);
+     border-radius:8px;padding:3px;flex-wrap:wrap}
+.seg button{background:none;border:1px solid transparent;border-radius:5px;
+  padding:5px 10px;font:inherit;font-size:12px;font-weight:550;color:var(--g-dim);
+  cursor:pointer;white-space:nowrap}
+.seg button:hover{color:var(--g-ink)}
+.seg button[aria-pressed="true"]{background:var(--g-raise);border-color:var(--g-line2);color:var(--g-ink)}
+.seg button:focus-visible{outline:2px solid var(--g-accent);outline-offset:1px}
+input[type="range"]{width:126px;accent-color:var(--g-accent)}
+input[type="color"]{width:44px;height:28px;padding:2px;border:1px solid var(--g-line2);
+  border-radius:6px;background:var(--g-bg);cursor:pointer}
+.val{font-family:var(--g-mono);font-size:11px;color:var(--g-faint);
+     font-variant-numeric:tabular-nums;letter-spacing:0;text-transform:none}
+.tune-end{margin-left:auto}
+.tune-acts{display:flex;gap:14px;align-items:center;height:28px}
+.linkish{background:none;border:none;padding:0;font:inherit;font-size:12.5px;
+  color:var(--g-accent);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.tune-note{margin:10px 0 0;font-size:11.5px;color:var(--g-faint);min-height:1em}
+
 /* ---- light/dark toggle ---- */
 .mode{flex:none;width:30px;height:30px;display:grid;place-items:center;padding:0;
       background:var(--g-bg);border:1px solid var(--g-line2);border-radius:7px;
@@ -135,6 +161,8 @@ iframe{flex:1;min-height:0;width:100%;border:0;background:var(--g-raise);display
     <button class="nav" id="next" type="button" title="Next (→)" aria-label="Next example">&#8594;</button>
   </div>
   <div class="tabs" id="tabs"></div>
+  <button class="nav tune-btn" id="tune-btn" type="button" aria-expanded="false"
+          aria-controls="tune" title="Tune this page (T)" aria-label="Tune this page">&#9788;</button>
   <div class="widths" id="widths"></div>
   <button class="mode" id="mode" type="button" aria-pressed="false"
           title="Switch to light (D)" aria-label="Switch to light">
@@ -148,6 +176,38 @@ iframe{flex:1;min-height:0;width:100%;border:0;background:var(--g-raise);display
     </svg>
   </button>
 </nav>
+
+<!-- Tuning strip. Hidden until asked for: the point of this page is to look at
+     the examples, and a permanent wall of sliders would be the tail wagging
+     the dog. -->
+<div class="tune" id="tune" hidden>
+  <div class="tune-row">
+    <div class="ctl">
+      <label>Theme</label>
+      <div class="seg" id="seg-theme"></div>
+    </div>
+    <div class="ctl">
+      <label for="rng-density">Density <span class="val" id="v-density">1.00</span></label>
+      <input type="range" id="rng-density" min=".8" max="1.4" step=".01" value="1">
+    </div>
+    <div class="ctl">
+      <label for="rng-radius">Radius <span class="val" id="v-radius">7px</span></label>
+      <input type="range" id="rng-radius" min="0" max="20" step="1" value="7">
+    </div>
+    <div class="ctl">
+      <label for="col-accent">Accent</label>
+      <input type="color" id="col-accent" value="#2F6FE4">
+    </div>
+    <div class="ctl tune-end">
+      <label>&nbsp;</label>
+      <div class="tune-acts">
+        <button class="linkish" id="tune-reset" type="button">Reset</button>
+        <button class="linkish" id="tune-copy" type="button">Copy CSS</button>
+      </div>
+    </div>
+  </div>
+  <p class="tune-note" id="tune-note"></p>
+</div>
 
 <main class="stage">
   <div class="frame">
@@ -226,6 +286,7 @@ iframe{flex:1;min-height:0;width:100%;border:0;background:var(--g-raise);display
   }
 
   function show(n){
+    if (n !== i){ tune.density = tune.radius = tune.accent = null; }
     i = n;
     var ex = EXAMPLES[n];
     if (frame.getAttribute("src") !== ex.src) frame.setAttribute("src", ex.src);
@@ -331,8 +392,229 @@ iframe{flex:1;min-height:0;width:100%;border:0;background:var(--g-raise);display
 
   modeBtn.addEventListener("click", toggleMode);
 
+  /* ---- tuning ---------------------------------------------------------------
+     The same reach-into-the-frame trick as the mode toggle, pointed at the other
+     axis. This deliberately tunes the REAL archetype files rather than miniature
+     copies of them: demo/gallery.html has four hand-built mini-layouts that have
+     to be kept in step with the archetypes by hand, and they never are.
+
+     Only offered for pages that wear a suite theme. On demo/gallery.html and the
+     specimen deck, data-theme means light/dark and there is nothing to retheme. */
+  var THEMES = ["vanilla","blueprint","halo","graphite","oxide","vellum"];
+  var tune = { theme:null, density:null, radius:null, accent:null };
+
+  var tuneBox  = document.getElementById("tune");
+  var tuneBtn  = document.getElementById("tune-btn");
+  var tuneNote = document.getElementById("tune-note");
+  var segTheme = document.getElementById("seg-theme");
+  var rngD = document.getElementById("rng-density");
+  var rngR = document.getElementById("rng-radius");
+  var colA = document.getElementById("col-accent");
+  var vD = document.getElementById("v-density");
+  var vR = document.getElementById("v-radius");
+
+  function tunable(){ return EXAMPLES[i].mode !== "chrome"; }
+
+  /* The element a theme is written to differs by page: the archetype puts
+     data-theme on <html> or on body.ui. Find whichever one the page chose
+     rather than assuming, and fall back to the .ui root. */
+  function themeRoot(doc){
+    return doc.querySelector("[data-theme]") || doc.querySelector(".ui") || doc.body;
+  }
+
+  function withFrame(fn){
+    try {
+      var doc = frame.contentWindow && frame.contentWindow.document;
+      if (doc && doc.documentElement) fn(doc, frame.contentWindow);
+    } catch (e) { /* cross-origin on file:// — see applyModeToFrame */ }
+  }
+
+  function applyTuneToFrame(){
+    withFrame(function(doc){
+      var el = themeRoot(doc);
+      if (!el) return;
+      if (tune.theme) el.setAttribute("data-theme", tune.theme);
+
+      var s = el.style;
+      ["--ui-density","--ui-radius","--ui-radius-sm","--ui-radius-lg",
+       "--ui-accent","--ui-accent-hover","--ui-accent-ink"].forEach(function(p){
+        s.removeProperty(p);
+      });
+
+      if (tune.density !== null) s.setProperty("--ui-density", tune.density);
+      if (tune.radius !== null){
+        s.setProperty("--ui-radius", tune.radius + "px");
+        s.setProperty("--ui-radius-sm", Math.max(0, Math.round(tune.radius * .6)) + "px");
+        s.setProperty("--ui-radius-lg", Math.round(tune.radius * 1.5) + "px");
+      }
+      if (tune.accent !== null){
+        s.setProperty("--ui-accent", tune.accent);
+        s.setProperty("--ui-accent-hover", shift(tune.accent, currentMode() === "dark" ? 22 : -26));
+        s.setProperty("--ui-accent-ink", ink(tune.accent));
+      }
+    });
+  }
+
+  /* Relative luminance decides whether a label on the accent is black or white. */
+  function ink(hex){
+    var c = hex.replace("#","");
+    var f = function(v){ v /= 255; return v <= .03928 ? v/12.92 : Math.pow((v+.055)/1.055, 2.4); };
+    var L = .2126*f(parseInt(c.slice(0,2),16)) +
+            .7152*f(parseInt(c.slice(2,4),16)) +
+            .0722*f(parseInt(c.slice(4,6),16));
+    return L > .45 ? "#0B0E12" : "#FFFFFF";
+  }
+  function shift(hex, amt){
+    var c = hex.replace("#",""), o = "#";
+    for (var n = 0; n < 3; n++){
+      var v = parseInt(c.substr(n*2,2),16) + amt;
+      o += Math.max(0, Math.min(255, v)).toString(16).padStart(2,"0");
+    }
+    return o;
+  }
+
+  /* Read the values actually in force, so the controls open showing the truth
+     rather than a default that no longer matches what is on screen. */
+  function readFrameDefaults(){
+    var got = null;
+    withFrame(function(doc, win){
+      var el = themeRoot(doc);
+      if (!el) return;
+      var cs = win.getComputedStyle(el);
+      got = {
+        theme: el.getAttribute("data-theme"),
+        density: (cs.getPropertyValue("--ui-density") || "1").trim(),
+        radius: parseFloat(cs.getPropertyValue("--ui-radius")) || 0,
+        accent: (cs.getPropertyValue("--ui-accent") || "#2F6FE4").trim()
+      };
+    });
+    return got;
+  }
+
+  function hexOf(colour){
+    if (/^#[0-9a-f]{6}$/i.test(colour)) return colour;
+    var m = colour.match(/rgba?\(([^)]+)\)/i);
+    if (!m) return "#2F6FE4";
+    var p = m[1].split(",").map(parseFloat);
+    return "#" + p.slice(0,3).map(function(v){
+      return Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2,"0");
+    }).join("");
+  }
+
+  function paintTune(){
+    tuneBtn.hidden = false;
+    segTheme.innerHTML = "";
+
+    if (!tunable()){
+      tuneNote.textContent =
+        "This page is not themed by the suite — it styles its own chrome, so there is nothing to retheme.";
+      [rngD, rngR, colA].forEach(function(el){ el.disabled = true; });
+      return;
+    }
+    [rngD, rngR, colA].forEach(function(el){ el.disabled = false; });
+
+    var live = readFrameDefaults();
+    if (!live){
+      tuneNote.textContent = "Opened from disk, so the frame is a separate origin and cannot be tuned. Works on the served site.";
+      return;
+    }
+
+    THEMES.forEach(function(t){
+      var b = document.createElement("button");
+      b.type = "button";
+      b.textContent = t;
+      b.setAttribute("aria-pressed", String(t === live.theme));
+      b.addEventListener("click", function(){
+        tune.theme = t;
+        /* A new theme brings its own density, radius and accent — keeping the
+           previous sliders would silently attribute one theme's values to
+           another, which is the whole point of the two-axis split. */
+        tune.density = tune.radius = tune.accent = null;
+        applyTuneToFrame(); paintTune();
+      });
+      segTheme.appendChild(b);
+    });
+
+    rngD.value = parseFloat(live.density) || 1;
+    vD.textContent = (parseFloat(live.density) || 1).toFixed(2);
+    rngR.value = live.radius;
+    vR.textContent = Math.round(live.radius) + "px";
+    colA.value = hexOf(live.accent);
+
+    tuneNote.textContent = "Tuning " + EXAMPLES[i].src + " live. Nothing is saved — Copy CSS takes it with you.";
+  }
+
+  function cssBlock(){
+    var lines = [];
+    if (tune.density !== null) lines.push("  --ui-density:      " + tune.density + ";");
+    if (tune.radius !== null){
+      lines.push("  --ui-radius:       " + tune.radius + "px;");
+      lines.push("  --ui-radius-sm:    " + Math.max(0, Math.round(tune.radius * .6)) + "px;");
+      lines.push("  --ui-radius-lg:    " + Math.round(tune.radius * 1.5) + "px;");
+    }
+    if (tune.accent !== null){
+      lines.push("  --ui-accent:       " + tune.accent.toUpperCase() + ";");
+      lines.push("  --ui-accent-hover: " + shift(tune.accent, currentMode() === "dark" ? 22 : -26).toUpperCase() + ";");
+      lines.push("  --ui-accent-ink:   " + ink(tune.accent) + ";");
+    }
+    var live = readFrameDefaults() || {};
+    var theme = tune.theme || live.theme || "vanilla";
+    if (!lines.length){
+      return '/* No overrides — this is theme "' + theme + '" (' + currentMode() + ') as shipped.\n' +
+             '   <html data-theme="' + theme + '" data-mode="' + currentMode() + '"> */';
+    }
+    return '/* Tuned from "' + theme + '". Load after themes.css. */\n' +
+           '[data-theme="' + theme + '"]{\n' + lines.join("\n") + "\n}";
+  }
+
+  rngD.addEventListener("input", function(){
+    tune.density = rngD.value; vD.textContent = parseFloat(rngD.value).toFixed(2);
+    applyTuneToFrame();
+  });
+  rngR.addEventListener("input", function(){
+    tune.radius = parseInt(rngR.value, 10); vR.textContent = rngR.value + "px";
+    applyTuneToFrame();
+  });
+  colA.addEventListener("input", function(){
+    tune.accent = colA.value; applyTuneToFrame();
+  });
+
+  document.getElementById("tune-reset").addEventListener("click", function(){
+    tune = { theme:null, density:null, radius:null, accent:null };
+    frame.setAttribute("src", EXAMPLES[i].src);   /* cleanest reset: reload it */
+    tuneNote.textContent = "Reset to as-designed.";
+  });
+
+  document.getElementById("tune-copy").addEventListener("click", function(){
+    var text = cssBlock();
+    var done = function(){ tuneNote.textContent = "CSS copied to the clipboard."; };
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done, function(){ fallback(text); });
+    } else fallback(text);
+    function fallback(t){
+      var ta = document.createElement("textarea");
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); done(); }
+      catch (e) { tuneNote.textContent = "Could not copy — here it is:\n" + t; }
+      document.body.removeChild(ta);
+    }
+  });
+
+  function toggleTune(){
+    var open = tuneBox.hasAttribute("hidden");
+    if (open){ tuneBox.removeAttribute("hidden"); paintTune(); }
+    else tuneBox.setAttribute("hidden", "");
+    tuneBtn.setAttribute("aria-expanded", String(open));
+  }
+  tuneBtn.addEventListener("click", toggleTune);
+
   /* Every navigation loads a fresh document in its designed mode, so re-apply. */
-  frame.addEventListener("load", applyModeToFrame);
+  frame.addEventListener("load", function(){
+    applyModeToFrame();
+    if (tune.theme || tune.density !== null || tune.radius !== null || tune.accent !== null)
+      applyTuneToFrame();
+    if (!tuneBox.hasAttribute("hidden")) paintTune();
+  });
 
   document.getElementById("prev").addEventListener("click", function(){ go(i-1); });
   document.getElementById("next").addEventListener("click", function(){ go(i+1); });
@@ -348,6 +630,7 @@ iframe{flex:1;min-height:0;width:100%;border:0;background:var(--g-raise);display
     if (e.key === "ArrowLeft"){ e.preventDefault(); go(i-1); }
     else if (e.key === "ArrowRight"){ e.preventDefault(); go(i+1); }
     else if (e.key === "d" || e.key === "D"){ e.preventDefault(); toggleMode(); }
+    else if (e.key === "t" || e.key === "T"){ e.preventDefault(); toggleTune(); }
   });
 
   window.addEventListener("hashchange", fromHash);
