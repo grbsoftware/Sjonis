@@ -26,18 +26,23 @@ Then verify **on a served URL**, not `file://` — `file://` cannot do the
 cross-frame work. Screenshots often fail ("pane not displayed");
 `mcp__Claude_Browser__javascript_tool` is the tool of choice for verification.
 
-**SERVE IT ON LOCALHOST — do not round-trip through Pages to look at a change.**
+**SERVE IT ON LOCALHOST VIA `preview_start` — do not round-trip through Pages.**
 As of 2026-08-04 the Browser pane blocks non-localhost URLs outright ("Link to
-grbsoftware.github.io was blocked. The Browser pane only supports localhost
-URLs"), and each Pages verification costs a commit plus a 45-90s build. So:
+grbsoftware.github.io was blocked"), and each Pages verification costs a commit
+plus a 45-90s build.
 
-```bash
-python -m http.server 8000    # from C:\Users\grben\Design, run in background
-```
+**It also blocks a localhost server you started from Bash** — the error is
+self-contradictory ("Link to localhost was blocked. The Browser pane only
+supports localhost URLs") and it cost a Windows Firewall prompt to find out. The
+pane only trusts a server IT started. `.claude/launch.json` now exists for this;
+the sanctioned path is:
 
-then point the pane at `http://localhost:8000/`. Same origin, cross-frame works,
-no cache lag, no commit needed to look at something. Push when it is right, not
-to find out whether it is.
+    mcp__Claude_Browser__preview_start  with  name: "sjonis"
+
+which starts `python -m http.server 8137` in the repo root and opens a trusted
+tab on it. Verified working. Same origin, cross-frame works, no cache lag, no
+commit needed to look at something. Push when it is right, not to find out
+whether it is.
 
 Two escape hatches worth knowing when a tab is already open on a blocked origin:
 a tab loaded BEFORE the block still runs `javascript_tool` fine, and from such a
