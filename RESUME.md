@@ -676,12 +676,41 @@ which serves both projects.
   never classes**. `tools/check_adapters.py` gates it.
 - **Print / forced-colors / reduced-transparency — DONE this session.** See
   README. `prefers-reduced-motion` was the only one previously handled.
-- `demo/gallery.html` is now largely redundant. Tuning moved to `index.html`,
+- **QUEUED (Gary, 2026-08-04): unify the two demos into one — AND HE SPECIFIED
+  THE SHAPE.** "efficient but pretty lol", then: *"a gallery for the genre then
+  you can click to go in and explore/customize with themes and skins. And you
+  can exit back out sort of behavior."*
+
+  So it is not a merge of two pages, it is a re-rooting of the whole front door
+  on the GENRE ring:
+
+      genre gallery  ->  click a genre  ->  framed page + tuner  ->  exit back
+
+  `index.html` already owns half of it (frame, tab strip, live tuner reaching
+  into the framed document, hash-as-state so browser back/forward walk the
+  history — that IS the "exit back out" behaviour, already built). `gallery.html`
+  owns the other half (one layout across six themes side by side). The merge is
+  those two, organised by genre instead of by example.
+
+  **Blocked on genres existing** — a gallery of one genre is not a gallery.
+  Build two or three first, then this.
+
+  **A distinction to keep straight while building it,** because it looks like it
+  contradicts the no-alternatives-in-a-genre rule above and does not: tuning the
+  theme or skin from *inside* a genre is EXPLORATION AWAY from a stated
+  position, not the genre offering options. The genre remains one authored
+  composition; the tuner exists to show what happens when you leave it. The UI
+  should make that read — "graphite / bevel" as the genre's stated pair, and
+  anything else visibly a deviation from it rather than an equal choice.
+
+  `demo/gallery.html` is now largely redundant. Tuning moved to `index.html`,
   which reaches into the framed document and tunes the REAL skeleton files;
   gallery still tunes four hand-built mini-layouts that duplicate the
   skeletons and drift from them. Either retire it or repoint it — but it is
   still the only place showing one layout across six themes side by side, so
-  decide deliberately rather than deleting it.
+  decide deliberately rather than deleting it. That side-by-side view is the
+  thing to preserve through any merge; it is the only answer to "does this hold
+  up across the palette" that does not need six clicks.
 - Adapters (`adapters/tailwind-v4.css`, `shadcn.css`) predate the site frame,
   commerce and editorial primitives and only bridge tokens, not classes — check
   whether that is still the right boundary before extending them.
