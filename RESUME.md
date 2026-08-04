@@ -86,7 +86,15 @@ two-axis split is right).
 10. **Native controls are painted by the UA, not by CSS.** Dark themes had
    white-on-white `<select>` drop-downs until `--ui-scheme` drove `color-scheme`.
    Same fix covers scrollbars, carets, spinners, date pickers.
-11. **The preview pane caches `core/*.css` and `ui.js` hard.** Edits appear not
+11. **A translucent token on a UA-painted surface has nothing behind it.** The
+   `<select>` option rule painted with `--ui-surface`; halo is the only theme
+   whose surfaces are `rgba`, and in dark that is `rgba(255,255,255,.055)` —
+   composited over the UA's own white popup base, not over our page, so it
+   resolved to near-white under near-white `--ui-text`. Invisible. Halo *light*
+   passed by luck (.72 white over white, dark text), which is why it read as a
+   dark-mode-only bug. Rule: UA surfaces get `--ui-bg`, the only ground that is
+   opaque in all six themes. Gary found this one.
+12. **The preview pane caches `core/*.css` and `ui.js` hard.** Edits appear not
    to work. Test with a cache-busted copy:
    `sed -e "s|../core/ui.css|../core/ui.css?v=$(date +%s)|" … > demo/_x.html`
    (gitignored), and delete it after. It also reports every element as visible,

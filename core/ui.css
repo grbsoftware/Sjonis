@@ -176,9 +176,17 @@
 
 /* Belt and braces for the drop-down list itself: Windows and Linux honour
    these, and it costs nothing where the UA already got it right from
-   color-scheme alone. */
+   color-scheme alone.
+
+   --ui-bg, NOT --ui-surface. The popup is composited by the UA over its own
+   base, not over our page, so a translucent value has nothing of ours behind
+   it — halo's dark --ui-surface is rgba(255,255,255,.055), which over the UA's
+   white base resolves to near-white and put --ui-text (#EDEDF5) on top of it.
+   Invisible. Halo light survived only by luck: .72 white over white reads as
+   white, and its text is dark. Any token used on a UA-painted surface must be
+   opaque; --ui-bg is the only ground guaranteed opaque in every theme. */
 .ui select option,.ui select optgroup{
-  background:var(--ui-surface);color:var(--ui-text);
+  background:var(--ui-bg);color:var(--ui-text);
 }
 
 .ui :focus-visible{
