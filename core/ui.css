@@ -548,11 +548,17 @@
 .ui-frame-muted img,.ui-frame-muted picture{opacity:.42;filter:saturate(.35)}
 
 .ui-swatches{display:flex;gap:var(--ui-s2);flex-wrap:wrap;align-items:center}
+/* Same rim as .ui-dot, for the same reason and derived from the same ink: a
+   fixed neutral line cannot delimit an arbitrary product colour -- a pale swatch
+   on a pale page needs a dark edge and a dark one needs a light edge, and
+   --ui-line-strong is only ~2:1 against the page by design. --ui-swatch must
+   therefore be a COLOUR, not a gradient; color-mix takes colours only. */
 .ui-swatch{
   width:18px;height:18px;padding:0;flex:0 0 auto;
   border-radius:var(--ui-radius-pill);
   background:var(--ui-swatch,var(--ui-surface-3));
-  border:1px solid var(--ui-line-strong);
+  border:1px solid color-mix(in oklab,
+    var(--ui-swatch,var(--ui-surface-3)) var(--ui-mark-rim-mix,55%),var(--ui-text));
   cursor:pointer;
 }
 /* The ring is OUTSIDE the swatch, so selection never changes the colour the
@@ -1034,10 +1040,28 @@ a.ui-brand{color:inherit;text-decoration:none}
 .ui-c5{--ui-series:var(--ui-cat-5)} .ui-c6{--ui-series:var(--ui-cat-6)}
 .ui-c7{--ui-series:var(--ui-cat-7)} .ui-c8{--ui-series:var(--ui-cat-8)}
 
+/* THE RIM. A categorical palette is chosen so eight hues stay apart from EACH
+   OTHER; that is a different job from staying apart from the page, and no
+   eight-hue set does both -- cat-4 (ochre) reads 1.91:1 on a light ground where
+   1.4.11 wants 3.0. Rather than darken the ramp and lose "yellow", the MARK is
+   delimited and the FILL keeps its identity: a 1px rim of the same hue mixed
+   toward the theme's ink, so it goes darker on light grounds and lighter on dark
+   ones with no colour named here. Worst case across all six themes x both modes
+   is 3.76:1, measured by tools/validate_palette.py.
+
+   Declared ON the mark, never at :root -- var() in a custom property resolves
+   where it is DECLARED, so a :root copy would bake --ui-series to its fallback
+   and every dot would rim as cat-1. Tune with --ui-mark-rim-mix, which is a
+   plain percentage and therefore safe to set from anywhere. */
+.ui-dot,.ui-tag::before{
+  --ui-mark-rim:color-mix(in oklab,
+    var(--ui-series,var(--ui-cat-1)) var(--ui-mark-rim-mix,55%),var(--ui-text));
+}
 .ui-dot{
   display:inline-block;flex:0 0 auto;width:9px;height:9px;
   border-radius:var(--ui-radius-pill);
   background:var(--ui-series,var(--ui-cat-1));
+  box-shadow:0 0 0 1px var(--ui-mark-rim);
 }
 /* Identity always needs a name next to it — colour alone is not a label. */
 .ui-key{display:inline-flex;align-items:center;gap:var(--ui-s2);font-size:var(--ui-fs-sm);color:var(--ui-text-dim)}
@@ -1062,6 +1086,7 @@ a.ui-brand{color:inherit;text-decoration:none}
   content:"";flex:0 0 auto;width:7px;height:7px;
   border-radius:var(--ui-radius-pill);
   background:var(--ui-series,var(--ui-cat-1));
+  box-shadow:0 0 0 1px var(--ui-mark-rim);
 }
 
 /* -----------------------------------------------------------------------------
@@ -1388,12 +1413,14 @@ a.ui-brand{color:inherit;text-decoration:none}
    previously need, in a system colour keyword so the UA keeps it.
    -------------------------------------------------------------------------- */
 @media (forced-colors:active){
-  /* Marks carry meaning by fill alone; without a border they vanish. */
-  .ui-dot,.ui-swatch,.ui-badge,.ui-spark,.ui-avatar,.ui-mark{
+  /* Marks carry meaning by fill alone; without a border they vanish. The rim
+     cannot do this job here -- box-shadow is dropped in forced colours, which
+     is exactly why the border is restated rather than relied upon. */
+  .ui-dot,.ui-tag::before,.ui-swatch,.ui-badge,.ui-spark,.ui-avatar,.ui-mark{
     border:1px solid CanvasText;
     forced-color-adjust:none;   /* a swatch that is not its own colour is a lie */
   }
-  .ui-dot,.ui-badge,.ui-avatar,.ui-mark{forced-color-adjust:auto}
+  .ui-dot,.ui-tag::before,.ui-badge,.ui-avatar,.ui-mark{forced-color-adjust:auto}
 
   /* Buttons and fields are distinguished from the page by fill in normal use. */
   .ui-btn,.ui-input,.ui-card,.ui-frame,.ui-menu,.ui-dialog,.ui-toast{
@@ -1480,4 +1507,13 @@ a.ui-brand{color:inherit;text-decoration:none}
 
   /* Images must not be scaled past the sheet. */
   .ui-frame img,.ui-figure img{max-width:100%;height:auto}
+
+  /* Browsers drop backgrounds when printing, which is right for a page tint and
+     wrong for a mark: a categorical dot IS the information, and a legend whose
+     dots did not print is a list of labels bound to nothing. These few elements
+     ask for their colour back. The rim goes with them -- a box-shadow is not
+     printed either, so without this the dot loses both fill and edge. */
+  .ui-dot,.ui-tag::before,.ui-swatch,.ui-badge,.ui-spark,.ui-avatar,.ui-mark{
+    print-color-adjust:exact;-webkit-print-color-adjust:exact;
+  }
 }

@@ -23,9 +23,14 @@ Usage:
 Exit code is 1 if any required pair fails, so it can gate a commit.
 """
 
+import math
 import re
 import sys
 import os
+
+# ui.css: color-mix(in oklab, <series> 55%, var(--ui-text)). Keep in step with
+# the --ui-mark-rim-mix default there, or this tool measures a different design.
+RIM_MIX = 0.55
 
 CSS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "core", "themes.css")
 
@@ -72,6 +77,50 @@ def flatten(fg, bg):
             g1 * a + g2 * (1 - a),
             b1 * a + b2 * (1 - a),
             1.0)
+
+
+def _srgb_to_lin(c):
+    c = c / 255.0
+    return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+
+
+def _lin_to_srgb(c):
+    v = 12.92 * c if c <= 0.0031308 else 1.055 * (c ** (1 / 2.4)) - 0.055
+    return max(0.0, min(255.0, v * 255.0))
+
+
+def to_oklab(rgb):
+    r, g, b = (_srgb_to_lin(x) for x in rgb[:3])
+    l = 0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b
+    m = 0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b
+    s = 0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b
+    l_, m_, s_ = (math.copysign(abs(v) ** (1.0 / 3.0), v) for v in (l, m, s))
+    return (0.2104542553 * l_ + 0.7936177850 * m_ - 0.0040720468 * s_,
+            1.9779984951 * l_ - 2.4285922050 * m_ + 0.4505937099 * s_,
+            0.0259040371 * l_ + 0.7827717662 * m_ - 0.8086757660 * s_)
+
+
+def from_oklab(lab):
+    L, a, b = lab
+    l_ = L + 0.3963377774 * a + 0.2158037573 * b
+    m_ = L - 0.1055613458 * a - 0.0638541728 * b
+    s_ = L - 0.0894841775 * a - 1.2914855480 * b
+    l, m, s = (v ** 3 for v in (l_, m_, s_))
+    return (_lin_to_srgb(+4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s),
+            _lin_to_srgb(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s),
+            _lin_to_srgb(-0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s),
+            1.0)
+
+
+def mix_oklab(a, b, t):
+    """CSS color-mix(in oklab, `a` t%, `b`), with t as a 0-1 weight on `a`.
+
+    Needed because ui.css derives the mark rim this way, and a checker that
+    measured the raw fill instead would be measuring a design that is no longer
+    on screen. Both inputs must already be opaque -- flatten() first.
+    """
+    la, lb = to_oklab(a), to_oklab(b)
+    return from_oklab(tuple(x * t + y * (1 - t) for x, y in zip(la, lb)))
 
 
 def luminance(c):
@@ -160,12 +209,8 @@ def checks(tokens, bg):
         if soft in tokens:
             rows.append(("%s banner" % state, "--ui-%s" % state, soft, AA_TEXT, True))
 
-    for n in range(1, 9):
-        cat = "--ui-cat-%d" % n
-        if cat in tokens:
-            # .ui-dot is a 9px mark, not prose -- 1.4.11 non-text, 3.0.
-            rows.append(("cat-%d dot on page" % n, cat, "--ui-bg", AA_LARGE, True))
-            rows.append(("cat-%d dot on surface" % n, cat, "--ui-surface", AA_LARGE, True))
+    # The categorical marks are measured in mark_checks(): what meets the ground
+    # is the computed rim, not the raw token, so it cannot be named as a pair.
 
     # Borders have no WCAG floor. Reported so a theme that loses its structure
     # is visible here rather than only in a screenshot.
@@ -175,15 +220,52 @@ def checks(tokens, bg):
     return rows
 
 
-def tag_checks(tokens, bg):
-    """.ui-tag needs its own pass: its ground is a 12% mix of the series hue
-    over the surface, so the ground has to be computed rather than named.
+def mark_checks(tokens, bg):
+    """The categorical marks, whose colours are COMPUTED rather than named.
 
-    The label is --ui-text (see the note in ui.css -- the hue is carried by the
-    border and dot instead), so this measures readability of the text against
-    that tint, plus the dot against it at the non-text bar."""
+    Two things here cannot be expressed as a token pair:
+
+      * .ui-dot and .ui-tag::before are delimited by a rim of the series hue
+        mixed toward --ui-text. What has to clear 1.4.11's 3.0 is that rim
+        against the ground -- the fill is inside the rim and is allowed to be
+        any hue the palette wants. Measuring the fill instead is what produced
+        the old 126-failure report for a problem the rim solves.
+      * .ui-tag's ground is a 12% tint of the series hue over the surface, so
+        the ground itself has to be computed before anything can be measured
+        against it. Its label is --ui-text, not the hue (see ui.css).
+
+    Returns rows already resolved to colours: (label, fg, bg, floor, required,
+    fg_name, bg_name).
+    """
     rows = []
     text = resolve(tokens, "--ui-text", bg)
+    if text is None:
+        return rows
+
+    def rim(cat):
+        return mix_oklab(cat, text, RIM_MIX)
+
+    # The plain dot, on each ground it is actually placed on.
+    for ground_name in ("--ui-bg", "--ui-surface", "--ui-surface-2", "--ui-surface-3"):
+        ground = resolve(tokens, ground_name, bg)
+        if ground is None:
+            continue
+        short = ground_name.replace("--ui-", "")
+        for n in range(1, 9):
+            cat = resolve(tokens, "--ui-cat-%d" % n, bg)
+            if cat is None:
+                continue
+            rows.append(("cat-%d dot rim on %s" % (n, short),
+                         rim(cat), ground, AA_LARGE, True,
+                         "rim(--ui-cat-%d)" % n, ground_name))
+            # Reported, never enforced. The whole point of the rim decision is
+            # that the FILL keeps its identity; this line is here so the cost of
+            # that choice stays visible instead of being quietly dropped.
+            rows.append(("cat-%d fill on %s" % (n, short),
+                         cat, ground, AA_LARGE, False,
+                         "--ui-cat-%d" % n, ground_name))
+
+    # The tag: computed tint ground, --ui-text label, rimmed dot.
     for ground_name in ("--ui-bg", "--ui-surface"):
         ground = resolve(tokens, ground_name, bg)
         if ground is None:
@@ -194,11 +276,12 @@ def tag_checks(tokens, bg):
             if cat is None:
                 continue
             tinted = flatten((cat[0], cat[1], cat[2], 0.12), ground)
-            if text is not None:
-                rows.append(("cat-%d tag label on %s" % (n, short),
-                             text, tinted, AA_TEXT, True, "--ui-text", ".ui-tag/cat-%d" % n))
-            rows.append(("cat-%d tag dot on %s" % (n, short),
-                         cat, tinted, AA_LARGE, True, "--ui-cat-%d" % n, ".ui-tag tint"))
+            rows.append(("cat-%d tag label on %s" % (n, short),
+                         text, tinted, AA_TEXT, True,
+                         "--ui-text", ".ui-tag/cat-%d on %s" % (n, short)))
+            rows.append(("cat-%d tag dot rim on %s" % (n, short),
+                         rim(cat), tinted, AA_LARGE, True,
+                         "rim(--ui-cat-%d)" % n, ".ui-tag tint on %s" % short))
     return rows
 
 
@@ -240,7 +323,7 @@ def main(argv):
             if fg is None or ground is None:
                 continue
             rows.append((label, fg, ground, floor, required, fg_tok, bg_tok))
-        for label, fg, ground, floor, required, fg_tok, bg_tok in tag_checks(tokens, bg):
+        for label, fg, ground, floor, required, fg_tok, bg_tok in mark_checks(tokens, bg):
             rows.append((label, fg, ground, floor, required, fg_tok, bg_tok))
 
         for label, fg, ground, floor, required, fg_tok, bg_tok in rows:
