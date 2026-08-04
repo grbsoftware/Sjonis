@@ -161,6 +161,26 @@ was recalling Java-applet physics toys — circles, springs, gravity). Agreed an
 worth designing for: a "toy" genre and a "clinical" genre differ in how things
 *move*, not only how they look. Deferred, but do not architect it out.
 
+### A genre carries no alternatives — and the test for it
+
+Gary asked (2026-08-04) whether a look different enough to stand on its own could
+be "an alternative in the same genre." **No**, and the reason is the ring's whole
+purpose: a genre holding alternatives is a parameter combination again, and a
+look that falls out of picking options is not a point of view. One skin, one
+theme, or it is not a genre.
+
+**The test, which is the useful part:** is choosing between the two *itself* a
+point of view? Hard bevel is period-accurate, drawn depth, 1996; soft bevel is
+modern relief, cast depth, present tense. Choosing between those is a stance, so
+they are two genres. If nobody would ever care which they got, it is a variant of
+one skin and the genre still picks one.
+
+What that leaves is real and needs a word: two genres that share a theme and the
+skeletons they suit and differ only in skin are **siblings**, in a **family**.
+Family is a finding aid, exactly like the era / industry / ideology / mood
+facets — it helps you locate a genre and never generates one. So bevel and
+soft-bevel each anchor their own control-panel genre: same furniture, two eras.
+
 ## DONE — the skin gate gap is CLOSED. 3576 pairs, 0 failures.
 
 `validate_palette.py` now checks every skin in `skins/` against every theme x
