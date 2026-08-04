@@ -79,7 +79,8 @@ readable rather than broken.
 | `<div data-ui-tabs>` with `.ui-tablist` / `.ui-tab[aria-controls]` | Tabs; ARIA and roving tabindex applied for you |
 | `<div class="ui-accordion" data-ui-accordion="single">` | One `<details>` open at a time |
 | `<table class="ui-table" data-ui-sort>` | Sortable headers; `data-sort-value` on a cell to sort by something other than its text |
-| `<input data-ui-filter="#table" data-ui-filter-status="#count">` | Live row filter with a count |
+| `<input data-ui-filter="#table" data-ui-filter-status="#count">` | Live filter with a count. Table rows and `.ui-list-item`s are found automatically; anything else (a card grid, a set of figures) opts in with `data-ui-item` on each item |
+| `<div data-ui-choice>` with `<button aria-pressed>` children | Single-select group — swatches, segmented controls, thumbnail strips. Arrow keys move within it; fires `ui:choice` with `{value, button}` |
 | `<button data-ui-copy="#el">` / `data-ui-copy-text="…"` | Clipboard, with a `file://` fallback |
 | `<form data-ui-validate>` | Native rules, your styling; errors on blur then live. `data-ui-rule` for a custom expression over `value` |
 | `data-ui-tip="…"` | Tooltip on hover **and** focus |
@@ -115,10 +116,43 @@ preferred mode applies.
 |---|---|
 | `app-shell.html` | Fixed rail + main. Toolbar, stat tiles, data table, banner. The dashboard/admin pattern. |
 | `portfolio.html` | Banded page, no rail. Hero, full-bleed feature, snap reel, column wall, long-form. Content and gallery sites. |
+| `storefront.html` | Site frame + auto-fit product grid. Prices, badges, swatches, filter, quick-look dialog. Catalogues. |
+| `storefront-product.html` | Page two of the same site. Two-column split, thumbnail strip, accordion, related reel. |
 
-The two are alternatives, not variants: pick by what the thing IS. A rail answers
+These are alternatives, not variants: pick by what the thing IS. A rail answers
 "where do the controls live", a band stack answers "where does the content live",
-and reaching for the shell by default is what produces six sites that look identical.
+a product grid answers "which of these do I want", and reaching for the shell by
+default is what produces six sites that look identical.
+
+## Site frame — the layer above the page
+
+Anything with more than one page needs the parts that repeat on all of them. Use
+these rather than building a header out of a band, which is what both archetypes
+did before they existed.
+
+| Class | Does |
+|---|---|
+| `.ui-skip` | Skip-to-content link. Off-screen until focused. Put it first in `<body>` |
+| `.ui-sitehead` | Full-width header bar; `-stick` (sticky, opaque), `-sunk` |
+| `.ui-sitebar` | The row inside it — combine with `.ui-measure` to align with the page |
+| `.ui-sitenav` / `.ui-sitenav-item` | Horizontal nav. Mark the current page with `aria-current="page"`; weight and a rule carry it, not hue alone |
+| `.ui-sitehead-actions` | Right-hand cluster — bag, sign in, search |
+| `.ui-crumbs` | Breadcrumb `<ol>`. Separators are generated, so screen readers do not read a slash between every step |
+| `.ui-sitefoot` / `-cols` / `-base` | Footer, auto-fit link columns, and the baseline row |
+
+**Copy the header and footer verbatim onto every page.** If it needs editing to
+survive a different page, it was a header and not a frame — the two storefront
+pages are byte-identical apart from `href`s, deliberately.
+
+**Commerce primitives** (`storefront.html`):
+
+| Class | Does |
+|---|---|
+| `.ui-price` / `-was` / `-note` | Tabular figures, so a column of prices never reflows. `-was` strikes through, `-note` says why in words |
+| `.ui-badge` | Corner label inside a `.ui-frame`; `-crit`, `-quiet`, `-end` |
+| `.ui-swatches` / `.ui-swatch` | Colour options. `--ui-swatch` sets the colour; the selected ring sits OUTSIDE so it never alters the colour being judged |
+| `.ui-frame-muted` | Sold out — still readable, stops inviting |
+| `.ui-card-body` | The padding half of `.ui-card-flush`, for words under an edge-to-edge image |
 
 **Content-page primitives** (portfolio and anything like it):
 
@@ -161,6 +195,17 @@ from `ui.css` primitives and save it there rather than writing one-off CSS.
   fourth is a hierarchy nobody can perceive.
 - **Density is one number.** Change `--ui-density` to go compact or comfortable;
   do not touch component padding.
+- **A categorical hue is a mark, never prose.** `--ui-cat-*` are chosen so eight
+  marks stay apart from each other at 3:1; asking the same hues to be readable
+  text at 4.5:1 is a different job no eight-hue set satisfies on a light ground.
+  Colour the border and the dot, set the label in `--ui-text`.
+- **Anything the UA paints needs an opaque token.** A `<select>` drop-down list,
+  scrollbars and date pickers are composited over the UA's own base, not over the
+  page, so a translucent `--ui-surface` has nothing behind it — halo's dark
+  surface resolved to near-white under near-white text. Use `--ui-bg`, the only
+  ground opaque in all six themes, and let `color-scheme` do the rest.
+- **Check it**: `python tools/validate_palette.py` measures every theme × mode
+  against the pairings the CSS actually produces, and exits 1 on failure.
 
 ## Authoring a theme
 
