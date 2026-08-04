@@ -64,18 +64,37 @@
 
   /* shape ----------------------------------------------------------------- */
   --radius:                var(--ui-radius);
+
+  /* charts ----------------------------------------------------------------
+     shadcn ships five chart slots; we have eight, so 1-5 map straight across
+     and 6-8 are exposed under our own names for anyone who needs more series
+     than shadcn assumes. These are identity colours, not state — they are
+     deliberately NOT derived from --primary, because a rebrand must not
+     silently re-colour a chart's series. */
+  --chart-1:               var(--ui-cat-1);
+  --chart-2:               var(--ui-cat-2);
+  --chart-3:               var(--ui-cat-3);
+  --chart-4:               var(--ui-cat-4);
+  --chart-5:               var(--ui-cat-5);
+  --chart-6:               var(--ui-cat-6);
+  --chart-7:               var(--ui-cat-7);
+  --chart-8:               var(--ui-cat-8);
 }
 
 /* -----------------------------------------------------------------------------
    NOT MAPPED, ON PURPOSE
 
-   --chart-1..5   shadcn's categorical chart palette. Series colours are a
-                  separate problem from UI colour: they need to stay distinct
-                  from each other and survive colour-blindness, which our
-                  single accent cannot supply. Author them per project.
+   Components.   This adapter bridges TOKENS, never classes. Our .ui-card and
+                 shadcn's <Card> are two answers to the same question, and
+                 mapping one onto the other would mean maintaining a third
+                 component layer that has to stay in step with both. Use
+                 shadcn's components wearing our themes — that is the whole
+                 point of the split. The same applies to the site frame,
+                 commerce and editorial classes: they are layout, and layout is
+                 cheap to rebuild in whatever idiom the project already uses.
 
-   --sidebar-*    Only present in shadcn's sidebar block. Add if you use it:
-                  --sidebar: var(--ui-surface-2); etc.
+   --sidebar-*   Only present in shadcn's sidebar block. Add if you use it:
+                 --sidebar: var(--ui-surface-2); etc.
 
    Depth and blur do not cross over — shadcn leaves shadows to Tailwind
    utilities. Our --ui-shadow / --ui-blur are unused here; apply them in your

@@ -47,10 +47,23 @@
   --color-info:         var(--ui-info);
   --color-info-soft:    var(--ui-info-soft);
 
+  /* categorical — identity, not state. text-cat-3, bg-cat-7, fill-cat-1.
+     Separate from both brand and semantic on purpose: a rebrand must not
+     re-colour a chart's series, and a series must never be read as a status. */
+  --color-cat-1:        var(--ui-cat-1);
+  --color-cat-2:        var(--ui-cat-2);
+  --color-cat-3:        var(--ui-cat-3);
+  --color-cat-4:        var(--ui-cat-4);
+  --color-cat-5:        var(--ui-cat-5);
+  --color-cat-6:        var(--ui-cat-6);
+  --color-cat-7:        var(--ui-cat-7);
+  --color-cat-8:        var(--ui-cat-8);
+
   /* shape -> rounded-ui, rounded-ui-sm, rounded-ui-lg ---------------------- */
   --radius-ui-sm:       var(--ui-radius-sm);
   --radius-ui:          var(--ui-radius);
   --radius-ui-lg:       var(--ui-radius-lg);
+  --radius-ui-pill:     var(--ui-radius-pill);   /* pills, swatches, dots */
 
   /* spacing — Tailwind's numeric scale, driven by our density multiplier.
      p-1 through p-7 now scale with the theme instead of being fixed. ------- */
@@ -61,6 +74,7 @@
   --spacing-5:          var(--ui-s5);
   --spacing-6:          var(--ui-s6);
   --spacing-7:          var(--ui-s7);
+  --spacing-8:          var(--ui-s8);   /* section rhythm, not component */
 
   /* type ------------------------------------------------------------------ */
   --font-ui:            var(--ui-font);
@@ -73,6 +87,16 @@
   --text-md:            var(--ui-fs-md);
   --text-lg:            var(--ui-fs-lg);
   --text-xl:            var(--ui-fs-xl);
+
+  /* Weights override Tailwind's own, so font-normal / font-medium /
+     font-semibold mean what the theme means rather than 400/500/600. Same
+     bargain as the spacing block above: one dial, at the cost of surprising
+     anyone expecting stock values. Our medium is 550 and our heading is 640 —
+     both deliberately off the round numbers, because that is where the system
+     fonts have real weights rather than synthesised ones. */
+  --font-weight-normal:   var(--ui-weight-body);
+  --font-weight-medium:   var(--ui-weight-medium);
+  --font-weight-semibold: var(--ui-weight-heading);
 
   /* depth ----------------------------------------------------------------- */
   --shadow-ui:          var(--ui-shadow);
@@ -92,4 +116,17 @@
 
    Halo's translucency needs backdrop-blur-[18px] or the --ui-blur value applied
    directly; Tailwind has no token namespace for backdrop-filter.
+
+   WHAT THIS DELIBERATELY DOES NOT BRIDGE
+
+   Classes. Not .ui-card, not .ui-sitehead, not .ui-price. Tailwind's premise is
+   that you compose utilities instead of naming components, so shipping our
+   component names into it would fight the tool and leave two layers to keep in
+   step. Everything a component needs is here as a token — build the component
+   the Tailwind way and it will wear all six themes.
+
+   The one thing worth copying by hand rather than rebuilding is .ui-justified:
+   the flex-grow/flex-basis arithmetic in ui.css has no utility equivalent, and
+   arbitrary values for it are unreadable. Import ui.css alongside and use that
+   one class.
    -------------------------------------------------------------------------- */
