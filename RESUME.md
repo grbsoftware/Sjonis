@@ -723,6 +723,62 @@ genuinely fit: a **sequential/continuous** ramp (one variable, low to high), a
 theme's accent family, or a decorative gradient. So the right move is probably a
 NEW token family — a sequential ramp — rather than editing `--ui-cat-*`.
 
+### HOW GARY WANTS THESE PALETTES USED — and the measurement that backs it
+
+Gary, after seeing the rainbow output: *"they may not be great for webpages...
+the gradients could be used very sparingly and not necessarily in the form of
+the rainbow, but the solid blocks of color or bars or circles could be 2 or more
+of the colors, and the accented text like the blue in the vanilla portfolio is
+used for Selected work 2024-2025 above the white text."*
+
+He is pointing at `.ui-eyebrow`, which is `color:var(--ui-accent)` — portfolio
+line 57. That splits into **two contrast regimes, and Sjonis already has a
+mechanism for each**: blocks/bars/circles are non-text (3:1, and the mark rim
+carries them), accent text is 4.5:1.
+
+Measured, his own blue/purple/green through Radiance (anchors `#6B3FA0`,
+`#3A5470`, `#2E8B57` -> 5 colours), on vanilla light:
+
+    colour     block (3.0)   block+rim   eyebrow text (4.5)
+    #6B3FA0      7.20 ok      11.28        7.20 ok
+    #554C88      7.38 ok      11.44        7.38 ok
+    #3A5470      7.64 ok      11.64        7.64 ok
+    #367066      5.59 ok       9.92        5.59 ok
+    #2E8B57      4.14 ok       8.41        4.14 FAILS
+
+**All five work as blocks; four of five work as the eyebrow.** Compare the vivid
+evenly-spaced rainbow, where three of four failed even the 3.0 bar. The palettes
+Gary likes are usable BECAUSE they are analogous and mid-chroma — that is also
+why they interpolate cleanly (no gamut pinch, see below). The rainbow default is
+the pathological case; what he actually wanted is what Radiance is good at.
+
+And only ONE colour ever needs 4.5, because there is one accent. So the mapping
+is already there: one hue -> `--ui-accent`, the rest -> the block/categorical
+slots. **No new architecture needed.**
+
+**THE GAP, and the next thing to build here:** Sjonis has no way to IMPORT a
+palette — it would be hand-edited tokens. Build the path: N hex colours in,
+`--ui-accent` plus block colours out, checked against every theme ground on the
+way through, with the "walk lightness toward the ink" fix (already used for the
+state colours) applied to any that miss. `#2E8B57` at 4.14 is the worked
+example; it needs roughly 8% darkening.
+
+### On why the rainbow is drab and no strategy fixes it
+
+Gary asked whether other midpoint strategies would help. Measured: for green ->
+blue, sRGB allows only C 0.112 where the interpolation wants 0.304 (37%), and
+the perceptual and vivid-as-possible answers are the SAME colour (`#00A5B1`) —
+the gamut wall is already there. HSL's `#00FFFF` only looked vivid by sitting at
+the wrong lightness. **The drabness is sRGB's gamut pinch between green and
+blue, not the interpolation.**
+
+For adjacent hues it is the opposite: blue -> purple has C 0.282 available
+against a mean of 0.104, **270% headroom**, so perceptual (`#474F8F`) and vivid
+(`#4300EC`) are genuinely different colours. A chroma-policy toggle (keep the
+perceptual midpoint vs push to the gamut hull) is therefore worth adding to
+Radiance and has a nice property: where it cannot help it changes nothing, so it
+cannot make the rainbow case worse. NOT YET BUILT — offered, not agreed.
+
 ### RADIANCE — READ, FIXED, SHIPPED (2026-08-04). Answers the question below.
 
 Gary said to fix it at source. Done, pushed, verified on the live deployed file:
