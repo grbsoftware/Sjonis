@@ -28,6 +28,14 @@
   --ui-accent-hover: #85AEF5;
   --ui-accent-ink: #0A0D10;
   --ui-accent-soft: #16233A;
+  --ui-good: #4ADE80;
+  --ui-good-soft: #12241A;
+  --ui-warn: #FBBF24;
+  --ui-warn-soft: #241D0E;
+  --ui-crit: #F87171;
+  --ui-crit-soft: #2A1416;
+  --ui-info: #5FB3E8;
+  --ui-info-soft: #0F1F2B;
   --ui-shadow: 0 1px 2px rgba(0,0,0,.42);
   --ui-shadow-lg: 0 8px 26px rgba(0,0,0,.5);
   --ui-cat-1: #3987E5;
@@ -38,14 +46,6 @@
   --ui-cat-6: #008300;
   --ui-cat-7: #9085E9;
   --ui-cat-8: #E66767;
-  --ui-good: #4ADE80;
-  --ui-good-soft: #12241A;
-  --ui-warn: #FBBF24;
-  --ui-warn-soft: #241D0E;
-  --ui-crit: #F87171;
-  --ui-crit-soft: #2A1416;
-  --ui-info: #5FB3E8;
-  --ui-info-soft: #0F1F2B;
 }
 
 /* No GTK equivalent, omitted: blur, ambient

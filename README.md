@@ -249,8 +249,19 @@ python tools/validate_palette.py        # every theme x mode, WCAG 2.1
 python tools/validate_palette.py halo   # one theme
 python tools/validate_palette.py -v     # show passes too
 python tools/check_adapters.py          # every var(--ui-*) an adapter uses resolves
+python tools/check_theme_modes.py       # each theme's base block is a complete palette
+python tools/check_theme_order.py       # every chooser lists themes in one order
 python tools/build_themes.py verify     # CSS <-> tokens round trip
 ```
+
+`check_theme_modes.py` guards the part of the contract that fails silently.
+`data-mode` is optional, so a page may write only `data-theme` — and five
+skeletons do. That only works if the base block repeats its preferred mode in
+FULL. Every theme shipped one missing the eight state tokens, so those pages
+were quietly using `ui.css`'s fallback green/amber/red rather than the theme's
+own, with all the contrast tuning those tokens had received going nowhere.
+Nothing looked broken, and `validate_palette.py` passed throughout — it reads
+the mode blocks, which were correct.
 
 It measures the pairings the CSS actually produces rather than plausible-looking
 ones, and composites translucent tokens over their ground first — halo's surfaces

@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Marketing — UI Suite skeleton</title>
+
+<link rel="stylesheet" href="../core/ui.css">
+<link rel="stylesheet" href="../core/themes.css">
+
+<!--
+  MARKETING SKELETON
+
+  The seventh skeleton, and the one that had to justify itself hardest — it
+  reuses the site frame, so on a screenshot it can look like storefront.html
+  with different words. The difference is structural and it is this:
+
+    a catalogue and a gallery are BROWSING structures. Many equivalent things,
+    and the order is a sort the reader can change.
+
+    a marketing page is a SEQUENCE. Every band does a different rhetorical job,
+    each one earns the next, and the order is the argument. There is no grid of
+    equivalents anywhere on the page, and nothing here can be re-sorted.
+
+  So the reading is one-way and the page is built to be scrolled once:
+    claim -> proof -> how -> what it costs -> objections -> ask
+
+  New in core/ui.css (MARKETING) — the four things that could not be composed
+  from what already existed:
+    .ui-logos / .ui-logo-word     proof by citation, deliberately quiet
+    .ui-steps / .ui-step          a numbered sequence, numbers generated
+    .ui-feature / -flip           alternating media/text, media first on mobile
+    .ui-plans / .ui-plan          comparison across cards — the hard one
+
+  Everything else is bands, measures and cards it already had.
+
+  The theme is halo because no skeleton was showing it, and a product page is
+  the one context its translucency is actually arguing for. Change the one
+  attribute on <body> and the page is blueprint or vellum instead — the
+  structure holds either way.
+-->
+
+<body class="ui" data-theme="halo" id="top">
+<a class="ui-skip" href="#main">Skip to content</a>
+<div class="ui-page">
+
+  <!-- site frame: the same header markup as storefront and portfolio, not a
+       variation on it. If this file needed its own header the frame would have
+       failed the test it was built to pass. --------------------------------->
+  <header class="ui-sitehead ui-sitehead-stick">
+    <div class="ui-sitebar ui-measure ui-measure-wide">
+      <a class="ui-brand" href="#top">
+        <div class="ui-mark">AR</div>
+        <div class="ui-brand-name">Ardent</div>
+      </a>
+      <nav class="ui-sitenav" aria-label="Sections">
+        <a class="ui-sitenav-item" href="#how">How it works</a>
+        <a class="ui-sitenav-item" href="#editions">Editions</a>
+        <a class="ui-sitenav-item" href="#questions">Questions</a>
+      </nav>
+      <div class="ui-sitehead-actions">
+        <button class="ui-btn" data-ui-open="#stockists">Find a stockist</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 1. THE CLAIM ---------------------------------------------------------->
+  <!-- One idea, set large. The headline gets no reading measure (it is not
+       being read, it is being taken in); the sentence under it does. That is
+       .ui-display vs .ui-lead and it is the whole reason both exist. -->
+  <section class="ui-band" id="main" tabindex="-1">
+    <div class="ui-measure ui-measure-wide">
+      <div class="ui-feature">
+        <div>
+          <p class="ui-eyebrow">Field recorder · Second edition</p>
+          <h1 class="ui-display">Record the room, not the settings.</h1>
+          <p class="ui-lead" style="margin-top:var(--ui-s4)">
+            Two channels, thirty-two bit float, and no gain knob to get wrong.
+            Ardent captures the whole dynamic range and lets you decide what
+            mattered afterwards.
+          </p>
+          <div class="ui-row" style="gap:var(--ui-s3);margin-top:var(--ui-s5)">
+            <a class="ui-btn ui-btn-lg" href="#editions">See the editions</a>
+            <button class="ui-btn ui-btn-ghost ui-btn-lg" data-ui-open="#stockists">
+              Find a stockist
+            </button>
+          </div>
+          <p class="ui-faint" style="margin-top:var(--ui-s3)">
+            Ships from Rotterdam · Two-year warranty
+          </p>
+        </div>
+        <figure class="ui-figure" style="margin:0">
+          <div class="ui-frame ui-ratio-square" data-ui-lazy>
+            <img data-src="../demo/img/signal.svg" alt="The recorder, front three-quarter view">
+          </div>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. PROOF -------------------------------------------------------------->
+  <!-- Citation, not decoration. It sits directly under the claim because that
+       is the point in the sequence where the reader is deciding whether to
+       keep going, and it is quiet because a loud logo wall argues with the
+       headline it is supposed to be supporting. -->
+  <section class="ui-band ui-band-tight ui-band-sunk">
+    <div class="ui-measure ui-measure-wide">
+      <p class="ui-label" style="text-align:center;margin-bottom:var(--ui-s5)">
+        In the field with
+      </p>
+      <div class="ui-logos">
+        <span class="ui-logo-word">Havstad</span>
+        <span class="ui-logo-word">Field &amp; Foley</span>
+        <span class="ui-logo-word">NORTHLIGHT</span>
+        <span class="ui-logo-word">Ruta 9</span>
+        <span class="ui-logo-word">Öre</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. WHAT IT IS --------------------------------------------------------->
+  <!-- Alternating rows. The flip is what stops three of these reading as a
+       list; the eye picks up the rhythm and each row gets read as its own
+       claim rather than as item two of three. -->
+  <section class="ui-band">
+    <div class="ui-measure ui-measure-wide" style="display:grid;gap:var(--ui-s8)">
+
+      <div class="ui-feature">
+        <div>
+          <p class="ui-eyebrow">No gain staging</p>
+          <h2 class="ui-title ui-title-lg">Thirty-two bit float, both channels.</h2>
+          <p class="ui-lead">
+            The clipped take and the take too quiet to use are the same problem
+            with the same cause. Float recording removes the decision from the
+            moment you are least able to make it — while the thing is happening.
+          </p>
+        </div>
+        <div class="ui-frame ui-ratio-wide" data-ui-lazy>
+          <img data-src="../demo/img/interval.svg" alt="Waveform captured across the full range">
+        </div>
+      </div>
+
+      <div class="ui-feature ui-feature-flip">
+        <div>
+          <p class="ui-eyebrow">Eleven hours</p>
+          <h2 class="ui-title ui-title-lg">Two AAs you can buy anywhere.</h2>
+          <p class="ui-lead">
+            A proprietary cell is a recorder that stops working in a place where
+            you cannot replace it. This takes the batteries sold at every petrol
+            station on earth, and tells you the remaining time in minutes rather
+            than in bars.
+          </p>
+        </div>
+        <div class="ui-frame ui-ratio-wide" data-ui-lazy>
+          <img data-src="../demo/img/column.svg" alt="Battery compartment, open">
+        </div>
+      </div>
+
+      <div class="ui-feature">
+        <div>
+          <p class="ui-eyebrow">Built for weather</p>
+          <h2 class="ui-title ui-title-lg">Sealed, and quiet about it.</h2>
+          <p class="ui-lead">
+            IP54, a machined shell, and every control usable with gloves on. The
+            handling noise floor is 18 dB(A) — low enough that the recording is
+            of the room rather than of you holding the recorder.
+          </p>
+        </div>
+        <div class="ui-frame ui-ratio-wide" data-ui-lazy>
+          <img data-src="../demo/img/weave.svg" alt="Machined shell, detail">
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4. HOW ---------------------------------------------------------------->
+  <!-- The step numbers are generated by a counter. Typing "1." "2." "3." into
+       the markup means the day somebody reorders these the page starts lying,
+       and nobody re-reads a number they wrote themselves. -->
+  <section class="ui-band ui-band-sunk" id="how" tabindex="-1">
+    <div class="ui-measure">
+      <p class="ui-eyebrow">How it works</p>
+      <h2 class="ui-title ui-title-lg" style="margin-bottom:var(--ui-s6)">
+        Three things, then it is out of your way.
+      </h2>
+      <ol class="ui-steps">
+        <li class="ui-step">
+          <div>
+            <h3 class="ui-title">Point it and press record.</h3>
+            <p class="ui-dim">There is no level to set, so there is no level to
+              get wrong. The meter is there to tell you the room is alive, not to
+              be ridden.</p>
+          </div>
+        </li>
+        <li class="ui-step">
+          <div>
+            <h3 class="ui-title">Mark what mattered.</h3>
+            <p class="ui-dim">One button drops a cue while you are still
+              listening. Cues survive as chapter marks in the file, so the edit
+              starts from your memory of the day rather than from a waveform.</p>
+          </div>
+        </li>
+        <li class="ui-step">
+          <div>
+            <h3 class="ui-title">Pull the card.</h3>
+            <p class="ui-dim">Plain WAV on plain exFAT. No app, no account, no
+              sync — the files are on the card and the card is in your hand.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 5. WHAT IT COSTS ------------------------------------------------------>
+  <!-- Three cards read ACROSS, so the price on each must sit on one line with
+       the others even though "Field" and "Studio, two-channel" are different
+       lengths. That is .ui-plans' subgrid head, and it is the only genuinely
+       hard layout problem on a marketing page.
+
+       The middle card is marked with a RING rather than a border, so being
+       recommended does not change its size and shove its neighbours out of the
+       alignment the subgrid just produced. -->
+  <section class="ui-band" id="editions" tabindex="-1">
+    <div class="ui-measure ui-measure-wide">
+      <p class="ui-eyebrow">Editions</p>
+      <h2 class="ui-title ui-title-lg" style="margin-bottom:var(--ui-s6)">
+        The same recorder. Different amounts of it.
+      </h2>
+
+      <div class="ui-plans">
+
+        <article class="ui-card ui-plan">
+          <h3 class="ui-plan-name">Ardent One</h3>
+          <p class="ui-plan-price">
+            <span class="ui-plan-figure">€349</span>
+            <span class="ui-plan-period">one payment</span>
+          </p>
+          <p class="ui-dim" style="margin:0">The recorder, as it comes. Everything
+            structural is in this box.</p>
+          <p style="margin:0"><button class="ui-btn ui-btn-ghost" data-ui-open="#stockists">Find a stockist</button></p>
+          <ul class="ui-plan-features">
+            <li>Two channels, 32-bit float</li>
+            <li>Internal mic pair</li>
+            <li>Two-year warranty</li>
+            <li data-ui-off>XLR inputs <span class="ui-sr">— not included</span></li>
+            <li data-ui-off>Timecode <span class="ui-sr">— not included</span></li>
+          </ul>
+        </article>
+
+        <article class="ui-card ui-plan ui-plan-recommended">
+          <h3 class="ui-plan-name">
+            Ardent Field
+            <span class="ui-pill ui-pill-info" style="margin-inline-start:var(--ui-s2)">Most bought</span>
+          </h3>
+          <p class="ui-plan-price">
+            <span class="ui-plan-figure">€529</span>
+            <span class="ui-plan-period">one payment</span>
+          </p>
+          <p class="ui-dim" style="margin:0">Adds the inputs, the case and the
+            windshield most people buy in the first month anyway.</p>
+          <p style="margin:0"><button class="ui-btn" data-ui-open="#stockists">Find a stockist</button></p>
+          <ul class="ui-plan-features">
+            <li>Two channels, 32-bit float</li>
+            <li>Internal mic pair</li>
+            <li>Three-year warranty</li>
+            <li>Two XLR inputs, 48 V</li>
+            <li data-ui-off>Timecode <span class="ui-sr">— not included</span></li>
+          </ul>
+        </article>
+
+        <article class="ui-card ui-plan">
+          <h3 class="ui-plan-name">Ardent Studio</h3>
+          <p class="ui-plan-price">
+            <span class="ui-plan-figure">€795</span>
+            <span class="ui-plan-period">one payment</span>
+          </p>
+          <p class="ui-dim" style="margin:0">For a set where something else is
+            already running the clock.</p>
+          <p style="margin:0"><button class="ui-btn ui-btn-ghost" data-ui-open="#stockists">Find a stockist</button></p>
+          <ul class="ui-plan-features">
+            <li>Two channels, 32-bit float</li>
+            <li>Internal mic pair</li>
+            <li>Three-year warranty</li>
+            <li>Two XLR inputs, 48 V</li>
+            <li>Genlock timecode in/out</li>
+          </ul>
+        </article>
+
+      </div>
+
+      <p class="ui-faint" style="margin-top:var(--ui-s4)">
+        Prices include VAT. Every edition is the same recorder — nothing is
+        unlocked later by paying more.
+      </p>
+    </div>
+  </section>
+
+  <!-- 6. OBJECTIONS --------------------------------------------------------->
+  <!-- Native <details>, so this survives with JS off, prints open, and is
+       reachable by the browser's own find-in-page. An FAQ that hides its
+       answers from ctrl-F is an FAQ nobody can use. -->
+  <section class="ui-band ui-band-sunk" id="questions" tabindex="-1">
+    <div class="ui-measure">
+      <p class="ui-eyebrow">Before you ask</p>
+      <h2 class="ui-title ui-title-lg" style="margin-bottom:var(--ui-s5)">
+        The five we get every week.
+      </h2>
+      <div class="ui-accordion" data-ui-accordion="single">
+        <details open>
+          <summary>Is 32-bit float actually different, or is it marketing?</summary>
+          <div class="ui-accordion-body">Different, and narrowly so. It does not
+            improve the microphones or the preamps — it removes clipping and the
+            noise floor as things you have to trade against each other in the
+            moment. If you always have time to set a level, you will not notice.</div>
+        </details>
+        <details>
+          <summary>Can I use it as a USB interface?</summary>
+          <div class="ui-accordion-body">Yes, class-compliant, two in and two out.
+            No driver on macOS, Windows or Linux.</div>
+        </details>
+        <details>
+          <summary>What happens when you stop making it?</summary>
+          <div class="ui-accordion-body">The files are plain WAV on plain exFAT
+            and nothing needs our servers, so a recorder we discontinued still
+            works exactly as it did. Schematics and firmware go public when a
+            model is retired.</div>
+        </details>
+        <details>
+          <summary>Is there an app?</summary>
+          <div class="ui-accordion-body">No, and that is the feature. Pull the
+            card.</div>
+        </details>
+        <details>
+          <summary>Do you ship outside the EU?</summary>
+          <div class="ui-accordion-body">To 41 countries. Duties are calculated
+            at checkout rather than collected from you on the doorstep.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. THE ASK ------------------------------------------------------------>
+  <!-- One action. A closing band offering three equally weighted choices is a
+       page that has stopped arguing and started hedging. -->
+  <section class="ui-band">
+    <div class="ui-measure" style="text-align:center">
+      <h2 class="ui-display">Hear it first.</h2>
+      <p class="ui-lead" style="margin:var(--ui-s4) auto 0">
+        Forty stockists keep a demo unit on the counter. Take a card, record the
+        street outside, and listen to it on the way home.
+      </p>
+      <p style="margin-top:var(--ui-s5)">
+        <button class="ui-btn ui-btn-lg" data-ui-open="#stockists">Find a stockist</button>
+      </p>
+    </div>
+  </section>
+
+  <!-- site frame: footer, again unchanged from the other pages --------------->
+  <footer class="ui-sitefoot">
+    <div class="ui-measure ui-measure-wide">
+      <div class="ui-sitefoot-cols">
+        <div>
+          <p class="ui-label">Product</p>
+          <ul>
+            <li><a href="#editions">Editions</a></li>
+            <li><a href="#how">How it works</a></li>
+            <li><a href="#questions">Questions</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="ui-label">Support</p>
+          <ul>
+            <li><a href="#top">Firmware</a></li>
+            <li><a href="#top">Manual (PDF)</a></li>
+            <li><a href="#top">Repairs</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="ui-label">Company</p>
+          <ul>
+            <li><a href="#top">About</a></li>
+            <li><a href="#top">Stockists</a></li>
+            <li><a href="#top">Press</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="ui-sitefoot-base">
+        <span class="ui-credit">Placeholder drawings generated by
+          <a href="https://www.anthropic.com">Claude</a>, reviewed and approved by Gary.</span>
+        <span>Ardent Instruments BV</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- The one dialog. Native <dialog>, so the focus trap, the inert background,
+     Escape and the top layer are the platform's problem rather than ours. -->
+<dialog class="ui-dialog" id="stockists">
+  <div class="ui-dialog-head">
+    <h2 class="ui-title">Find a stockist</h2>
+    <button class="ui-btn ui-btn-ghost ui-x" data-ui-close aria-label="Close"></button>
+  </div>
+  <div class="ui-dialog-body">
+    <div class="ui-field">
+      <label class="ui-label" for="near">Town or postcode</label>
+      <input class="ui-input" id="near" type="search" placeholder="Rotterdam"
+             data-ui-filter="#shops" data-ui-filter-status="#shopcount">
+      <p class="ui-help">Forty shops keep a demo unit on the counter.</p>
+    </div>
+    <p class="ui-faint" id="shopcount" aria-live="polite">4 of 4</p>
+    <ul class="ui-list" id="shops">
+      <li class="ui-list-item" data-ui-item>
+        <div><p class="ui-list-title">Havstad Ljud</p>
+          <p class="ui-list-sub">Gothenburg · demo unit</p></div>
+      </li>
+      <li class="ui-list-item" data-ui-item>
+        <div><p class="ui-list-title">Field &amp; Foley</p>
+          <p class="ui-list-sub">Rotterdam · demo unit</p></div>
+      </li>
+      <li class="ui-list-item" data-ui-item>
+        <div><p class="ui-list-title">Ruta 9 Audio</p>
+          <p class="ui-list-sub">Lisbon · order only</p></div>
+      </li>
+      <li class="ui-list-item" data-ui-item>
+        <div><p class="ui-list-title">Öre Instrument</p>
+          <p class="ui-list-sub">Malmö · demo unit</p></div>
+      </li>
+    </ul>
+  </div>
+  <div class="ui-dialog-foot">
+    <button class="ui-btn ui-btn-ghost" data-ui-close>Close</button>
+  </div>
+</dialog>
+
+<script src="../core/ui.js"></script>
+</body>
+</html>

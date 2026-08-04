@@ -116,6 +116,38 @@
           "$type": "color",
           "$value": "#E9F0FC"
         },
+        "good": {
+          "$type": "color",
+          "$value": "#15803D"
+        },
+        "good-soft": {
+          "$type": "color",
+          "$value": "#E6F4EA"
+        },
+        "warn": {
+          "$type": "color",
+          "$value": "#A06106"
+        },
+        "warn-soft": {
+          "$type": "color",
+          "$value": "#FDF3E0"
+        },
+        "crit": {
+          "$type": "color",
+          "$value": "#B91C1C"
+        },
+        "crit-soft": {
+          "$type": "color",
+          "$value": "#FDEAEA"
+        },
+        "info": {
+          "$type": "color",
+          "$value": "#0369A1"
+        },
+        "info-soft": {
+          "$type": "color",
+          "$value": "#E5F2FA"
+        },
         "shadow": {
           "$value": "0 1px 2px rgba(16,24,40,.06)",
           "$extensions": {
@@ -589,6 +621,38 @@
           "$type": "color",
           "$value": "#0B2E3D"
         },
+        "good": {
+          "$type": "color",
+          "$value": "#4ED6A4"
+        },
+        "good-soft": {
+          "$type": "color",
+          "$value": "#082A24"
+        },
+        "warn": {
+          "$type": "color",
+          "$value": "#E8B84B"
+        },
+        "warn-soft": {
+          "$type": "color",
+          "$value": "#2A2310"
+        },
+        "crit": {
+          "$type": "color",
+          "$value": "#FF6B6B"
+        },
+        "crit-soft": {
+          "$type": "color",
+          "$value": "#2E1416"
+        },
+        "info": {
+          "$type": "color",
+          "$value": "#35C6E8"
+        },
+        "info-soft": {
+          "$type": "color",
+          "$value": "#0B2E3D"
+        },
         "cat-1": {
           "$type": "color",
           "$value": "#3987E5"
@@ -1005,6 +1069,38 @@
         "accent-soft": {
           "$type": "color",
           "$value": "rgba(79,214,193,.14)"
+        },
+        "good": {
+          "$type": "color",
+          "$value": "#4FD6C1"
+        },
+        "good-soft": {
+          "$type": "color",
+          "$value": "rgba(79,214,193,.13)"
+        },
+        "warn": {
+          "$type": "color",
+          "$value": "#FFC46B"
+        },
+        "warn-soft": {
+          "$type": "color",
+          "$value": "rgba(255,196,107,.13)"
+        },
+        "crit": {
+          "$type": "color",
+          "$value": "#FF7B8A"
+        },
+        "crit-soft": {
+          "$type": "color",
+          "$value": "rgba(255,123,138,.13)"
+        },
+        "info": {
+          "$type": "color",
+          "$value": "#8AB4FF"
+        },
+        "info-soft": {
+          "$type": "color",
+          "$value": "rgba(138,180,255,.13)"
         },
         "shadow": {
           "$value": "0 6px 22px rgba(0,0,0,.34)",
@@ -1471,6 +1567,38 @@
           "$type": "color",
           "$value": "#18212D"
         },
+        "good": {
+          "$type": "color",
+          "$value": "#4FB286"
+        },
+        "good-soft": {
+          "$type": "color",
+          "$value": "#10241C"
+        },
+        "warn": {
+          "$type": "color",
+          "$value": "#D9A441"
+        },
+        "warn-soft": {
+          "$type": "color",
+          "$value": "#241E10"
+        },
+        "crit": {
+          "$type": "color",
+          "$value": "#E06C63"
+        },
+        "crit-soft": {
+          "$type": "color",
+          "$value": "#261414"
+        },
+        "info": {
+          "$type": "color",
+          "$value": "#6D93C4"
+        },
+        "info-soft": {
+          "$type": "color",
+          "$value": "#18212D"
+        },
         "shadow": {
           "$value": "0 1px 2px rgba(0,0,0,.4)",
           "$extensions": {
@@ -1899,6 +2027,38 @@
         "accent-soft": {
           "$type": "color",
           "$value": "#2C1A10"
+        },
+        "good": {
+          "$type": "color",
+          "$value": "#86A84E"
+        },
+        "good-soft": {
+          "$type": "color",
+          "$value": "#1C2413"
+        },
+        "warn": {
+          "$type": "color",
+          "$value": "#E0A03A"
+        },
+        "warn-soft": {
+          "$type": "color",
+          "$value": "#2A2110"
+        },
+        "crit": {
+          "$type": "color",
+          "$value": "#DD574C"
+        },
+        "crit-soft": {
+          "$type": "color",
+          "$value": "#2A1310"
+        },
+        "info": {
+          "$type": "color",
+          "$value": "#5E9AA8"
+        },
+        "info-soft": {
+          "$type": "color",
+          "$value": "#132123"
         },
         "shadow": {
           "$value": "0 2px 0 rgba(0,0,0,.28)",
@@ -2334,6 +2494,38 @@
           "$value": "#FFFFFF"
         },
         "accent-soft": {
+          "$type": "color",
+          "$value": "#E4E9EF"
+        },
+        "good": {
+          "$type": "color",
+          "$value": "#3F7A52"
+        },
+        "good-soft": {
+          "$type": "color",
+          "$value": "#E6EFE7"
+        },
+        "warn": {
+          "$type": "color",
+          "$value": "#896719"
+        },
+        "warn-soft": {
+          "$type": "color",
+          "$value": "#F3EEDD"
+        },
+        "crit": {
+          "$type": "color",
+          "$value": "#A6453B"
+        },
+        "crit-soft": {
+          "$type": "color",
+          "$value": "#F3E4E1"
+        },
+        "info": {
+          "$type": "color",
+          "$value": "#3A5470"
+        },
+        "info-soft": {
           "$type": "color",
           "$value": "#E4E9EF"
         },

@@ -750,6 +750,151 @@ a.ui-brand{color:inherit;text-decoration:none}
 .ui-sitefoot-base > :last-child{margin-inline-start:auto}
 
 /* -----------------------------------------------------------------------------
+   MARKETING
+   The vocabulary of a page that ARGUES. A catalogue and a gallery are browsing
+   structures: many equivalent things, and the order is a sort. A marketing page
+   is a sequence — each band does a different rhetorical job and the order is
+   load-bearing, which is why none of these are grids of equivalents.
+
+   Everything here is composed from bands and measures. What genuinely could not
+   be built from what already existed is below, and it is a short list.
+   -------------------------------------------------------------------------- */
+
+/* Proof, in the form of names. Deliberately quiet: a logo wall competing with
+   the headline above it is an argument against itself.
+
+   The two kinds of mark are quietened by DIFFERENT means, and the split is a
+   contrast decision rather than a stylistic one:
+
+   An IMAGE logo is a logotype, which WCAG 1.4.3 exempts from the contrast
+   minimum — and it arrives carrying brand colours chosen against somebody
+   else's ground, so muting it with grayscale and opacity is the only honest way
+   to put it on an arbitrary theme. Colour returns on hover.
+
+   A WORDMARK is not exempt. It is real text set in the page's own typeface, so
+   it is held to 4.5:1 like any other text and dimmed with --ui-text-dim, the
+   one level below --ui-text that clears 4.5 on every surface of every theme.
+   Measured on all twelve theme x mode combinations: at opacity .55 the
+   wordmarks scored 3.44-3.87 across every LIGHT mode and passed in dark, which
+   is the failure shape that ships — it looks deliberate and it is unreadable on
+   half the palette. Same lesson as .ui-credit, one component out. */
+.ui-logos{
+  display:flex;flex-wrap:wrap;align-items:center;
+  gap:var(--ui-s5) var(--ui-s7);justify-content:center;
+}
+.ui-logos > *{flex:0 0 auto}
+.ui-logos img,.ui-logos svg{
+  opacity:.55;filter:grayscale(1);
+  transition:opacity var(--ui-dur) var(--ui-ease),filter var(--ui-dur) var(--ui-ease);
+}
+.ui-logos a:hover img,.ui-logos a:hover svg,
+.ui-logos img:hover,.ui-logos svg:hover{opacity:1;filter:none}
+/* Not a heading — it is a name being cited, so it must not enter the outline. */
+.ui-logo-word{
+  font-family:var(--ui-font-display);font-size:var(--ui-fs-lg);
+  font-weight:var(--ui-weight-heading);letter-spacing:var(--ui-tracking-head);
+  color:var(--ui-text-dim);
+}
+
+/* A numbered sequence. The number is generated, never typed: a hand-typed "3"
+   survives a reorder and starts lying. Counter, not <ol> markers, because the
+   marker cannot be positioned or sized without list-style-position hacks. */
+.ui-steps{counter-reset:ui-step;display:grid;gap:var(--ui-s5);list-style:none;margin:0;padding:0}
+.ui-step{counter-increment:ui-step;display:grid;grid-template-columns:auto 1fr;gap:var(--ui-s4)}
+.ui-step::before{
+  content:counter(ui-step);
+  display:grid;place-items:center;
+  inline-size:2.25rem;block-size:2.25rem;
+  border-radius:var(--ui-radius-pill);
+  background:var(--ui-accent);color:var(--ui-accent-ink);
+  font-variant-numeric:tabular-nums;
+  font-weight:var(--ui-weight-heading);font-size:var(--ui-fs-md);
+}
+.ui-step > :first-child{margin-block-start:calc(var(--ui-s2) * .5)}
+
+/* An alternating media/text row. NOT .ui-split (that is a fixed list track for
+   list+detail) and NOT .ui-cols (that is auto-fit equals). This is two halves
+   that swap sides down the page, and the swap is what makes a stack of them
+   read as a rhythm rather than a list. Below the fold it collapses to media
+   FIRST regardless of side, because the picture is the entry point on a phone. */
+.ui-feature{
+  display:grid;gap:var(--ui-s6);align-items:center;
+  grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr));
+}
+@media (min-width:820px){
+  /* order, not direction: reversing the flow direction would also reverse it
+     for a right-to-left document, where the alternation should still alternate. */
+  .ui-feature-flip > :first-child{order:2}
+}
+
+/* PLANS — the one hard problem on a marketing page.
+   Three cards side by side are compared ACROSS, so the price on card two must
+   sit on the same line as the price on cards one and three even when one plan's
+   name wraps to two lines and another's does not. Nothing but subgrid does that
+   without hard-coding heights, so the head is a subgrid of four rows: name,
+   price, blurb, action. The feature list below flows freely — that part is read
+   down a column, not across, and forcing it into rows would mean every plan
+   needs an empty cell for every feature it does not have.
+
+   Without subgrid support the cards simply size themselves; the page is still
+   correct, just less tidy. That is the degradation to want.
+
+   The recommended plan is marked with a RING, not a border: a border is inside
+   the box and changes the card's size, which pushes its neighbours out of the
+   alignment this whole section exists to produce. Same reasoning as
+   .ui-swatch[aria-pressed], one component out. */
+.ui-plans{display:grid;gap:var(--ui-s4);grid-template-columns:repeat(auto-fit,minmax(min(16rem,100%),1fr))}
+.ui-plan{display:flex;flex-direction:column;gap:var(--ui-s3)}
+@supports (grid-template-rows:subgrid){
+  .ui-plans{grid-template-rows:auto auto auto auto auto}
+  .ui-plan{display:grid;grid-row:span 5;grid-template-rows:subgrid;gap:var(--ui-s3)}
+}
+.ui-plan-name{
+  font-size:var(--ui-fs-xs);letter-spacing:var(--ui-tracking-label);
+  text-transform:uppercase;font-weight:var(--ui-weight-medium);
+  color:var(--ui-text-dim);margin:0;
+}
+.ui-plan-price{
+  display:flex;align-items:baseline;gap:var(--ui-s2);flex-wrap:wrap;
+  font-variant-numeric:tabular-nums;
+}
+.ui-plan-figure{
+  font-family:var(--ui-font-display);
+  font-size:var(--ui-fs-xl);font-weight:var(--ui-weight-heading);
+  letter-spacing:-.02em;line-height:1;color:var(--ui-text);
+}
+.ui-plan-period{color:var(--ui-text-dim);font-size:var(--ui-fs-sm)}
+.ui-plan-features{list-style:none;margin:0;padding:0;display:grid;gap:var(--ui-s2);align-content:start}
+/* The tick is a mark, so it carries a text alternative in the markup, not here.
+   It is --ui-good rather than the accent because "included" is a state, and the
+   suite's rule is that state survives a rebrand. */
+.ui-plan-features li{display:grid;grid-template-columns:auto 1fr;gap:var(--ui-s2);align-items:start}
+.ui-plan-features li::before{
+  content:"";inline-size:.85em;block-size:.85em;margin-block-start:.35em;
+  background:currentColor;color:var(--ui-good);
+  clip-path:polygon(13% 45%,3% 55%,38% 90%,97% 25%,87% 15%,38% 70%);
+}
+/* Not included. A missing row would be ambiguous with a shorter list, so the
+   absence is stated — and stated in text for anyone who cannot see the bar.
+
+   --ui-text-dim, not --ui-text-faint. Faint measured 3.03-3.72 here against a
+   4.5 bar on all twelve theme x mode combinations: this is a row of body text
+   that a buyer is comparing across three cards, not a caption. The MARK stays
+   faint, because a mark is held to 3.0 and being visibly the quieter of the two
+   states is its whole job. */
+.ui-plan-features li[data-ui-off]{color:var(--ui-text-dim)}
+.ui-plan-features li[data-ui-off]::before{
+  color:var(--ui-text-faint);
+  clip-path:polygon(0 42%,100% 42%,100% 58%,0 58%);
+}
+/* The border is kept and made transparent rather than removed, so the card's
+   box is byte-identical to its neighbours' and the ring is purely outside it. */
+.ui-plan-recommended{
+  box-shadow:0 0 0 2px var(--ui-accent);
+  border-color:transparent;
+}
+
+/* -----------------------------------------------------------------------------
    GRID
    Auto-fit, so the column COUNT is a consequence of the available width and the
    minimum tile size — not a breakpoint you maintain. min() keeps a single
@@ -1783,6 +1928,23 @@ a.ui-brand{color:inherit;text-decoration:none}
     border-bottom:3px solid Highlight;
   }
   .ui-swatch[aria-pressed="true"]{outline:3px solid Highlight;outline-offset:2px}
+  /* Same shape as the swatch: the recommended plan is marked by a box-shadow
+     ring, and box-shadow is dropped here. An outline is drawn outside the box,
+     so the substitute keeps the property that made the ring right in the first
+     place — the recommended card stays exactly the size of its neighbours. */
+  .ui-plan-recommended{outline:3px solid Highlight;outline-offset:2px}
+  /* Grayscale is not applied to a palette the user chose, and a cited logo at
+     55% opacity against a high-contrast ground is the thing they turned this on
+     to avoid. */
+  .ui-logos > *{opacity:1;filter:none}
+  /* Tick and bar are backgrounds, so both collapse to Canvas and every plan
+     reads as offering everything. The two shapes still differ, and the row's
+     text alternative carries the rest. */
+  .ui-plan-features li::before{background:CanvasText}
+  .ui-plan-features li[data-ui-off]::before{background:GrayText}
+  /* The accent disc becomes Canvas on Canvas — the number survives, the circle
+     does not, and a step that looks like a bare digit reads as a list marker. */
+  .ui-step::before{border:1px solid CanvasText}
   /* Halo's blur is a no-op here and only costs paint time. */
   .ui,.ui *{backdrop-filter:none}
 }
@@ -1842,7 +2004,17 @@ a.ui-brand{color:inherit;text-decoration:none}
 
   /* Do not cut these in half across a page boundary. */
   .ui-card,.ui-figure,.ui-frame,.ui-pullquote,.ui-quote,.ui-stat,
-  .ui-banner,.ui-list-item,.ui-table tr,.ui-readout,.ui-meter-row{break-inside:avoid}
+  .ui-banner,.ui-list-item,.ui-table tr,.ui-readout,.ui-meter-row,
+  .ui-plan,.ui-step{break-inside:avoid}
+
+  /* The tick and the bar are the entire content of a plan comparison, and they
+     are drawn with a background — which the UA drops, leaving every plan
+     apparently offering every feature. Exactly the .ui-dot case: a mark whose
+     absence changes the meaning has to print. The rest of the page still leaves
+     backgrounds to the reader's setting. */
+  .ui-plan-features li::before{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  /* A logo wall is a list of names on paper; the dimming was a screen device. */
+  .ui-logos > *{opacity:1;filter:none}
   h1,h2,h3,.ui-title,.ui-display{break-after:avoid}
 
   /* A stage is sized to the VIEWPORT, which on paper means a sheet and a half
