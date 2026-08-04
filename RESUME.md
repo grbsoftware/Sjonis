@@ -94,7 +94,17 @@ two-axis split is right).
    passed by luck (.72 white over white, dark text), which is why it read as a
    dark-mode-only bug. Rule: UA surfaces get `--ui-bg`, the only ground that is
    opaque in all six themes. Gary found this one.
-12. **The preview pane caches `core/*.css` and `ui.js` hard.** Edits appear not
+12. **A percentage inside `columns:` resolves against the COLUMN box.** The side
+   pull quote was `width:min(20rem,42%)`; inside a 22rem column that is ~150px,
+   about seven characters a line, with the body text squeezed into the rest.
+   Anything floated inside multi-column text has to be sized against the column,
+   not the container — and usually should not float at all.
+13. **The browser caches `core/*.css` and `ui.js` for 10 minutes on Pages.**
+   A page loaded before a push keeps the old assets and the new work looks
+   broken. Verify with a cache-buster:
+   `document.querySelectorAll('link[rel=stylesheet]').forEach(l=>l.href=l.href.split('?')[0]+'?cb='+Date.now())`
+   and re-inject `ui.js?cb=…` — three "bugs" this session were only this.
+14. **The preview pane caches `core/*.css` and `ui.js` hard.** Edits appear not
    to work. Test with a cache-busted copy:
    `sed -e "s|../core/ui.css|../core/ui.css?v=$(date +%s)|" … > demo/_x.html`
    (gitignored), and delete it after. It also reports every element as visible,

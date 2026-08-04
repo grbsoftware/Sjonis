@@ -435,6 +435,16 @@
     margin-inline-start:var(--ui-s5);
     margin-block-start:0;
   }
+  /* ...but never inside .ui-columns. A percentage in a multi-column container
+     resolves against the COLUMN box, not the container, so 42% of a 22rem
+     column is ~150px — a pull quote about seven characters wide, with the
+     column text squeezed into what is left. There is no room to float beside a
+     reading column; across the column is the only sane position. */
+  .ui-columns .ui-pullquote-side{
+    float:none;width:auto;
+    margin-inline-start:0;
+    margin-block:var(--ui-s5);
+  }
 }
 
 /* Margin note. Beside the measure on a wide screen, inline on a narrow one —
