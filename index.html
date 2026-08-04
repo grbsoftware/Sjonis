@@ -296,6 +296,39 @@ input[type="color"]{width:44px;height:28px;padding:2px;border:1px solid var(--g-
     } catch (e) { return null; }
   }
 
+  /* UNDRESSING IS NOT OPTIONAL, and leaving it out was a real bug Gary found.
+     Three entries frame the SAME file — app-shell, control-panel and
+     control-surface are all skeletons/app-shell.html — so moving between any
+     two of them does not reload anything (see show()). Dressing that can only
+     be ADDED therefore strands the previous genre on the next entry: control
+     panel walked into control surface still wearing bevel, and plain app-shell
+     wore whichever genre you came from. Arriving from a DIFFERENT file always
+     looked right, which is exactly why it read as a random fault.
+
+     This restores rather than guesses. The values that were there before are
+     stashed on the element itself at dressing time, so undressing puts a page
+     back the way its author wrote it — a skeleton carries data-theme on <html>
+     and class="ui" on <body>, but demo pages put both on one element, and
+     blindly removing data-theme would strip the theme off those. No stash
+     means we never dressed this document and there is nothing to undo. */
+  var DRESS_MARK = "data-ui-dressed";
+  var DRESS_ATTRS = ["data-theme", "data-mode", "data-skin", "data-genre"];
+
+  function undressFrame(doc){
+    var root = doc.querySelector("[" + DRESS_MARK + "]");
+    if (root){
+      var was = {};
+      try { was = JSON.parse(root.getAttribute(DRESS_MARK)) || {}; } catch (e) {}
+      DRESS_ATTRS.forEach(function(a){
+        if (was[a] === null || was[a] === undefined) root.removeAttribute(a);
+        else root.setAttribute(a, was[a]);
+      });
+      root.removeAttribute(DRESS_MARK);
+    }
+    var old = doc.querySelectorAll("link[data-injected]");
+    for (var n = old.length - 1; n >= 0; n--) old[n].parentNode.removeChild(old[n]);
+  }
+
   /* Dressing is four attributes and two stylesheets, applied to the framed
      document — the same four and two an author would write by hand, because
      there is no mechanism here that a hand-written page does not have. */
@@ -303,10 +336,15 @@ input[type="color"]{width:44px;height:28px;padding:2px;border:1px solid var(--g-
     var ex = EXAMPLES[i], g = ex.genre && GENRES[ex.genre];
     if (ex.genre && !g && Object.keys(GENRES).length)
       console.warn('Sjonis: no genre "' + ex.genre + '" in tokens/genres.json');
-    if (!g) return;
     try {
       var doc = frame.contentWindow && frame.contentWindow.document;
       if (!doc || !doc.documentElement) return;
+      /* Always strip first, so this function states the WHOLE desired result
+         rather than a difference from an unknown previous one. Running it
+         twice for the same entry has to land in the same place, or the
+         same-src path below would accumulate stylesheets. */
+      undressFrame(doc);
+      if (!g) return;   /* undressed IS the finished state for a plain entry */
       /* ON THE .ui ELEMENT, NOT <html> — this is trap 1 wearing a new hat, and
          it cost a round trip here. ui.css's derived block is `:root,.ui`, so it
          RE-DECLARES the four role tokens at the .ui level; a skin sitting on an
@@ -316,13 +354,18 @@ input[type="color"]{width:44px;height:28px;padding:2px;border:1px solid var(--g-
          skin. Measured on the live site before the fix: .ui-card was a 1px
          near-black box instead of a 2px bevel on the mid face. */
       var root = doc.querySelector(".ui") || doc.documentElement;
+      /* Stash what the author wrote, before overwriting it. null means the
+         attribute was absent, which undressFrame restores as absent. */
+      var was = {};
+      DRESS_ATTRS.forEach(function(a){ was[a] = root.getAttribute(a); });
+      root.setAttribute(DRESS_MARK, JSON.stringify(was));
+
       root.setAttribute("data-theme", g.theme);
       root.setAttribute("data-mode",  g.mode);
       root.setAttribute("data-skin",  g.skin);
       root.setAttribute("data-genre", g.id);
       [["skin", "../skins/" + g.skin + ".css"],
        ["genre", "../genres/" + g.id + ".css"]].forEach(function(pair){
-        if (doc.querySelector('link[data-injected="' + pair[0] + '"]')) return;
         var l = doc.createElement("link");
         l.rel = "stylesheet";
         l.href = pair[1];
@@ -371,7 +414,15 @@ input[type="color"]{width:44px;height:28px;padding:2px;border:1px solid var(--g-
     if (n !== i){ tune.density = tune.radius = tune.accent = null; }
     i = n;
     var ex = EXAMPLES[n];
+    /* Reloading is what normally triggers the dressing, via the frame's load
+       event. When the src is unchanged there IS no load event, so the frame
+       has to be re-dressed here instead — three entries share
+       skeletons/app-shell.html and moving between them would otherwise leave
+       the previous entry's genre on screen. Not reloading is the right call
+       (it would throw away scroll position and any state the page holds); the
+       bug was assuming a reload always happens. */
     if (frame.getAttribute("src") !== ex.src) frame.setAttribute("src", ex.src);
+    else { applyGenreToFrame(); applyModeToFrame(); }
     path.textContent  = ex.src;
     blurb.textContent = ex.blurb;
     out.setAttribute("href", ex.src);

@@ -689,6 +689,24 @@ Both genres verified dressing correctly in `index.html` (`#control-panel`,
 `#control-surface`). **The genre gallery is no longer blocked** — two genres
 exist, which was the stated precondition.
 
+**BUG GARY FOUND, FIXED — dressing could only be ADDED, never removed.** Three
+entries frame the same file (`app-shell`, `control-panel`, `control-surface`
+are all `skeletons/app-shell.html`), and `show()` skips the reload when the src
+is unchanged — correctly, since reloading throws away scroll position. But the
+frame's `load` event is what triggered dressing, so between those three entries
+nothing ran: control-panel walked into control-surface still wearing bevel, and
+plain app-shell wore whichever genre you came from. Arriving from a *different*
+file always worked, which is why it read as random.
+
+Two halves to the fix. `show()` re-dresses in place when it skips the reload,
+and `applyGenreToFrame` now states the whole desired result — it strips first,
+so it is idempotent and `!g` means "undressed" rather than "leave it alone".
+Undressing **restores rather than guesses**: the author's original values are
+stashed on the element at dressing time, because a skeleton carries
+`data-theme` on `<html>` while demo pages put it on the same element as
+`class="ui"`, and blindly removing it would strip the theme off those. Verified
+by clicking all 12 transitions Gary listed.
+
 **Two silent failures made loud in `index.html`.** `loadGenres` ended in
 `.catch(function(){})`, justified by file:// having no origin. True, and still
 wrong: a JSON typo, a renamed file and a cached empty body all produce the
