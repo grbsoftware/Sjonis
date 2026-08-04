@@ -1,5 +1,8 @@
 # Sjonis
 
+**[See it running →](https://grbsoftware.github.io/Sjonis/)** — every example in one
+frame, arrow keys to move between them, one toggle for light and dark.
+
 A token-driven set of interface templates. Two axes that move independently:
 
 - **Archetype** — structure. Chosen by what the thing *is*.
@@ -13,11 +16,12 @@ No build step, no dependencies, no framework. Two stylesheets and HTML — plus 
 optional script if you want the parts that move.
 
 ```
+index.html           example browser — every page below in one frame
 core/ui.css          structure, primitives, components — contains no colours
 core/themes.css      six themes, each with a light and a dark palette
 core/ui.js           optional behaviour layer — see below
 tokens/              the same themes as W3C DTCG JSON — the portable source
-tools/               token extractor + multi-platform generators (Python, no deps)
+tools/               token extractor + generators + contrast validator (Python, no deps)
 adapters/            bridges to Tailwind v4 and shadcn/ui
 archetypes/          copyable page scaffolds — app-shell, portfolio
 dist/                generated: GTK4 CSS, WinUI/WPF XAML
@@ -25,6 +29,9 @@ demo/gallery.html    live theme switcher + tuner + CSS export
 demo/behaviour.html  every interactive component, switchable across all themes
 .claude/skills/      Claude Code skill so an agent can use the suite directly
 ```
+
+Nothing to install and nothing to build. Clone it, open `index.html`, and every
+example runs — the whole suite is HTML, CSS and one optional classic script.
 
 ## Quick start
 
@@ -174,6 +181,19 @@ Georgia). No webfonts, no network requests, no layout shift, nothing to license.
 
 If you want a distinctive typeface, override `--ui-font` / `--ui-font-display` and
 load the face yourself. Only those two tokens need to change.
+
+## Checking a theme
+
+```bash
+python tools/validate_palette.py        # every theme x mode, WCAG 2.1
+python tools/validate_palette.py halo   # one theme
+python tools/validate_palette.py -v     # show passes too
+```
+
+It measures the pairings the CSS actually produces rather than plausible-looking
+ones, and composites translucent tokens over their ground first — halo's surfaces
+are `rgba()`, so a ratio against the literal value is meaningless. Exit code is 1
+on any required failure, so it can gate a commit.
 
 ## Beyond the web
 
