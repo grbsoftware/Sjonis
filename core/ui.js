@@ -482,10 +482,20 @@
       var status = input.getAttribute('data-ui-filter-status')
         ? $(input.getAttribute('data-ui-filter-status')) : null;
 
+      /* What counts as "an item" depends on what is being filtered. Table rows
+         and list items are inferred, because those two carry their own
+         structure; anything else — a grid of cards, a set of figures — opts in
+         with data-ui-item, which beats guessing at .ui-card and then hiding the
+         wrong thing on a page that nests one card inside another. */
+      function itemsOf() {
+        if (target.tBodies && target.tBodies[0]) return $$('tr', target.tBodies[0]);
+        var opted = $$('[data-ui-item]', target);
+        return opted.length ? opted : $$('.ui-list-item,.ui-row', target);
+      }
+
       on(input, 'input', function () {
         var q = input.value.trim().toLowerCase();
-        var items = target.tBodies && target.tBodies[0]
-          ? $$('tr', target.tBodies[0]) : $$('.ui-list-item,.ui-row', target);
+        var items = itemsOf();
         var shown = 0;
         items.forEach(function (el) {
           var hit = !q || el.textContent.toLowerCase().indexOf(q) !== -1;
@@ -493,6 +503,54 @@
           if (hit) shown++;
         });
         if (status) status.textContent = shown + ' of ' + items.length;
+      });
+    });
+  }
+
+  /* ---------------------------------------------------------------------------
+     CHOICE —  <div data-ui-choice> with <button aria-pressed> children.
+     One of the set is on; picking one turns the rest off. Swatches, segmented
+     controls, view switchers.
+
+     aria-pressed rather than a .is-selected class, because the state has to be
+     announced, not just drawn — and because it means the CSS has nothing to
+     stay in sync with. Arrow keys move within the group the way a radio group
+     does; the buttons stay individually tabbable, which is the one departure,
+     since a colour swatch is worth landing on directly.
+     ------------------------------------------------------------------------ */
+  function wireChoice(root) {
+    $$('[data-ui-choice]', root).forEach(function (group) {
+      if (!claim(group, 'Choice')) return;
+
+      function buttons() { return $$('button,[role="button"]', group); }
+
+      function select(btn) {
+        buttons().forEach(function (b) {
+          b.setAttribute('aria-pressed', String(b === btn));
+        });
+        group.dispatchEvent(new CustomEvent('ui:choice', {
+          bubbles: true,
+          detail: { value: btn.getAttribute('data-value') || btn.getAttribute('aria-label'),
+                    button: btn }
+        }));
+      }
+
+      on(group, 'click', function (e) {
+        var btn = e.target.closest('button,[role="button"]');
+        if (btn && group.contains(btn)) select(btn);
+      });
+
+      on(group, 'keydown', function (e) {
+        var step = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1
+                 : e.key === 'ArrowLeft'  || e.key === 'ArrowUp'   ? -1 : 0;
+        if (!step) return;
+        var list = buttons();
+        var at = list.indexOf(document.activeElement);
+        if (at < 0) return;
+        e.preventDefault();
+        var next = list[(at + step + list.length) % list.length];
+        next.focus();
+        select(next);
       });
     });
   }
@@ -1006,6 +1064,7 @@
     wireTips(root);
     wireSort(root);
     wireFilter(root);
+    wireChoice(root);
     wireCopy(root);
     wireMarquee(root);      /* before wireLazy: it creates frames to wire */
     wireLazy(root);

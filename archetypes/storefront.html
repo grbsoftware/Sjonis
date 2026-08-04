@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Storefront — UI Suite archetype</title>
+
+<link rel="stylesheet" href="../core/ui.css">
+<link rel="stylesheet" href="../core/themes.css">
+
+<!--
+  STOREFRONT ARCHETYPE
+
+  The third skeleton, and the one that tests whether the SITE FRAME generalises.
+  app-shell answers "where do the controls live". portfolio answers "where does
+  the work live". This answers "which of these do I want", which is a different
+  job again: the page exists to be compared across, so every card has to carry
+  the same four facts in the same four places, and nothing may reflow when one
+  product has a longer name or a shorter price.
+
+  What it borrows unchanged from the site frame:
+    .ui-sitehead / .ui-sitebar / .ui-sitenav      the header, identical markup
+    .ui-crumbs                                    where you are in the catalogue
+    .ui-sitefoot / -cols / -base                  the footer, identical markup
+
+  What is specific to a catalogue (core/ui.css, COMMERCE):
+    .ui-price / .ui-price-was / .ui-price-note    figures that never reflow
+    .ui-badge                                     a corner label on a frame
+    .ui-swatch / .ui-swatches                     colour options
+    .ui-frame-muted                               sold out, still readable
+
+  Images are the same placeholder SVGs the portfolio uses, deferred with
+  data-ui-lazy so the frame reserves the box before the file arrives.
+-->
+
+<body class="ui" data-theme="graphite" id="top">
+<a class="ui-skip" href="#main">Skip to content</a>
+
+<div class="ui-page">
+
+  <!-- site frame: header ----------------------------------------------------->
+  <header class="ui-sitehead ui-sitehead-stick">
+    <div class="ui-sitebar ui-measure ui-measure-wide">
+      <a class="ui-brand" href="#top">
+        <div class="ui-mark">SJ</div>
+        <div class="ui-brand-name">Sjonis Editions</div>
+      </a>
+      <nav class="ui-sitenav" aria-label="Catalogue">
+        <a class="ui-sitenav-item" aria-current="page" href="#main">Prints</a>
+        <a class="ui-sitenav-item" href="#main">Objects</a>
+        <a class="ui-sitenav-item" href="#main">Archive</a>
+      </nav>
+      <div class="ui-sitehead-actions">
+        <button class="ui-btn ui-btn-ghost" data-ui-open="#cart">
+          Bag <span class="ui-nav-count">3</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- where you are ---------------------------------------------------------->
+  <div class="ui-band ui-band-tight">
+    <div class="ui-measure ui-measure-wide">
+      <nav aria-label="Breadcrumb">
+        <ol class="ui-crumbs">
+          <li><a href="#top">Home</a></li>
+          <li><a href="#top">Prints</a></li>
+          <li><span aria-current="page">Screenprints</span></li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <!-- title + controls ------------------------------------------------------->
+  <section class="ui-band ui-band-tight" id="main" tabindex="-1">
+    <div class="ui-measure ui-measure-wide">
+      <div class="ui-toolbar">
+        <div>
+          <h1 class="ui-title ui-title-lg">Screenprints</h1>
+          <p class="ui-dim">Hand-pulled, numbered editions. Each one is the output of a
+            rule set rather than a drawing.</p>
+        </div>
+        <div class="ui-row" style="gap:var(--ui-s3);align-items:flex-end">
+          <div class="ui-field">
+            <label class="ui-label" for="q">Find</label>
+            <input class="ui-input" id="q" type="search" placeholder="lattice, orbit…"
+                   data-ui-filter="#grid" data-ui-filter-status="#count">
+          </div>
+          <div class="ui-field">
+            <label class="ui-label" for="sort">Sort</label>
+            <select class="ui-input" id="sort">
+              <option>Featured</option>
+              <option>Price, low to high</option>
+              <option>Price, high to low</option>
+              <option>Newest</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <p class="ui-faint" id="count" aria-live="polite">8 of 8</p>
+    </div>
+  </section>
+
+  <!-- the grid. .ui-cols is auto-fit, so the column count follows the width
+       rather than a breakpoint list. data-ui-item makes each card a filter
+       target. --------------------------------------------------------------->
+  <section class="ui-band ui-band-tight">
+    <div class="ui-measure ui-measure-wide">
+      <div class="ui-cols" id="grid">
+
+        <article class="ui-card ui-card-flush" data-ui-item>
+          <div class="ui-frame ui-ratio-portrait" data-ui-lazy>
+            <span class="ui-badge">New</span>
+            <img data-src="../demo/img/lattice.svg" alt="Lattice, a screenprint of a woven grid">
+          </div>
+          <div class="ui-card-body">
+            <h2 class="ui-title">Lattice</h2>
+            <p class="ui-faint">Edition of 40 · 50×70cm</p>
+            <p><span class="ui-price">£180</span></p>
+            <div class="ui-swatches" data-ui-choice role="group" aria-label="Ink">
+              <button class="ui-swatch" style="--ui-swatch:var(--ui-cat-1)" aria-pressed="true"  aria-label="Blue"></button>
+              <button class="ui-swatch" style="--ui-swatch:var(--ui-cat-3)" aria-pressed="false" aria-label="Green"></button>
+              <button class="ui-swatch" style="--ui-swatch:var(--ui-cat-7)" aria-pressed="false" aria-label="Violet"></button>
+            </div>
+            <p>
+              <button class="ui-btn" data-ui-open="#look">Quick look</button>
+            </p>
+          </div>
+        </article>
+
+        <article class="ui-card ui-card-flush" data-ui-item>
+          <div class="ui-frame ui-ratio-portrait" data-ui-lazy>
+            <span class="ui-badge ui-badge-crit">−30%</span>
+            <img data-src="../demo/img/orbit.svg" alt="Orbit, concentric arcs">
+          </div>
+          <div class="ui-card-body">
+            <h2 class="ui-title">Orbit</h2>
+            <p class="ui-faint">Edition of 25 · 50×70cm</p>
+            <p>
+              <span class="ui-price">£126</span>
+              <span class="ui-price-was">£180</span>
+              <span class="ui-price-note">Reduced</span>
+            </p>
+            <div class="ui-swatches" data-ui-choice role="group" aria-label="Ink">
+              <button class="ui-swatch" style="--ui-swatch:var(--ui-cat-2)" aria-pressed="true"  aria-label="Orange"></button>
+              <button class="ui-swatch" style="--ui-swatch:var(--ui-cat-5)" aria-pressed="false" aria-label="Pink"></button>
+            </div>
+            <p>
+              <button class="ui-btn" data-ui-open="#look">Quick look</button>
+            </p>
+          </div>
+        </article>
+
+        <article class="ui-card ui-card-flush" data-ui-item>
+          <div class="ui-frame ui-ratio-portrait" data-ui-lazy>
+            <img data-src="../demo/img/sediment.svg" alt="Sediment, horizontal bands">
+          </div>
+          <div class="ui-card-body">
+            <h2 class="ui-title">Sediment</h2>
+            <p class="ui-faint">Edition of 40 · 40×50cm</p>
+            <p><span class="ui-price">£145</span></p>
+            <div class="ui-swatches" data-ui-choice role="group" aria-label="Ink">
+              <button class="ui-swatch" style="--ui-swatch:var(--ui-cat-4)" aria-pressed="true"  aria-label="Ochre"></button>
+              <button class="ui-swatch" style="--ui-swatch:var(--ui-cat-6)" aria-pressed="false" aria-label="Green"></button>
+            </div>
+            <p>
+              <button class="ui-btn" data-ui-open="#look">Quick look</button>
+            </p>
+          </div>
+        </article>
+
+        <article class="ui-card ui-card-flush" data-ui-item>
+          <div class="ui-frame ui-ratio-portrait ui-frame-muted" data-ui-lazy>
+            <span class="ui-badge ui-badge-quiet">Sold out</span>
+            <img data-src="../demo/img/weave.svg" alt="Weave, interlaced lines">
+          </div>
+          <div class="ui-card-body">
+            <h2 class="ui-title">Weave</h2>
+            <p class="ui-faint">Edition of 20 · 50×70cm</p>
+            <p><span class="ui-price">£210</span></p>
+            <p class="ui-dim">
+              <button class="ui-btn ui-btn-ghost" disabled>Sold out</button>
+            </p>
+          </div>
+        </article>
+
+        <article class="ui-card ui-card-flush" data-ui-item>
+          <div class="ui-frame ui-ratio-portrait" data-ui-lazy>
+            <img data-src="../demo/img/horizon.svg" alt="Horizon, a split field">
+          </div>
+          <div class="ui-card-body">
+            <h2 class="ui-title">Horizon</h2>
+            <p class="ui-faint">Edition of 60 · 30×40cm</p>
+            <p><span class="ui-price">£95</span></p>
+            <div class="ui-swatches" data-ui-choice role="group" aria-label="Ink">
+              <button class="ui-swatch" style="--ui-swatch:var(--ui-cat-1)" aria-pressed="true"  aria-label="Blue"></button>
+              <button class="ui-swatch" style="--ui-swatch:var(--ui-cat-8)" aria-pressed="false" aria-label="Red"></button>
+            </div>
+            <p>
+              <button class="ui-btn" data-ui-open="#look">Quick look</button>
+            </p>
+          </div>
+        </article>
+
+        <article class="ui-card ui-card-flush" data-ui-item>
+          <div class="ui-frame ui-ratio-portrait" data-ui-lazy>
+            <span class="ui-badge">New</span>
+            <img data-src="../demo/img/signal.svg" alt="Signal, a stepped wave">
+          </div>
+          <div class="ui-card-body">
+            <h2 class="ui-title">Signal</h2>
+            <p class="ui-faint">Edition of 30 · 50×70cm</p>
+            <p><span class="ui-price">£165</span></p>
+            <div class="ui-swatches" data-ui-choice role="group" aria-label="Ink">
+              <button class="ui-swatch" style="--ui-swatch:var(--ui-cat-3)" aria-pressed="true"  aria-label="Green"></button>
+              <button class="ui-swatch" style="--ui-swatch:var(--ui-cat-7)" aria-pressed="false" aria-label="Violet"></button>
+            </div>
+            <p>
+              <button class="ui-btn" data-ui-open="#look">Quick look</button>
+            </p>
+          </div>
+        </article>
+
+        <article class="ui-card ui-card-flush" data-ui-item>
+          <div class="ui-frame ui-ratio-portrait" data-ui-lazy>
+            <img data-src="../demo/img/interval.svg" alt="Interval, spaced verticals">
+          </div>
+          <div class="ui-card-body">
+            <h2 class="ui-title">Interval</h2>
+            <p class="ui-faint">Edition of 45 · 40×50cm</p>
+            <p><span class="ui-price">£130</span></p>
+            <div class="ui-swatches" data-ui-choice role="group" aria-label="Ink">
+              <button class="ui-swatch" style="--ui-swatch:var(--ui-cat-6)" aria-pressed="true"  aria-label="Green"></button>
+              <button class="ui-swatch" style="--ui-swatch:var(--ui-cat-2)" aria-pressed="false" aria-label="Orange"></button>
+            </div>
+            <p>
+              <button class="ui-btn" data-ui-open="#look">Quick look</button>
+            </p>
+          </div>
+        </article>
+
+        <article class="ui-card ui-card-flush" data-ui-item>
+          <div class="ui-frame ui-ratio-portrait" data-ui-lazy>
+            <img data-src="../demo/img/fold.svg" alt="Fold, a creased plane">
+          </div>
+          <div class="ui-card-body">
+            <h2 class="ui-title">Fold</h2>
+            <p class="ui-faint">Edition of 40 · 50×70cm</p>
+            <p><span class="ui-price">£175</span></p>
+            <div class="ui-swatches" data-ui-choice role="group" aria-label="Ink">
+              <button class="ui-swatch" style="--ui-swatch:var(--ui-cat-5)" aria-pressed="true"  aria-label="Pink"></button>
+              <button class="ui-swatch" style="--ui-swatch:var(--ui-cat-4)" aria-pressed="false" aria-label="Ochre"></button>
+            </div>
+            <p>
+              <button class="ui-btn" data-ui-open="#look">Quick look</button>
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- a sunk band breaks the grid's rhythm without a new layout ------------- -->
+  <section class="ui-band ui-band-sunk ui-band-line">
+    <div class="ui-measure ui-measure-wide ui-split" style="align-items:center;gap:var(--ui-s6)">
+      <div class="ui-frame ui-ratio-wide" data-ui-lazy>
+        <img data-src="../demo/img/drift.svg" alt="Drift, the current portfolio set">
+      </div>
+      <div>
+        <p class="ui-eyebrow">Portfolio set</p>
+        <h2 class="ui-title ui-title-lg">Six prints, one rule set</h2>
+        <p class="ui-lead">The whole series boxed, with the generating rules printed on
+          the colophon sheet. Edition of 15.</p>
+        <p>
+          <span class="ui-price" style="font-size:var(--ui-fs-lg,20px)">£780</span>
+          <span class="ui-price-was">£1,020</span>
+        </p>
+        <p><a class="ui-btn" href="#main">See the set</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- site frame: footer ----------------------------------------------------->
+  <footer class="ui-sitefoot">
+    <div class="ui-measure ui-measure-wide">
+      <div class="ui-sitefoot-cols">
+        <div>
+          <div class="ui-label">Shop</div>
+          <ul>
+            <li><a href="#main">Prints</a></li>
+            <li><a href="#main">Objects</a></li>
+            <li><a href="#main">Gift cards</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="ui-label">Help</div>
+          <ul>
+            <li><a href="#main">Shipping</a></li>
+            <li><a href="#main">Returns</a></li>
+            <li><a href="#main">Framing guide</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="ui-label">Studio</div>
+          <ul>
+            <li><a href="#main">About</a></li>
+            <li><a href="#main">Contact</a></li>
+            <li><a href="#main">Trade enquiries</a></li>
+          </ul>
+        </div>
+        <div class="ui-field">
+          <label for="th" class="ui-label">Appearance</label>
+          <select class="ui-input" id="th" data-ui-theme>
+            <option>vanilla</option><option>blueprint</option><option>halo</option>
+            <option selected>graphite</option><option>oxide</option><option>vellum</option>
+          </select>
+          <button class="ui-mode-toggle" data-ui-mode="toggle" style="margin-top:var(--ui-s2)">
+            <span class="ui-mode-word" data-ui-mode-label>Night</span>◐
+          </button>
+        </div>
+      </div>
+
+      <div class="ui-sitefoot-base">
+        <span>&copy; 2026 Sjonis Editions</span>
+        <span>Placeholder drawings generated by
+          <a href="https://www.anthropic.com">Claude</a>, reviewed and approved by Gary.</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- Quick look. <dialog> so the focus trap, the backdrop and Esc are the
+     platform's problem rather than ours. ------------------------------------->
+<dialog class="ui-dialog ui-dialog-wide" id="look">
+  <form method="dialog" class="ui-dialog-head">
+    <h2 class="ui-title">Lattice</h2>
+    <button class="ui-x" aria-label="Close" data-ui-close>&times;</button>
+  </form>
+  <div class="ui-dialog-body ui-split" style="gap:var(--ui-s5)">
+    <div class="ui-frame ui-ratio-portrait" data-ui-lazy>
+      <img data-src="../demo/img/lattice.svg" alt="Lattice">
+    </div>
+    <div>
+      <p class="ui-faint">Edition of 40 · 50×70cm · four-colour screenprint</p>
+      <p class="ui-prose">Pulled by hand on 300gsm Somerset. The plate order is part
+        of the rule set, so no two pulls in the edition register identically.</p>
+      <p><span class="ui-price">£180</span></p>
+      <div class="ui-field">
+        <label class="ui-label" for="ink">Ink</label>
+        <select class="ui-input" id="ink">
+          <option>Blue</option><option>Green</option><option>Violet</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="ui-dialog-foot">
+    <button class="ui-btn ui-btn-ghost" data-ui-close>Keep looking</button>
+    <button class="ui-btn" data-ui-close>Add to bag</button>
+  </div>
+</dialog>
+
+<dialog class="ui-dialog" id="cart">
+  <form method="dialog" class="ui-dialog-head">
+    <h2 class="ui-title">Your bag</h2>
+    <button class="ui-x" aria-label="Close" data-ui-close>&times;</button>
+  </form>
+  <div class="ui-dialog-body">
+    <ul class="ui-list">
+      <li class="ui-list-item">
+        <div class="ui-list-top">
+          <span class="ui-list-title">Lattice · Blue</span>
+          <span class="ui-price">£180</span>
+        </div>
+        <div class="ui-list-sub">Edition of 40 · 50×70cm</div>
+      </li>
+      <li class="ui-list-item">
+        <div class="ui-list-top">
+          <span class="ui-list-title">Orbit · Orange</span>
+          <span class="ui-price">£126</span>
+        </div>
+        <div class="ui-list-sub">Reduced from £180</div>
+      </li>
+      <li class="ui-list-item">
+        <div class="ui-list-top">
+          <span class="ui-list-title">Horizon · Blue</span>
+          <span class="ui-price">£95</span>
+        </div>
+        <div class="ui-list-sub">Edition of 60 · 30×40cm</div>
+      </li>
+    </ul>
+  </div>
+  <div class="ui-dialog-foot">
+    <span class="ui-dim">Total</span>
+    <span class="ui-price">£401</span>
+    <button class="ui-btn" data-ui-close>Checkout</button>
+  </div>
+</dialog>
+
+<script src="../core/ui.js"></script>
+</body>
+</html>

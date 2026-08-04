@@ -357,6 +357,65 @@
 }
 
 /* -----------------------------------------------------------------------------
+   COMMERCE
+   A small vocabulary for the things a catalogue has and a dashboard does not:
+   a price, a badge on the corner of an image, a row of colour options.
+
+   Prices are the one number in this suite that must never reflow. A grid of
+   cards where "£9.00" and "£112.00" set at different widths makes the whole
+   column look broken, so these are tabular-figure by default — the same reason
+   .ui-num exists for tables.
+   -------------------------------------------------------------------------- */
+.ui-price{
+  font-variant-numeric:tabular-nums;
+  font-weight:var(--ui-weight-heading);
+  letter-spacing:-.01em;
+  color:var(--ui-text);
+}
+.ui-price-was{
+  font-variant-numeric:tabular-nums;
+  color:var(--ui-text-faint);
+  text-decoration:line-through;
+  font-weight:var(--ui-weight-body);
+  margin-inline-start:var(--ui-s2);
+}
+/* "Reduced" is a fact about the price, so it is announced next to the price
+   rather than left to the strikethrough, which no screen reader reads aloud. */
+.ui-price-note{color:var(--ui-crit);font-size:var(--ui-fs-sm);font-weight:var(--ui-weight-medium)}
+
+/* Sits on the corner of a .ui-frame. Absolute inside it, so the frame needs no
+   extra wrapper and the badge cannot push the image out of its ratio. */
+.ui-badge{
+  position:absolute;z-index:2;
+  inset-block-start:var(--ui-s2);inset-inline-start:var(--ui-s2);
+  padding:2px var(--ui-s2);border-radius:var(--ui-radius-sm);
+  font-size:var(--ui-fs-sm);font-weight:var(--ui-weight-medium);
+  letter-spacing:.02em;
+  background:var(--ui-text);color:var(--ui-bg);
+}
+.ui-badge-crit{background:var(--ui-crit);color:var(--ui-bg)}
+.ui-badge-quiet{background:var(--ui-surface-3);color:var(--ui-text);border:1px solid var(--ui-line)}
+.ui-badge-end{inset-inline-start:auto;inset-inline-end:var(--ui-s2)}
+
+/* Sold out, discontinued — the card still reads, it just stops inviting. */
+.ui-frame-muted img,.ui-frame-muted picture{opacity:.42;filter:saturate(.35)}
+
+.ui-swatches{display:flex;gap:var(--ui-s2);flex-wrap:wrap;align-items:center}
+.ui-swatch{
+  width:18px;height:18px;padding:0;flex:0 0 auto;
+  border-radius:var(--ui-radius-pill);
+  background:var(--ui-swatch,var(--ui-surface-3));
+  border:1px solid var(--ui-line-strong);
+  cursor:pointer;
+}
+/* The ring is OUTSIDE the swatch, so selection never changes the colour the
+   customer is judging — and it survives on a swatch the same hue as the page. */
+.ui-swatch[aria-pressed="true"]{
+  box-shadow:0 0 0 2px var(--ui-bg),0 0 0 4px var(--ui-accent);
+}
+.ui-swatch:focus-visible{outline:2px solid var(--ui-accent);outline-offset:3px}
+
+/* -----------------------------------------------------------------------------
    SITE FRAME
    The layer above the page: the parts that repeat on EVERY page of a site and
    say where you are within it. Archetypes had no vocabulary for this, so both
@@ -770,6 +829,10 @@ a.ui-brand{color:inherit;text-decoration:none}
   padding:var(--ui-s4);min-width:0;
 }
 .ui-card-flush{padding:0;overflow:hidden}
+/* The other half of -flush: an image goes edge to edge, then the words below it
+   need the padding back. Without this every card in a catalogue carries an
+   inline style, which is how an archetype starts hardcoding values again. */
+.ui-card-body{padding:var(--ui-s4);display:flex;flex-direction:column;gap:var(--ui-s2);min-width:0}
 
 .ui-grid{display:grid;gap:var(--ui-s3)}
 .ui-grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
