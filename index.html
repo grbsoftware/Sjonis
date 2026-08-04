@@ -295,6 +295,11 @@ iframe{flex:1;min-height:0;width:100%;border:0;background:var(--g-raise);display
       doc = win && win.document;
       if (!doc || !doc.documentElement) return;
 
+      /* The frame's own scrollbar is painted by the UA, not by our CSS, so it
+         stays light inside a dark page until color-scheme says otherwise. Set it
+         first: it applies whichever branch below runs. */
+      doc.documentElement.style.colorScheme = m;
+
       if (strat === "ui" && win.UI && typeof win.UI.setTheme === "function"){
         win.UI.setTheme(null, m);          /* keeps the page's own toggles honest */
         return;
