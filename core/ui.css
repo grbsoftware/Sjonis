@@ -1485,6 +1485,13 @@ a.ui-brand{color:inherit;text-decoration:none}
   border-radius:var(--ui-control-radius);
   font:inherit;font-size:var(--ui-fs);font-weight:var(--ui-weight-medium);
   cursor:pointer;white-space:nowrap;
+  /* An <a class="ui-btn"> is a button that happens to navigate, and the UA
+     underlines every anchor. Without this, every call to action in the suite
+     that is a link rather than a <button> is underlined inside its own filled
+     pill — ten of them across five skeletons, and it never showed up because
+     the demo pages mostly use real <button>s. Declared on the shared block so
+     ghost and danger get it too. */
+  text-decoration:none;
   transition:filter var(--ui-dur) var(--ui-ease),background var(--ui-dur) var(--ui-ease),
              color var(--ui-dur) var(--ui-ease);
 }
