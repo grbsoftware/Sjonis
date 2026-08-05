@@ -972,6 +972,75 @@ measuring all 12 combinations: "not included" rows at `--ui-text-faint` scored
 WCAG 1.4.3 exempts those and they arrive carrying colours chosen against
 someone else's ground — but a text wordmark is not exempt.
 
+### The three bugs Gary found DEMOING it to a friend, 2026-08-05
+
+All three had been shipped, reviewed and looked at repeatedly. None was
+caught by any gate. Written up because the pattern matters more than the fixes.
+
+**1. The example browser's chrome was eating the page it exists to show.**
+The shell is `height:100%` + `overflow:hidden`, so chrome and framed page
+compete for the same pixels — and `.tabs`/`.bar` could WRAP. At 911x512 (about
+150% browser zoom on a laptop) the strip went to two rows, chrome took **59% of
+the viewport** and the framed page got 30%. Adding an example could silently
+cost a reader a whole row, so **the design got worse every time the suite
+grew** — backwards for a browser OF the suite. Now: both `nowrap`, the strip
+scrolls sideways so its cost is fixed, and height queries drop the masthead
+below 680px and the frame title bar below 520px. Measured, chrome/page:
+
+    1366x768   29%/64% -> 24%/69%
+     911x512   59%/30% -> 13%/85%
+
+29. **Flexbox spreads a shortfall across EVERY sibling, and the ones that
+    cannot scroll pay it in crushed controls.** `.tabs` kept the default
+    `flex:0 1 auto`, so at 683px the tuner button was squeezed to 14px and the
+    width presets to nothing, while the strip sat at 467px with a scrollbar it
+    was not using. The scrollable thing must be `flex:1 1 0` and everything
+    else `flex:none`. Also: a one-row strip hides the current tab on any deep
+    link — `scrollIntoView({inline:"nearest"})`, `nearest` so it never moves
+    the page.
+
+**2. `.ui-btn` never reset `text-decoration`.** Every `<a class="ui-btn">` in
+the suite rendered underlined inside its own filled pill — 10 of them across 5
+skeletons, shipped for weeks. It survived because the DEMO pages mostly use
+real `<button>`s, so the thing everybody looked at was fine and the thing
+nobody looked at was not. Fixed on the shared block.
+
+30. **`frame-ancestors 'self'` means a link cannot be followed from inside the
+    example browser AT ALL.** anthropic.com refuses to be framed, so clicking
+    the portfolio's contact button inside `index.html`'s iframe did nothing:
+    no error, no navigation, no clue. This is the failure Gary hit in front of
+    someone. **Every external link in a skeleton needs
+    `target="_blank" rel="noopener"`** — all 8 now do. Anything framed by
+    index.html has this constraint, so treat it as a rule for new skeletons
+    rather than a bug that was fixed once.
+
+**The joke, now complete:** portfolio's "Get in touch" pointed at `#top`
+because that is the placeholder the rest of the file uses. It points at
+anthropic.com now, like the two credit lines — the artist being credited is
+Claude, so the enquiries button was the one link on the page that was lying.
+
+31. **I blamed the Pages cache for all three of these and was WRONG about all
+    three.** Gary corrected the timeline: the demo was ~12h before he reported
+    it, and the work it was running was 16-24h old — fully built and served
+    long before he showed anybody. So the contact link really did nothing, the
+    buttons really were underlined, and the chrome really did eat the page. Not
+    one was stale.
+
+    The mechanism of the mistake is the part to keep. Trap 13 is real, it is
+    written down four times in this file, and it produces the *same symptom* as
+    a genuine bug — so it is the cheapest available explanation and it
+    exonerates the code. I reached for it three times, stated it confidently,
+    and told Gary to hard-refresh instead of looking. **A trap you have written
+    down becomes a bias.** The cache is only the answer once you have
+    established WHEN the reader loaded the page; until then it is a guess that
+    happens to be flattering. Ask for the timeline first — it is one question
+    and it settles it.
+
+    Same shape as the halo/vellum hunt at the top of this file: a previous
+    session's note named the wrong subject and cost a day. Written-down
+    knowledge in this project has now misdirected two investigations. Treat
+    every entry here as a hypothesis to test, never as a diagnosis.
+
 ## NEXT — in priority order
 2. **Skin three — the soft one.** Gary's, and he is right: "black can be
    beveled on black, I've done it before with softer shadows and or highlights."
