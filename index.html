@@ -38,22 +38,41 @@ body{margin:0;background:var(--g-bg);color:var(--g-ink);font-family:var(--g-sans
            text-align:right;line-height:1.45}
 
 /* ---- nav bar ------------------------------------------------------------- */
-.bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+/* nowrap for the same reason as .tabs: the row must have a fixed cost. .tabs
+   is the only flexible child, so it is what gives up width, and it scrolls. */
+.bar{display:flex;align-items:center;gap:14px;flex-wrap:nowrap;
      padding:10px 20px;border-bottom:1px solid var(--g-line);
      background:var(--g-raise);flex:none}
-.pager{display:flex;align-items:center;gap:6px}
+.pager{display:flex;align-items:center;gap:6px;flex:none}
 .count{font-family:var(--g-mono);font-size:11.5px;color:var(--g-faint);
        font-variant-numeric:tabular-nums;min-width:4.5ch;text-align:center}
 
 button{font:inherit;cursor:pointer}
-.nav{width:30px;height:30px;display:grid;place-items:center;padding:0;
+.nav{width:30px;height:30px;display:grid;place-items:center;padding:0;flex:none;
      background:var(--g-bg);border:1px solid var(--g-line2);border-radius:7px;
      color:var(--g-ink);font-size:14px;line-height:1}
 .nav:hover{border-color:var(--g-accent);color:var(--g-accent)}
 .nav:focus-visible{outline:2px solid var(--g-accent);outline-offset:1px}
 
+/* ONE ROW, ALWAYS — it scrolls sideways rather than wrapping.
+   Wrapping was the real bug here. The shell is height:100% with overflow:hidden,
+   so every pixel the chrome gains comes straight out of the framed page. With
+   the strip allowed to wrap, adding an example could silently cost the reader a
+   whole row of viewport: at 911x512 (about 150% zoom on a laptop) the strip went
+   to two rows, chrome reached 59% of the screen and the actual page got 30%.
+   That is a design that gets worse every time the suite grows, which is the
+   opposite of what a browser for a growing suite should do. */
 .tabs{display:flex;gap:3px;background:var(--g-bg);border:1px solid var(--g-line);
-      border-radius:8px;padding:3px;flex-wrap:wrap;min-width:0}
+      border-radius:8px;padding:3px;flex-wrap:nowrap;min-width:0;
+      overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;
+      scroll-padding-inline:3px;
+      /* flex:1 1 0, so the strip is the ONLY thing in the bar that gives up
+         width. Left at the default 0 1 auto, flexbox distributes the shortfall
+         across every sibling — and the ones that cannot scroll pay it in
+         crushed controls: at 683px the width presets collapsed to zero and the
+         tuner button to 14px, both unusable, while the strip stayed 467px wide
+         with a scrollbar it was not using. Everything else is flex:none. */
+      flex:1 1 0}
 .tabs button{background:none;border:1px solid transparent;border-radius:5px;
   padding:5px 11px;font-size:12.5px;font-weight:550;color:var(--g-dim);white-space:nowrap}
 .tabs button:hover{color:var(--g-ink)}
@@ -61,7 +80,7 @@ button{font:inherit;cursor:pointer}
 .tabs button:focus-visible{outline:2px solid var(--g-accent);outline-offset:1px}
 
 .widths{display:flex;gap:3px;margin-left:auto;background:var(--g-bg);
-        border:1px solid var(--g-line);border-radius:8px;padding:3px}
+        border:1px solid var(--g-line);border-radius:8px;padding:3px;flex:none}
 .widths button{background:none;border:1px solid transparent;border-radius:5px;
   padding:5px 9px;font-family:var(--g-mono);font-size:11.5px;color:var(--g-dim)}
 .widths button[aria-pressed="true"]{background:var(--g-raise);border-color:var(--g-line2);color:var(--g-ink)}
@@ -85,6 +104,29 @@ button{font:inherit;cursor:pointer}
 .out:hover{border-bottom-color:currentColor}
 
 iframe{flex:1;min-height:0;width:100%;border:0;background:var(--g-raise);display:block}
+
+/* ---- when the viewport is SHORT, the chrome yields ------------------------
+   A height query, not a width one, because height is the actual constraint:
+   this shell is locked to the viewport, so chrome and content are in direct
+   competition for the same pixels. It is also what a reader hits by ZOOMING —
+   zoom shrinks the CSS viewport while the chrome keeps its size in CSS pixels,
+   so the browser chrome quietly grows to fill the screen just as the reader is
+   asking to see the page BIGGER. That is the wrong way round, and it is why
+   the masthead is the first thing to go: it is pure identity, and the reader
+   looking at a framed example already knows what site they are on. */
+@media (max-height:680px){
+  .top{display:none}
+  .bar{padding:7px 14px}
+  .stage{padding:9px 14px 12px}
+  .tune{padding:9px 14px}
+}
+@media (max-height:520px){
+  /* Last resort. The frame's own title bar is the first thing that can go
+     without losing a control — the path it shows is also in the tab strip. */
+  .frame-bar{display:none}
+  .bar{padding:5px 12px}
+  .stage{padding:6px 12px 8px}
+}
 
 /* Escape hatch: some browsers refuse to frame a local file. The frame sits on
    top of this, so if it never paints the reader still has a way through. */
@@ -448,14 +490,22 @@ input[type="color"]{width:44px;height:28px;padding:2px;border:1px solid var(--g-
 
   function paintTabs(){
     tabs.innerHTML = "";
+    var here = null;
     EXAMPLES.forEach(function(ex, n){
       var b = document.createElement("button");
       b.type = "button";
       b.textContent = ex.label;
-      if (n === i) b.setAttribute("aria-current", "page");
+      if (n === i) { b.setAttribute("aria-current", "page"); here = b; }
       b.addEventListener("click", function(){ go(n); });
       tabs.appendChild(b);
     });
+    /* The strip is ONE scrolling row, so the current tab can be off-screen —
+       and it always is when you arrive on a deep link or walk the list with the
+       arrow keys. Bring it into view. `nearest` scrolls the strip only when it
+       has to and never moves the page, which `smooth` centring would. */
+    if (here && here.scrollIntoView) {
+      here.scrollIntoView({ inline: "nearest", block: "nearest" });
+    }
   }
 
   function paintWidths(){
